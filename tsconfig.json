@@ -14,10 +14,6 @@
     "noEmit": true, // We use bun to run .ts directly
     "types": ["bun-types", "node"] // Add "node" here for @types/node
   },
-  "include": [
-    "scripts/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-} 
+  "include": ["scripts/**/*.ts"],
+  "exclude": ["node_modules"]
+}
