@@ -1,487 +1,2507 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
     <title>Download Cursor</title>
-    <!-- Material 3 Web Components -->
-    <script type="module" src="https://esm.run/@material/web/all.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background: #1c1c1e;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            color: #e0e0e0;
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #111111;
+        --bg-tertiary: #1a1a1a;
+        --bg-hover: #222222;
+        --border-primary: #2a2a2a;
+        --border-hover: #3a3a3a;
+        --text-primary: #ffffff;
+        --text-secondary: #a1a1a1;
+        --text-muted: #666666;
+        --accent-primary: #0070f3;
+        --accent-hover: #0761d1;
+        --accent-secondary: #7c3aed;
+        --success: #00d084;
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-xl:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--bg-primary);
+        background-image:
+          radial-gradient(circle at 25% 25%, #1a1a2e 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, #16213e 0%, transparent 50%);
+        background-attachment: fixed;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        animation: fadeInScale 0.6s ease-out;
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Hero Section with Immediate Downloads */
+      .hero-section {
+        text-align: center;
+        margin-bottom: 4rem;
+        padding: 4rem 0 2rem 0;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.1s both;
+      }
+
+      .hero-title {
+        font-size: clamp(2.5rem, 10vw, 5.5rem);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        background: linear-gradient(
+          45deg,
+          var(--text-primary),
+          var(--accent-primary),
+          var(--text-primary)
+        );
+        background-size: 200% 200%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation:
+          fadeInUp 0.8s ease-out 0.1s both,
+          shimmer 3s ease-in-out infinite;
+      }
+
+      .hero-title .italic {
+        font-style: italic;
+        font-weight: 500;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 400;
+        line-height: 1.5;
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+
+      /* Smart Download Section - Top Priority */
+      .smart-download-section {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+      }
+
+      .smart-download-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-primary),
+          transparent
+        );
+      }
+
+      .platform-detected {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .platform-icon {
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+
+      .platform-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+
+      .primary-download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem 2rem;
+        background: var(--accent-primary);
+        border: 1px solid var(--accent-primary);
+        border-radius: 12px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.125rem;
+        transition: all 0.2s ease;
+        margin-bottom: 1rem;
+        min-width: 280px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .primary-download::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .primary-download:hover::before {
+        left: 100%;
+      }
+
+      .primary-download:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 112, 243, 0.3);
+      }
+
+      .primary-download:active {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 15px rgba(0, 112, 243, 0.2);
+      }
+
+      .primary-download.loading {
+        pointer-events: none;
+        background: var(--bg-tertiary);
+        border-color: var(--border-primary);
+        animation: pulse 1.5s infinite;
+      }
+
+      .primary-download.loading .download-icon {
+        animation: rotate 1s linear infinite;
+      }
+
+      .download-icon {
+        font-size: 1.25rem;
+      }
+
+      .download-help {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+        opacity: 0.8;
+      }
+
+      .alternative-downloads {
+        margin-top: 1rem;
+      }
+
+      .alternative-downloads-toggle {
+        background: none;
+        border: 1px solid var(--border-primary);
+        color: var(--text-secondary);
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 48px;
+        width: 100%;
+        position: relative;
+      }
+
+      .alternative-downloads-toggle:hover {
+        border-color: var(--accent-primary);
+        color: var(--text-primary);
+        background: var(--bg-hover);
+        transform: translateY(-1px);
+      }
+
+      .alternative-downloads-toggle:active {
+        transform: translateY(0);
+      }
+
+      .alternative-options {
+        display: none;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-primary);
+      }
+
+      .alternative-options.show {
+        display: block;
+      }
+
+      .quick-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .quick-download-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .quick-download-btn:hover {
+        background: var(--bg-hover);
+        border-color: var(--border-hover);
+        transform: translateY(-1px);
+      }
+
+      /* Inline Version Info */
+      .version-info-inline {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 2rem;
+        margin: 2rem 0 1.5rem 0;
+        padding: 1.5rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 12px;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+      }
+
+      .version-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        color: var(--text-primary);
+      }
+
+      .version-meta {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .version-description-inline {
+        color: var(--text-secondary);
+        line-height: 1.5;
+        font-size: 0.875rem;
+      }
+
+      .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        background: rgba(0, 208, 132, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(0, 208, 132, 0.2);
+        animation: scaleIn 0.6s ease-out 0.8s both;
+        transition: all 0.3s ease;
+      }
+
+      .status-badge:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 208, 132, 0.3);
+      }
+
+      .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .expand-toggle {
+        background: none;
+        border: 1px solid var(--border-primary);
+        color: var(--text-secondary);
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        min-height: 48px;
+        width: 100%;
+      }
+
+      .expand-toggle:hover {
+        border-color: var(--accent-primary);
+        color: var(--text-primary);
+        background: var(--bg-hover);
+        transform: translateY(-1px);
+      }
+
+      .expand-toggle:active {
+        transform: translateY(0);
+      }
+
+      /* Version History Section */
+      .version-history-section {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+
+      .version-history-content {
+        display: none;
+      }
+
+      .version-history-content.show {
+        display: block;
+        margin-top: 2rem;
+      }
+
+      .version-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .version-item {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .version-item:hover {
+        border-color: var(--border-hover);
+      }
+
+      .version-header {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .version-item[open] .version-header {
+        background: var(--bg-hover);
+        border-bottom: 1px solid var(--border-primary);
+      }
+
+      .version-header:hover {
+        background: var(--bg-hover);
+      }
+
+      .version-number {
+        font-family: "Inter", monospace;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .version-date {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-right: 1rem;
+      }
+
+      .expand-icon {
+        width: 0.6rem;
+        height: 0.6rem;
+        border-right: 2px solid var(--text-secondary);
+        border-bottom: 2px solid var(--text-secondary);
+        transform: rotate(45deg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        flex-shrink: 0;
+      }
+
+      .alternative-downloads-toggle:hover .expand-icon,
+      .expand-toggle:hover .expand-icon {
+        border-color: var(--accent-primary);
+        transform: rotate(45deg) scale(1.1);
+      }
+
+      .alternative-downloads-toggle[aria-expanded="true"] .expand-icon {
+        transform: rotate(-135deg) scale(1.1);
+        border-color: var(--accent-primary);
+      }
+
+      .version-item[open] .expand-icon {
+        transform: rotate(-135deg);
+        border-color: var(--accent-primary);
+      }
+
+      .version-content {
+        padding: 1.5rem;
+        background: var(--bg-primary);
+        border-top: 1px solid var(--border-primary);
+      }
+
+      .platform-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .platform-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .platform-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--accent-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .download-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .download-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+
+      .download-link:hover {
+        color: var(--accent-primary);
+        border-color: var(--accent-primary);
+        background: rgba(0, 112, 243, 0.05);
+      }
+
+      /* Keyboard Navigation */
+      .keyboard-hint {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 10;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 0.5rem;
+        border-radius: 6px;
+        backdrop-filter: blur(4px);
+      }
+
+      .key {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 4px;
+        padding: 0.25rem 0.5rem;
+        font-family: monospace;
+        font-size: 0.75rem;
+      }
+
+      footer {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-top: 4rem;
+        padding: 2rem 0;
+        border-top: 1px solid var(--border-primary);
+      }
+
+      footer a {
+        color: var(--accent-primary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      footer a:hover {
+        color: var(--accent-hover);
+      }
+
+      /* Loading States */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+      }
+
+      .loading::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        animation: shimmer 1.5s infinite;
+        border-radius: inherit;
+      }
+
+      .pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Enhanced focus indicators */
+      .quick-download-btn:focus-visible,
+      .platform-download-link:focus-visible {
+        outline: 2px solid var(--accent-primary);
+        outline-offset: 2px;
+        background: rgba(0, 112, 243, 0.1);
+      }
+
+      /* Base responsive fixes */
+      * {
+        max-width: 100%;
+      }
+
+      body {
+        width: 100%;
+        min-width: 320px;
+      }
+
+      .hero-title,
+      .hero-subtitle,
+      .section-title {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+
+      /* Responsive Design - Mobile First */
+      @media (max-width: 390px) {
         main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1rem 3rem 1rem;
+          padding: 1rem 0.875rem;
+          width: 100%;
+          overflow-x: hidden;
         }
-        .hero-card {
-            margin-top: 2rem;
-            margin-bottom: 2.5rem;
-            padding: 0;
-            background: linear-gradient(120deg, #2c3e50 0%, #1e2a38 100%);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.16);
-            border-radius: 24px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+
+        .hero-section {
+          padding: 1.5rem 0;
+          margin-bottom: 2rem;
         }
-        .hero-content {
-            padding: 2.5rem 2rem 2rem 2rem;
-        }
+
         .hero-title {
-            font-size: 2.7rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-            color: #ffffff;
-        }
-        .hero-version {
-            font-size: 1.2rem;
-            color: #64b5f6;
-            font-weight: 500;
-            margin-bottom: 1.2rem;
-        }
-        .hero-desc {
-            font-size: 1.1rem;
-            color: #bdc3c7;
-            margin-bottom: 2rem;
-        }
-        .download-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-        }
-        .note {
-            color: #95a5a6;
-            font-size: 0.98rem;
-            margin-bottom: 0.5rem;
-        }
-        .details-card {
-            background: #2a2a2c;
-            border-radius: 18px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+          font-size: 2rem;
+          line-height: 1.1;
+          margin-bottom: 1rem;
         }
 
-        /* Styles for expandable version list - THESE ARE THE CRITICAL STYLES */
-        .expandable-version-list {
-            margin-top: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        .hero-subtitle {
+          font-size: 0.95rem;
+          padding: 0;
+          margin-bottom: 1.5rem;
         }
-        .expandable-version-list .version-details {
-            width: 100%;
-            background-color: #2b2d2f;
-            border-radius: 8px;
-            border: 1px solid #3e4042;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: box-shadow 0.25s ease-in-out, border-color 0.25s ease-in-out;
-        }
-        .expandable-version-list .version-details:hover {
-             border-color: #505254;
-             box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .expandable-version-list .version-summary {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            align-items: center;
-            padding: 14px 18px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .expandable-version-list .version-details[open] .version-summary {
-            background-color: #303234;
-            border-bottom: 1px solid #3e4042;
-        }
-        .expandable-version-list .version-summary:hover {
-            background-color: #333537;
-        }
-        .expandable-version-list .version-number {
-            font-family: 'Roboto', Arial, sans-serif;
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: #e8e8e8;
-        }
-        .expandable-version-list .version-date {
-            font-family: 'Roboto', Arial, sans-serif;
-            font-size: 0.85rem; 
-            color: #9e9e9e;
-            justify-self: end;
-            margin-right: 1.25rem;
-        }
-        .expandable-version-list .version-links {
-            padding: 18px 20px;
-            background-color: #26282a;
-            color: #c0c0c0;
-        }
-        .expandable-version-list .version-links strong {
-            font-family: 'Roboto', Arial, sans-serif;
-            font-size: 0.9rem; 
-            font-weight: 500;
-            color: #8ab4f8;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .expandable-version-list .version-links a {
-            font-family: 'Roboto', Arial, sans-serif;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #8ab4f8;
-            text-decoration: none;
-            display: inline-block;
-            padding: 2px 0;
-        }
-         .expandable-version-list .version-links a:hover {
-            text-decoration: underline;
-            color: #a6cfff;
-        }
-        .expandable-version-list .expand-icon {
-            display: inline-block;
-            width: 0.6em; 
-            height: 0.6em;
-            border-right: 0.18em solid #9e9e9e;
-            border-bottom: 0.18em solid #9e9e9e;
-            transform: rotate(45deg) translateY(-0.1em);
-            transition: transform 0.25s ease-in-out, border-color 0.2s ease-in-out;
-            justify-self: end;
-        }
-        .expandable-version-list .version-details[open] .expand-icon {
-            transform: rotate(-135deg) translateY(0.1em);
-            border-color: #8ab4f8;
-        }
-        .expandable-version-list summary::-webkit-details-marker {
-            display: none;
-        }
-        .expandable-version-list summary {
-            list-style: none;
-        }
-        .expandable-version-list summary::marker {
-            display: none;
-        }
-        /* END Styles for expandable version list */
 
-        footer {
-            text-align: center;
-            color: #7f8c8d; /* Softer grey for footer text */
-            font-size: 0.85rem; /* Slightly smaller font */
-            margin-top: 3rem; /* Increased space from main content */
-            padding: 1.5rem 0 2rem 0; /* Adjusted top and bottom padding */
-            border-top: 1px solid #3e4042; /* Subtle separator line */
+        .smart-download-section,
+        .version-history-section {
+          padding: 1rem;
+          margin-bottom: 1.5rem;
+          border-radius: 12px;
         }
-        footer a {
-            color: #8ab4f8; /* Link color consistent with other links */
-            text-decoration: none;
+
+        .primary-download {
+          width: 100%;
+          min-width: auto;
+          padding: 0.75rem 1rem;
+          font-size: 0.875rem;
+          min-height: 44px;
+          border-radius: 8px;
         }
-        footer a:hover {
-            text-decoration: underline;
-            color: #a6cfff; /* Brighter on hover */
+
+        .platform-detected {
+          font-size: 0.8rem;
+          margin-bottom: 0.75rem;
         }
-        @media (max-width: 600px) {
-            .hero-title { font-size: 2rem; }
-            .hero-content { padding: 1.2rem 0.5rem; }
-            .details-card { padding: 1rem 0.2rem; }
+
+        .download-help {
+          font-size: 0.8rem;
+          margin-bottom: 1rem;
         }
+
+        .alternative-downloads {
+          margin-top: 1rem;
+        }
+
+        .alternative-options {
+          margin-top: 0.75rem;
+          padding-top: 0.75rem;
+        }
+
+        .platform-icon {
+          width: 1rem;
+          height: 1rem;
+        }
+
+        .expand-icon {
+          width: 0.7rem;
+          height: 0.7rem;
+          border-width: 2px;
+        }
+
+        .keyboard-hint {
+          display: none;
+        }
+
+        .quick-options {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .quick-download-btn {
+          padding: 0.875rem 1rem;
+          font-size: 0.8rem;
+          min-height: 48px;
+          border-radius: 8px;
+        }
+
+        .version-info-inline {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 1rem;
+          padding: 1rem;
+          margin: 1.5rem 0 1rem 0;
+        }
+
+        .version-title {
+          font-size: 1.1rem;
+        }
+
+        .section-title {
+          font-size: 1.15rem;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 1rem;
+        }
+
+        .expand-toggle {
+          padding: 1rem 1.25rem;
+          font-size: 0.875rem;
+          min-height: 52px;
+          border-radius: 10px;
+        }
+
+        .alternative-downloads-toggle {
+          padding: 1rem 1.25rem;
+          font-size: 0.875rem;
+          min-height: 52px;
+          border-radius: 10px;
+        }
+
+        .platform-card {
+          padding: 1rem;
+          border-radius: 10px;
+        }
+
+        .platform-header .platform-icon {
+          font-size: 1.1rem;
+        }
+
+        .platform-name {
+          font-size: 0.9rem;
+        }
+
+        .platform-download-link {
+          padding: 0.75rem;
+          font-size: 0.8rem;
+          min-height: 44px;
+          border-radius: 6px;
+        }
+
+        .download-size {
+          font-size: 0.7rem;
+        }
+
+        .version-header {
+          grid-template-columns: 1fr;
+          padding: 0.875rem 1rem;
+          position: relative;
+        }
+
+        .version-number {
+          font-size: 0.85rem;
+        }
+
+        .version-date {
+          font-size: 0.75rem;
+          margin-top: 0.25rem;
+          margin-right: 0;
+        }
+
+        .expand-icon {
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%) rotate(45deg);
+          width: 0.5rem;
+          height: 0.5rem;
+        }
+
+        .version-item[open] .expand-icon {
+          transform: translateY(-50%) rotate(-135deg);
+        }
+
+        .version-content {
+          padding: 1rem;
+        }
+
+        .platform-label {
+          font-size: 0.8rem;
+        }
+
+        .download-links {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .download-link {
+          padding: 0.75rem;
+          font-size: 0.8rem;
+          min-height: 44px;
+          border-radius: 6px;
+        }
+      }
+
+      @media (min-width: 391px) and (max-width: 480px) {
+        main {
+          padding: 1rem 1rem;
+        }
+
+        .hero-title {
+          font-size: clamp(2.25rem, 7vw, 2.75rem);
+          line-height: 1.2;
+        }
+
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+
+        .smart-download-section,
+        .version-history-section {
+          padding: 1.25rem;
+          margin-bottom: 2rem;
+        }
+
+        .primary-download {
+          min-width: auto;
+          width: 100%;
+          padding: 0.875rem 1.25rem;
+          font-size: 0.95rem;
+          min-height: 48px;
+        }
+
+        .keyboard-hint {
+          display: none;
+        }
+
+        .quick-options {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .quick-download-btn {
+          padding: 1rem;
+          font-size: 0.875rem;
+          min-height: 48px;
+        }
+
+        .version-info-inline {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 1rem;
+          margin: 1.5rem 0 1rem 0;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .version-header {
+          grid-template-columns: 1fr;
+          padding: 1rem 1.25rem;
+          position: relative;
+        }
+
+        .version-number {
+          font-size: 0.9rem;
+        }
+
+        .version-date {
+          font-size: 0.8rem;
+          margin-top: 0.25rem;
+          margin-right: 0;
+        }
+
+        .expand-icon {
+          position: absolute;
+          right: 1.25rem;
+          top: 50%;
+          transform: translateY(-50%) rotate(45deg);
+        }
+
+        .version-item[open] .expand-icon {
+          transform: translateY(-50%) rotate(-135deg);
+        }
+
+        .section-title {
+          font-size: 1.25rem;
+        }
+
+        .download-links {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .download-link,
+        .platform-download-link {
+          min-height: 44px;
+          padding: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      @media (min-width: 481px) and (max-width: 768px) {
+        main {
+          padding: 1.5rem 1.25rem;
+        }
+
+        .hero-title {
+          font-size: clamp(2.5rem, 6vw, 3.25rem);
+        }
+
+        .version-info-inline {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 1rem;
+          margin: 1.5rem 0 1rem 0;
+        }
+
+        .quick-options {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .version-header {
+          grid-template-columns: 1fr auto;
+          gap: 1rem;
+        }
+
+        .version-date {
+          grid-column: 1;
+          margin-top: 0.5rem;
+          margin-right: 0;
+        }
+
+        .expand-icon {
+          grid-column: 2;
+          grid-row: 1;
+        }
+
+        .download-links {
+          flex-direction: column;
+        }
+
+        .download-link {
+          min-height: 48px;
+        }
+
+        .keyboard-hint {
+          display: none;
+        }
+      }
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        main {
+          padding: 2rem 1.5rem;
+        }
+
+        .quick-options {
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .keyboard-hint {
+          bottom: 0.75rem;
+          right: 0.75rem;
+          font-size: 0.7rem;
+        }
+      }
+
+      /* Prevent horizontal overflow */
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+        }
+
+        main {
+          overflow-x: hidden;
+        }
+
+        .smart-download-section,
+        .version-history-section {
+          overflow-x: hidden;
+        }
+      }
+
+      /* Hide native details marker */
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      summary {
+        list-style: none;
+      }
+
+      summary::marker {
+        display: none;
+      }
+
+      /* Accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      /* Focus styles */
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--accent-primary);
+        outline-offset: 2px;
+      }
+
+      /* Touch device improvements */
+      @media (hover: none) and (pointer: coarse) {
+        .quick-download-btn,
+        .download-link {
+          min-height: 48px;
+          padding: 0.875rem 1rem;
+        }
+
+        .alternative-downloads-toggle,
+        .expand-toggle {
+          min-height: 52px;
+          padding: 1rem 1.25rem;
+          font-size: 0.95rem;
+        }
+
+        .primary-download {
+          min-height: 52px;
+          padding: 1rem 1.5rem;
+          font-size: 1rem;
+        }
+
+        .version-header {
+          min-height: 56px;
+          padding: 1rem 1.25rem;
+        }
+
+        /* Larger touch targets for better usability */
+        .expand-icon {
+          width: 0.8rem;
+          height: 0.8rem;
+          border-width: 2px;
+        }
+
+        /* Better visual feedback on touch */
+        .alternative-downloads-toggle:active,
+        .expand-toggle:active {
+          transform: scale(0.98);
+          background: var(--bg-hover);
+        }
+      }
+
+      /* Improve text scaling on mobile */
+      @media (max-width: 480px) {
+        html {
+          -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+        }
+      }
+
+      /* Enhanced Micro Interactions */
+
+      /* Page entrance animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes slideInFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-2deg);
+        }
+        75% {
+          transform: rotate(2deg);
+        }
+      }
+
+      /* Page load animations */
+      body {
+        animation: fadeInScale 0.6s ease-out;
+      }
+
+      .hero-section {
+        animation: fadeInUp 0.8s ease-out 0.1s both;
+      }
+
+      .smart-download-section {
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+      }
+
+      .version-history-section {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+
+      /* Enhanced button interactions */
+      .primary-download {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .primary-download::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .primary-download:hover::before {
+        left: 100%;
+      }
+
+      .primary-download:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 112, 243, 0.3);
+      }
+
+      .primary-download:active {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 4px 15px rgba(0, 112, 243, 0.2);
+      }
+
+      .primary-download.loading {
+        pointer-events: none;
+        background: var(--bg-tertiary);
+        border-color: var(--border-primary);
+        animation: pulse 1.5s infinite;
+      }
+
+      .primary-download.loading .download-icon {
+        animation: rotate 1s linear infinite;
+      }
+
+      /* Enhanced card interactions */
+      .platform-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .platform-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(0, 112, 243, 0.05),
+          rgba(124, 58, 237, 0.05)
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 12px;
+      }
+
+      .platform-card:hover {
+        border-color: var(--accent-primary);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 112, 243, 0.15);
+      }
+
+      .platform-card:hover::before {
+        opacity: 1;
+      }
+
+      .platform-card:hover .platform-icon {
+        animation: float 2s ease-in-out infinite;
+      }
+
+      /* Enhanced link interactions */
+      .quick-download-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quick-download-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 112, 243, 0.1),
+          transparent
+        );
+        transition: left 0.4s ease;
+      }
+
+      .quick-download-btn:hover::before {
+        left: 100%;
+      }
+
+      .quick-download-btn:hover {
+        background: var(--bg-hover);
+        border-color: var(--accent-primary);
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 112, 243, 0.1);
+      }
+
+      .quick-download-btn.loading {
+        background: linear-gradient(
+          90deg,
+          var(--bg-tertiary),
+          var(--bg-hover),
+          var(--bg-tertiary)
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        pointer-events: none;
+      }
+
+      /* Enhanced toggle interactions */
+      .alternative-downloads-toggle,
+      .expand-toggle {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .alternative-downloads-toggle:hover,
+      .expand-toggle:hover {
+        border-color: var(--accent-primary);
+        color: var(--accent-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 112, 243, 0.1);
+      }
+
+      .expand-icon {
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .alternative-downloads-toggle:hover .expand-icon {
+        animation: wiggle 0.5s ease-in-out;
+      }
+
+      /* Enhanced dropdown animations */
+      .alternative-options {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      .alternative-options.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        max-height: 300px;
+      }
+
+      .quick-options {
+        animation: fadeInUp 0.5s ease-out 0.1s both;
+      }
+
+      .quick-download-btn {
+        animation: slideInFromLeft 0.4s ease-out calc(var(--index, 0) * 0.1s)
+          both;
+      }
+
+      /* Version history enhanced animations */
+      .version-history-content {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      .version-history-content.show {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 2000px;
+      }
+
+      .version-item {
+        animation: fadeInUp 0.4s ease-out calc(var(--index, 0) * 0.1s) both;
+        transition: all 0.3s ease;
+      }
+
+      .version-item:hover {
+        transform: translateX(4px);
+        border-color: var(--border-hover);
+      }
+
+      .version-header {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .version-header:hover {
+        background: var(--bg-hover);
+        transform: scale(1.01);
+      }
+
+      /* Enhanced status badge */
+      .status-badge {
+        animation: scaleIn 0.6s ease-out 0.8s both;
+        transition: all 0.3s ease;
+      }
+
+      .status-badge:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 208, 132, 0.3);
+      }
+
+      /* Platform icon animations */
+      .platform-icon {
+        transition: all 0.3s ease;
+      }
+
+      .platform-header:hover .platform-icon {
+        transform: scale(1.2) rotate(5deg);
+      }
+
+      /* Download message enhanced */
+      .download-message {
+        animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-primary);
+      }
+
+      /* Enhanced focus states */
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--accent-primary);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(0, 112, 243, 0.1);
+        transform: scale(1.02);
+      }
+
+      /* Hero title enhanced animation */
+      .hero-title {
+        background: linear-gradient(
+          45deg,
+          var(--text-primary),
+          var(--accent-primary),
+          var(--text-primary)
+        );
+        background-size: 200% 200%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation:
+          fadeInUp 0.8s ease-out 0.1s both,
+          shimmer 3s ease-in-out infinite;
+      }
+
+      .hero-subtitle {
+        animation: fadeInUp 0.8s ease-out 0.3s both;
+      }
+
+      /* Section headers enhanced */
+      .section-title {
+        transition: all 0.3s ease;
+      }
+
+      .section-title:hover {
+        transform: translateX(4px);
+        color: var(--accent-primary);
+      }
+
+      /* Enhanced loading states */
+      .loading-skeleton {
+        background: linear-gradient(
+          90deg,
+          var(--bg-tertiary),
+          var(--bg-hover),
+          var(--bg-tertiary)
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 4px;
+      }
+
+      /* Smooth scrolling for the page */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Enhanced version item content animations */
+      .version-content {
+        transition: all 0.3s ease;
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      .version-item[open] .version-content {
+        opacity: 1;
+        max-height: 500px;
+        animation: fadeInUp 0.4s ease-out;
+      }
+
+      /* Platform sections in version history */
+      .platform-section {
+        animation: slideInFromLeft 0.4s ease-out
+          calc(var(--platform-index, 0) * 0.1s) both;
+      }
+
+      .download-link {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .download-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 112, 243, 0.1),
+          transparent
+        );
+        transition: left 0.4s ease;
+      }
+
+      .download-link:hover::before {
+        left: 100%;
+      }
+
+      .download-link:hover {
+        background: var(--bg-hover);
+        border-color: var(--accent-primary);
+        transform: translateX(4px) scale(1.02);
+        box-shadow: 0 2px 8px rgba(0, 112, 243, 0.1);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        <!-- HERO SECTION -->
-        <section class="hero-card" id="hero-section">
-            <div class="hero-content">
-                <div class="hero-title">Download Cursor</div>
-                <div class="hero-version" id="latest-version">Latest Version: v0.51.1 <span style='color:#888;font-size:0.95em;'>(released 2025-05-31)</span></div>
-                <div class="hero-desc">
-                    The fastest, AI-powered code editor. Download the latest version for your platform.<br>
-                    <span class="note">All download links are direct from Cursor's official servers.</span>
-                </div>
-                <div class="download-buttons" id="download-buttons">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <h1 class="hero-title">
+          Download the most <em class="italic">powerful</em> editor
+        </h1>
+        <p class="hero-subtitle">
+          AI-powered code editor built for developers who move fast
+        </p>
+      </section>
 
-    <!-- Windows buttons -->
-    <div class="button-group">
-      <a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/x64/user-setup/CursorUserSetup-x64-0.51.1.exe" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🪟 Windows x64 (User)
-        </md-filled-button>
-      </a>
-<a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/arm64/user-setup/CursorUserSetup-arm64-0.51.1.exe" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🪟 Windows ARM64 (User)
-        </md-filled-button>
-      </a>
-    </div>
-    
-    <!-- macOS buttons -->
-    <div class="button-group">
-      <a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/universal/Cursor-darwin-universal.dmg" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🍏 macOS Universal
-        </md-filled-button>
-      </a>
-<a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/x64/Cursor-darwin-x64.dmg" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🍏 macOS Intel
-        </md-filled-button>
-      </a>
-<a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/arm64/Cursor-darwin-arm64.dmg" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🍏 macOS Apple Silicon
-        </md-filled-button>
-      </a>
-    </div>
-    
-    <!-- Linux buttons -->
-    <div class="button-group">
-      <a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/linux/x64/Cursor-0.51.1-x86_64.AppImage" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🐧 Linux x64
-        </md-filled-button>
-      </a>
-<a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/linux/arm64/Cursor-0.51.1-aarch64.AppImage" style="text-decoration: none; display: inline-block; margin-bottom: 0.5em;">
-        <md-filled-button style="font-size:1.1rem;padding:1.1em 2.2em;min-width:180px;background:#5e35b1;">
-          🐧 Linux ARM64
-        </md-filled-button>
-      </a>
-    </div>
-  
-                </div>
-            </div>
-        </section>
+      <!-- Smart Download Section -->
+      <section class="smart-download-section">
+        <div class="platform-detected" id="platform-detected">
+          <span class="platform-icon" id="detected-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+            </svg>
+          </span>
+          <span id="detected-text">Detecting your platform...</span>
+        </div>
 
-        <!-- DETAILS SECTION -->
-        <section class="details-card">
-            <h2 style="margin-top:0; font-size:1.5rem; color:#64b5f6; font-weight:600;">All Versions & Platforms</h2>
-            <div id="details-table">
-<div class="expandable-version-list">
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.51.1</span>
-            <span class="version-date">2025-05-31</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/x64/user-setup/CursorUserSetup-x64-0.51.1.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/arm64/user-setup/CursorUserSetup-arm64-0.51.1.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/x64/system-setup/CursorSetup-x64-0.51.1.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/arm64/system-setup/CursorSetup-arm64-0.51.1.exe" target="_blank">Windows ARM64 (System)</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/x64/system-setup/CursorSetup-x64-0.51.1.exe" target="_blank">Windows x64</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/arm64/system-setup/CursorSetup-arm64-0.51.1.exe" target="_blank">Windows ARM64</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/linux/x64/Cursor-0.51.1-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/linux/arm64/Cursor-0.51.1-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.51.0</span>
-            <span class="version-date">2025-05-30</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/x64/user-setup/CursorUserSetup-x64-0.51.0.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/arm64/user-setup/CursorUserSetup-arm64-0.51.0.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/x64/system-setup/CursorSetup-x64-0.51.0.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/arm64/system-setup/CursorSetup-arm64-0.51.0.exe" target="_blank">Windows ARM64 (System)</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/x64/system-setup/CursorSetup-x64-0.51.0.exe" target="_blank">Windows x64</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/win32/arm64/system-setup/CursorSetup-arm64-0.51.0.exe" target="_blank">Windows ARM64</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/linux/x64/Cursor-0.51.0-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/adaabf32700c570904618df5bd7166988f3d079b/linux/arm64/Cursor-0.51.0-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.7</span>
-            <span class="version-date">2025-05-24</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/x64/user-setup/CursorUserSetup-x64-0.50.7.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.7.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/x64/system-setup/CursorSetup-x64-0.50.7.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/arm64/system-setup/CursorSetup-arm64-0.50.7.exe" target="_blank">Windows ARM64 (System)</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/x64/system-setup/CursorSetup-x64-0.50.7.exe" target="_blank">Windows x64</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/win32/arm64/system-setup/CursorSetup-arm64-0.50.7.exe" target="_blank">Windows ARM64</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/linux/x64/Cursor-0.50.7-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/02270c8441bdc4b2fdbc30e6f470a589ec78d60d/linux/arm64/Cursor-0.50.7-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.6</span>
-            <span class="version-date">2025-05-23</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/x64/user-setup/CursorUserSetup-x64-0.50.6.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.6.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/x64/system-setup/CursorSetup-x64-0.50.6.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/arm64/system-setup/CursorSetup-arm64-0.50.6.exe" target="_blank">Windows ARM64 (System)</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/x64/system-setup/CursorSetup-x64-0.50.6.exe" target="_blank">Windows x64</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/win32/arm64/system-setup/CursorSetup-arm64-0.50.6.exe" target="_blank">Windows ARM64</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/linux/x64/Cursor-0.50.6-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/f3f2ad556456ff2df80332923bb1e2a818110d1b/linux/arm64/Cursor-0.50.6-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.5</span>
-            <span class="version-date">2025-05-18</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/x64/user-setup/CursorUserSetup-x64-0.50.5.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.5.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/x64/system-setup/CursorSetup-x64-0.50.5.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/arm64/system-setup/CursorSetup-arm64-0.50.5.exe" target="_blank">Windows ARM64 (System)</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/x64/system-setup/CursorSetup-x64-0.50.5.exe" target="_blank">Windows x64</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/win32/arm64/system-setup/CursorSetup-arm64-0.50.5.exe" target="_blank">Windows ARM64</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/linux/x64/Cursor-0.50.5-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/linux/arm64/Cursor-0.50.5-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.4</span>
-            <span class="version-date">2025-05-14</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/win32/x64/user-setup/CursorUserSetup-x64-0.50.4.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.4.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/win32/x64/system-setup/CursorSetup-x64-0.50.4.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/win32/arm64/system-setup/CursorSetup-arm64-0.50.4.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/linux/x64/Cursor-0.50.4-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/8ea935e79a50a02da912a034bbeda84a6d3d355d/linux/arm64/Cursor-0.50.4-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.3</span>
-            <span class="version-date">2025-05-13</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/win32/x64/user-setup/CursorUserSetup-x64-0.50.3.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.3.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/win32/x64/system-setup/CursorSetup-x64-0.50.3.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/win32/arm64/system-setup/CursorSetup-arm64-0.50.3.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/linux/x64/Cursor-0.50.3-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/7ae22cf8cd5af9e08b62585dd03d10f5f610acf9/linux/arm64/Cursor-0.50.3-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.2</span>
-            <span class="version-date">2025-05-13</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/win32/x64/user-setup/CursorUserSetup-x64-0.50.2.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.2.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/win32/x64/system-setup/CursorSetup-x64-0.50.2.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/win32/arm64/system-setup/CursorSetup-arm64-0.50.2.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/linux/x64/Cursor-0.50.2-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/fc3e38722d374aeba23729a31220a4f0662e3c9b/linux/arm64/Cursor-0.50.2-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.1</span>
-            <span class="version-date">2025-05-11</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/win32/x64/user-setup/CursorUserSetup-x64-0.50.1.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.1.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/win32/x64/system-setup/CursorSetup-x64-0.50.1.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/win32/arm64/system-setup/CursorSetup-arm64-0.50.1.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/linux/x64/Cursor-0.50.1-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/81bf18c2ba01d6e7e886875bdb6d1d04ac31c1f7/linux/arm64/Cursor-0.50.1-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.50.0</span>
-            <span class="version-date">2025-05-09</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/win32/x64/user-setup/CursorUserSetup-x64-0.50.0.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/win32/arm64/user-setup/CursorUserSetup-arm64-0.50.0.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/win32/x64/system-setup/CursorSetup-x64-0.50.0.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/win32/arm64/system-setup/CursorSetup-arm64-0.50.0.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/linux/x64/Cursor-0.50.0-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/bbfa51c1211255cbbde8b558e014a593f44051f4/linux/arm64/Cursor-0.50.0-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.6</span>
-            <span class="version-date">2025-04-25</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/win32/x64/user-setup/CursorUserSetup-x64-0.49.6.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.6.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/win32/x64/system-setup/CursorSetup-x64-0.49.6.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/win32/arm64/system-setup/CursorSetup-arm64-0.49.6.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/x64/Cursor-0.49.6-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/arm64/Cursor-0.49.6-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.5</span>
-            <span class="version-date">2025-04-24</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/win32/x64/user-setup/CursorUserSetup-x64-0.49.5.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.5.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/win32/x64/system-setup/CursorSetup-x64-0.49.5.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/win32/arm64/system-setup/CursorSetup-arm64-0.49.5.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/linux/x64/Cursor-0.49.5-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/fd861c8a80c0f9e4e35294b1915ee8a7b29ae858/linux/arm64/Cursor-0.49.5-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.4</span>
-            <span class="version-date">2025-04-22</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/win32/x64/user-setup/CursorUserSetup-x64-0.49.4.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.4.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/win32/x64/system-setup/CursorSetup-x64-0.49.4.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/win32/arm64/system-setup/CursorSetup-arm64-0.49.4.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/linux/x64/Cursor-0.49.4-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/ec408037b24566b11e6132c58bbe6ad27046eb91/linux/arm64/Cursor-0.49.4-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.3</span>
-            <span class="version-date">2025-04-21</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/win32/x64/user-setup/CursorUserSetup-x64-0.49.3.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.3.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/win32/x64/system-setup/CursorSetup-x64-0.49.3.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/win32/arm64/system-setup/CursorSetup-arm64-0.49.3.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/linux/x64/Cursor-0.49.3-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/224bc1da1a36703c583d62e407d4bccbb8c6a641/linux/arm64/Cursor-0.49.3-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.2</span>
-            <span class="version-date">2025-04-19</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/win32/x64/user-setup/CursorUserSetup-x64-0.49.2.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.2.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/win32/x64/system-setup/CursorSetup-x64-0.49.2.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/win32/arm64/system-setup/CursorSetup-arm64-0.49.2.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/linux/x64/Cursor-0.49.2-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/1d0a7a3b734be5aea27e30d0c56d2a6e2c79da74/linux/arm64/Cursor-0.49.2-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.1</span>
-            <span class="version-date">2025-04-17</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/win32/x64/user-setup/CursorUserSetup-x64-0.49.1.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.1.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/win32/x64/system-setup/CursorSetup-x64-0.49.1.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/win32/arm64/system-setup/CursorSetup-arm64-0.49.1.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/linux/x64/Cursor-0.49.1-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/600e5c827c07c5818474c1056eeec61d478b407a/linux/arm64/Cursor-0.49.1-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details>
-        <details class="version-details">
-          <summary class="version-summary">
-            <span class="version-number">0.49.0</span>
-            <span class="version-date">2025-04-16</span>
-            <span class="expand-icon"></span>
-          </summary>
-          <div class="version-links">
-            <strong>🪟 Windows:</strong><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/win32/x64/user-setup/CursorUserSetup-x64-0.49.0.exe" target="_blank">Windows x64 (User)</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/win32/arm64/user-setup/CursorUserSetup-arm64-0.49.0.exe" target="_blank">Windows ARM64 (User)</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/win32/x64/system-setup/CursorSetup-x64-0.49.0.exe" target="_blank">Windows x64 (System)</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/win32/arm64/system-setup/CursorSetup-arm64-0.49.0.exe" target="_blank">Windows ARM64 (System)</a><br><br>
-            <strong>🍏 macOS:</strong><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/darwin/universal/Cursor-darwin-universal.dmg" target="_blank">macOS Universal</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/darwin/x64/Cursor-darwin-x64.dmg" target="_blank">macOS Intel</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/darwin/arm64/Cursor-darwin-arm64.dmg" target="_blank">macOS Apple Silicon</a><br><br>
-            <strong>🐧 Linux:</strong><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/linux/x64/Cursor-0.49.0-x86_64.AppImage" target="_blank">Linux x64</a><br><a href="https://downloads.cursor.com/production/88a47f0edd42a2ba73afb018ada9fe9eda7df75f/linux/arm64/Cursor-0.49.0-aarch64.AppImage" target="_blank">Linux ARM64</a>
-          </div>
-        </details></div>
+        <a
+          href="#"
+          class="primary-download"
+          id="primary-download"
+          role="button"
+          aria-describedby="download-help"
+        >
+          <span class="download-icon">↓</span>
+          <span id="primary-download-text">Download for Your Platform</span>
+        </a>
+
+        <div class="download-help" id="download-help">
+          Direct download from official Cursor servers • Always latest version
+        </div>
+
+        <div class="version-info-inline">
+          <div class="version-details-inline">
+            <h3 class="version-title">Latest Version</h3>
+            <div class="version-meta" id="version-meta-inline">
+              Loading version information...
             </div>
-        </section>
+            <div class="version-description-inline">
+              Enhanced AI capabilities, improved performance, and new
+              collaborative features. All downloads are direct from Cursor's
+              official servers.
+            </div>
+          </div>
+          <div class="status-badge">Latest</div>
+        </div>
+
+        <div class="alternative-downloads">
+          <button
+            class="alternative-downloads-toggle"
+            id="alt-toggle"
+            aria-expanded="false"
+            aria-controls="alt-options"
+          >
+            <span>Other platforms</span>
+            <span
+              class="expand-icon"
+              style="transform: rotate(45deg); margin-left: 0.25rem"
+            ></span>
+          </button>
+
+          <div class="alternative-options" id="alt-options" aria-hidden="true">
+            <div class="quick-options" id="quick-options">
+              <!-- Populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <div class="keyboard-hint">
+          <span class="key">Ctrl</span><span class="key">D</span> Quick download
+          • <span class="key">Esc</span> Close menus
+        </div>
+      </section>
+
+      <!-- Version History -->
+      <section class="version-history-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="platform-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
+                />
+              </svg>
+            </span>
+            Version History
+          </h2>
+          <button class="expand-toggle" id="history-toggle">
+            <span>Show all versions</span>
+            <span
+              class="expand-icon"
+              style="transform: rotate(45deg); margin-left: 0.25rem"
+            ></span>
+          </button>
+        </div>
+
+        <div class="version-history-content" id="version-history-content">
+          <div class="version-list" id="version-list">
+            <!-- Versions will be populated dynamically from version-history.json -->
+          </div>
+        </div>
+      </section>
     </main>
+
     <footer>
-        <div>This site is automatically generated. View the source on <a href="https://github.com/accesstechnology-mike/downloadcursor.app" target="_blank">GitHub</a>.</div>
+      <div>
+        This site is automatically generated. View the source on
+        <a
+          href="https://github.com/accesstechnology-mike/downloadcursor.app"
+          target="_blank"
+          >GitHub</a
+        >.
+      </div>
     </footer>
-</body>
+
+    <script>
+      // Global variable to store version data
+      let versionData = null;
+
+      // Load version history from JSON
+      async function loadVersionHistory() {
+        try {
+          const response = await fetch("./version-history.json");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          versionData = await response.json();
+          return versionData;
+        } catch (error) {
+          console.error("Failed to load version history:", error);
+          // Fallback to hardcoded latest version if JSON fails
+          return {
+            versions: [
+              {
+                version: "0.51.1",
+                date: "2025-05-31",
+                platforms: {
+                  "win32-x64-user":
+                    "https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/x64/user-setup/CursorUserSetup-x64-0.51.1.exe",
+                  "win32-arm64-user":
+                    "https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/win32/arm64/user-setup/CursorUserSetup-arm64-0.51.1.exe",
+                  "darwin-universal":
+                    "https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/universal/Cursor-darwin-universal.dmg",
+                  "darwin-arm64":
+                    "https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/darwin/arm64/Cursor-darwin-arm64.dmg",
+                  "linux-x64":
+                    "https://downloads.cursor.com/production/a9dd46cbd249a30044eaae1526eb6ca1ec2f7568/linux/x64/Cursor-0.51.1-x86_64.AppImage",
+                },
+              },
+            ],
+          };
+        }
+      }
+
+      // Get platform-friendly names
+      function getPlatformDisplayName(platformKey) {
+        const platformNames = {
+          "win32-x64-user": "Windows x64 (User)",
+          "win32-arm64-user": "Windows ARM64 (User)",
+          "win32-x64-system": "Windows x64 (System)",
+          "win32-arm64-system": "Windows ARM64 (System)",
+          "win32-x64": "Windows x64",
+          "win32-arm64": "Windows ARM64",
+          "darwin-universal": "macOS Universal",
+          "darwin-x64": "macOS Intel",
+          "darwin-arm64": "macOS Apple Silicon",
+          "linux-x64": "Linux x64",
+          "linux-arm64": "Linux ARM64",
+        };
+        return platformNames[platformKey] || platformKey;
+      }
+
+      // Get platform category with proper Lucide icons
+      function getPlatformCategory(platformKey) {
+        if (platformKey.startsWith("win32"))
+          return {
+            name: "Windows",
+            icon: `<i data-lucide="monitor"></i>`,
+          };
+        if (platformKey.startsWith("darwin"))
+          return {
+            name: "macOS",
+            icon: `<i data-lucide="laptop"></i>`,
+          };
+        if (platformKey.startsWith("linux"))
+          return {
+            name: "Linux",
+            icon: `<i data-lucide="terminal"></i>`,
+          };
+        return {
+          name: "Other",
+          icon: `<i data-lucide="hard-drive"></i>`,
+        };
+      }
+
+      // Get prioritized platforms (remove duplicates, prefer user over system)
+      function getPrioritizedPlatforms(platforms) {
+        const result = [];
+        const seenPlatforms = new Set();
+
+        // Define platform groups to avoid duplicates
+        const platformGroups = [
+          ["win32-x64-user", "win32-x64-system", "win32-x64"],
+          ["win32-arm64-user", "win32-arm64-system", "win32-arm64"],
+          ["darwin-universal"],
+          ["darwin-arm64", "darwin-x64"],
+          ["linux-x64"],
+          ["linux-arm64"],
+        ];
+
+        // Process each group, taking the first available platform
+        platformGroups.forEach((group) => {
+          for (const key of group) {
+            if (platforms[key] && !seenPlatforms.has(getBasePlatform(key))) {
+              result.push({ key, url: platforms[key] });
+              seenPlatforms.add(getBasePlatform(key));
+              break;
+            }
+          }
+        });
+
+        // Add any remaining platforms not in groups
+        Object.entries(platforms).forEach(([key, url]) => {
+          const basePlatform = getBasePlatform(key);
+          if (!seenPlatforms.has(basePlatform)) {
+            result.push({ key, url });
+            seenPlatforms.add(basePlatform);
+          }
+        });
+
+        return result;
+      }
+
+      // Get base platform identifier for deduplication
+      function getBasePlatform(platformKey) {
+        if (platformKey.startsWith("win32-x64")) return "win32-x64";
+        if (platformKey.startsWith("win32-arm64")) return "win32-arm64";
+        if (platformKey.startsWith("darwin-universal"))
+          return "darwin-universal";
+        if (platformKey.startsWith("darwin-arm64")) return "darwin-arm64";
+        if (platformKey.startsWith("darwin-x64")) return "darwin-x64";
+        if (platformKey.startsWith("linux-x64")) return "linux-x64";
+        if (platformKey.startsWith("linux-arm64")) return "linux-arm64";
+        return platformKey;
+      }
+
+      // Platform Detection and Smart Downloads
+      function detectPlatform(latestVersion) {
+        if (!latestVersion) return null;
+
+        const userAgent = navigator.userAgent.toLowerCase();
+        const platform = navigator.platform.toLowerCase();
+
+        if (userAgent.includes("win")) {
+          const preferredKey = "win32-x64-user";
+          return {
+            name: "Windows",
+            icon: `<i data-lucide="monitor"></i>`,
+            url:
+              latestVersion.platforms[preferredKey] ||
+              latestVersion.platforms["win32-x64"],
+            filename: getPlatformDisplayName(preferredKey),
+          };
+        } else if (userAgent.includes("mac")) {
+          // Check for Apple Silicon vs Intel
+          const isAppleSilicon =
+            userAgent.includes("arm") || platform.includes("arm");
+          const preferredKey = isAppleSilicon
+            ? "darwin-arm64"
+            : "darwin-universal";
+          return {
+            name: "macOS",
+            icon: `<i data-lucide="laptop"></i>`,
+            url:
+              latestVersion.platforms[preferredKey] ||
+              latestVersion.platforms["darwin-universal"],
+            filename: getPlatformDisplayName(preferredKey),
+          };
+        } else if (userAgent.includes("linux")) {
+          const preferredKey = "linux-x64";
+          return {
+            name: "Linux",
+            icon: `<i data-lucide="terminal"></i>`,
+            url: latestVersion.platforms[preferredKey],
+            filename: getPlatformDisplayName(preferredKey),
+          };
+        } else {
+          // Default to Windows
+          const preferredKey = "win32-x64-user";
+          return {
+            name: "Universal",
+            icon: `<i data-lucide="hard-drive"></i>`,
+            url:
+              latestVersion.platforms[preferredKey] ||
+              latestVersion.platforms["win32-x64"],
+            filename: "Download Cursor",
+          };
+        }
+      }
+
+      // Update version info section
+      function updateVersionInfo(latestVersion) {
+        const versionMeta = document.getElementById("version-meta-inline");
+        const versionDescription = document.querySelector(
+          ".version-description-inline",
+        );
+
+        if (versionMeta && latestVersion) {
+          versionMeta.textContent = `v${latestVersion.version} • Released ${latestVersion.date} • Multiple platforms available`;
+        }
+
+        if (versionDescription) {
+          versionDescription.textContent =
+            "Enhanced AI capabilities, improved performance, and new collaborative features. All downloads are direct from Cursor's official servers.";
+        }
+      }
+
+      // Set up smart download
+      function setupSmartDownload(latestVersion) {
+        const platform = detectPlatform(latestVersion);
+
+        if (!platform) {
+          console.error("Could not detect platform or load version data");
+          return;
+        }
+
+        // Update detected platform display
+        document.getElementById("detected-icon").innerHTML = platform.icon;
+        document.getElementById("detected-text").textContent =
+          `Detected: ${platform.name}`;
+
+        // Update primary download button
+        const primaryBtn = document.getElementById("primary-download");
+        primaryBtn.href = platform.url;
+        document.getElementById("primary-download-text").textContent =
+          `Download ${platform.filename}`;
+
+        // Setup alternative options
+        setupAlternativeOptions(latestVersion);
+      }
+
+      // Setup alternative download options
+      function setupAlternativeOptions(latestVersion) {
+        if (!latestVersion) return;
+
+        // Prioritize platforms and remove duplicates
+        const prioritizedPlatforms = getPrioritizedPlatforms(
+          latestVersion.platforms,
+        );
+
+        const platformCategories = {
+          Windows: [],
+          macOS: [],
+          Linux: [],
+        };
+
+        // Group platforms by category
+        prioritizedPlatforms.forEach(({ key, url }) => {
+          const category = getPlatformCategory(key);
+          const displayName = getPlatformDisplayName(key);
+
+          if (category.name === "Windows") {
+            platformCategories.Windows.push({
+              name: displayName,
+              icon: category.icon,
+              url,
+            });
+          } else if (category.name === "macOS") {
+            platformCategories.macOS.push({
+              name: displayName,
+              icon: category.icon,
+              url,
+            });
+          } else if (category.name === "Linux") {
+            platformCategories.Linux.push({
+              name: displayName,
+              icon: category.icon,
+              url,
+            });
+          }
+        });
+
+        // Create options for all platforms
+        const allPlatforms = [
+          ...platformCategories.Windows,
+          ...platformCategories.macOS,
+          ...platformCategories.Linux,
+        ];
+
+        const quickOptions = document.getElementById("quick-options");
+        quickOptions.innerHTML = allPlatforms
+          .map(
+            (platform, index) =>
+              `<a href="${platform.url}" class="quick-download-btn" style="--index: ${index}">
+                    <span class="platform-icon">${platform.icon}</span>
+                    <span>${platform.name}</span>
+                </a>`,
+          )
+          .join("");
+
+        // Re-initialize Lucide icons for dynamic content
+        lucide.createIcons();
+      }
+
+      // Render version history
+      function renderVersionHistory(versions) {
+        const versionList = document.getElementById("version-list");
+
+        const versionsHTML = versions
+          .map((version, versionIndex) => {
+            // Prioritize platforms and remove duplicates for this version
+            const prioritizedPlatforms = getPrioritizedPlatforms(
+              version.platforms,
+            );
+
+            const platformCategories = {
+              Windows: { icon: `<i data-lucide="monitor"></i>`, platforms: [] },
+              macOS: { icon: `<i data-lucide="laptop"></i>`, platforms: [] },
+              Linux: { icon: `<i data-lucide="terminal"></i>`, platforms: [] },
+            };
+
+            // Group platforms by category for this version
+            prioritizedPlatforms.forEach(({ key, url }) => {
+              const category = getPlatformCategory(key);
+              const displayName = getPlatformDisplayName(key);
+
+              if (category.name in platformCategories) {
+                platformCategories[category.name].platforms.push({
+                  name: displayName,
+                  url: url,
+                });
+              }
+            });
+
+            // Generate platform sections HTML
+            const platformSectionsHTML = Object.entries(platformCategories)
+              .map(([categoryName, data], platformIndex) => {
+                if (data.platforms.length === 0) return "";
+
+                const linksHTML = data.platforms
+                  .map(
+                    (platform) =>
+                      `<a href="${platform.url}" class="download-link">${platform.name}</a>`,
+                  )
+                  .join("");
+
+                return `
+                        <div class="platform-section" style="--platform-index: ${platformIndex}">
+                            <div class="platform-label">
+                                <span class="platform-icon">${data.icon}</span>
+                                ${categoryName}
+                            </div>
+                            <div class="download-links">
+                                ${linksHTML}
+                            </div>
+                        </div>
+                    `;
+              })
+              .filter((html) => html !== "")
+              .join("");
+
+            return `
+                    <details class="version-item" style="--index: ${versionIndex}">
+                        <summary class="version-header">
+                            <span class="version-number">${version.version}</span>
+                            <span class="version-date">${version.date}</span>
+                            <span class="expand-icon"></span>
+                        </summary>
+                        <div class="version-content">
+                            ${platformSectionsHTML}
+                        </div>
+                    </details>
+                `;
+          })
+          .join("");
+
+        versionList.innerHTML = versionsHTML;
+
+        // Re-initialize Lucide icons for dynamic content
+        lucide.createIcons();
+      }
+
+      // Toggle functionality
+      function setupToggles() {
+        // Alternative downloads toggle
+        const altToggle = document.getElementById("alt-toggle");
+        const altOptions = document.getElementById("alt-options");
+
+        altToggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          const isExpanded = altOptions.classList.contains("show");
+
+          // Add smooth transition class
+          altToggle.classList.add("transitioning");
+
+          altOptions.classList.toggle("show");
+          const icon = altToggle.querySelector(".expand-icon");
+
+          // Update ARIA attributes
+          altToggle.setAttribute("aria-expanded", !isExpanded);
+          altOptions.setAttribute("aria-hidden", isExpanded);
+
+          // Enhanced icon animation with better mobile feedback
+          if (altOptions.classList.contains("show")) {
+            icon.style.transform = "rotate(-135deg) scale(1.1)";
+            altToggle.style.backgroundColor = "var(--bg-hover)";
+            altToggle.style.borderColor = "var(--accent-primary)";
+          } else {
+            icon.style.transform = "rotate(45deg) scale(1)";
+            altToggle.style.backgroundColor = "";
+            altToggle.style.borderColor = "";
+          }
+
+          // Reset stagger animations for quick options
+          if (!isExpanded) {
+            const quickBtns = altOptions.querySelectorAll(
+              ".quick-download-btn",
+            );
+            quickBtns.forEach((btn, index) => {
+              btn.style.setProperty("--index", index);
+              btn.style.animation = "none";
+              btn.offsetHeight; // Trigger reflow
+              btn.style.animation = `slideInFromLeft 0.4s ease-out calc(${index} * 0.1s) both`;
+            });
+
+            // Better mobile focus management
+            if (window.innerWidth <= 768) {
+              setTimeout(() => {
+                altOptions.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                });
+              }, 100);
+            }
+          }
+
+          // Focus management with smooth transition
+          if (!isExpanded && window.innerWidth > 768) {
+            setTimeout(() => {
+              const firstOption = altOptions.querySelector(
+                ".quick-download-btn",
+              );
+              if (firstOption) firstOption.focus();
+            }, 200);
+          }
+
+          // Remove transitioning class
+          setTimeout(() => {
+            altToggle.classList.remove("transitioning");
+          }, 400);
+        });
+
+        // History toggle
+        const historyToggle = document.getElementById("history-toggle");
+        const historyContent = document.getElementById(
+          "version-history-content",
+        );
+
+        historyToggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          const isExpanding = !historyContent.classList.contains("show");
+
+          // Add smooth transition class
+          historyToggle.classList.add("transitioning");
+
+          historyContent.classList.toggle("show");
+          const icon = historyToggle.querySelector(".expand-icon");
+          const text = historyToggle.querySelector("span");
+
+          if (historyContent.classList.contains("show")) {
+            icon.style.transform = "rotate(-135deg) scale(1.1)";
+            text.textContent = "Hide versions";
+            historyToggle.style.backgroundColor = "var(--bg-hover)";
+            historyToggle.style.borderColor = "var(--accent-primary)";
+
+            // Reset stagger animations for version items
+            setTimeout(() => {
+              const versionItems =
+                historyContent.querySelectorAll(".version-item");
+              versionItems.forEach((item, index) => {
+                item.style.setProperty("--index", index);
+                item.style.animation = "none";
+                item.offsetHeight; // Trigger reflow
+                item.style.animation = `fadeInUp 0.4s ease-out calc(${index} * 0.1s) both`;
+              });
+            }, 50);
+
+            // Better mobile scroll management
+            if (window.innerWidth <= 768) {
+              setTimeout(() => {
+                historyContent.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                });
+              }, 200);
+            }
+          } else {
+            icon.style.transform = "rotate(45deg) scale(1)";
+            text.textContent = "Show all versions";
+            historyToggle.style.backgroundColor = "";
+            historyToggle.style.borderColor = "";
+          }
+
+          // Remove transitioning class
+          setTimeout(() => {
+            historyToggle.classList.remove("transitioning");
+          }, 400);
+        });
+      }
+
+      // Keyboard shortcuts
+      function setupKeyboardShortcuts() {
+        document.addEventListener("keydown", (e) => {
+          // Cmd/Ctrl + D for quick download
+          if ((e.metaKey || e.ctrlKey) && e.key === "d") {
+            e.preventDefault();
+            document.getElementById("primary-download").click();
+          }
+
+          // Escape to close any open toggles
+          if (e.key === "Escape") {
+            const altOptions = document.getElementById("alt-options");
+            const historyContent = document.getElementById(
+              "version-history-content",
+            );
+            const altToggle = document.getElementById("alt-toggle");
+            const historyToggle = document.getElementById("history-toggle");
+
+            if (altOptions.classList.contains("show")) {
+              altOptions.classList.remove("show");
+              altToggle.setAttribute("aria-expanded", "false");
+              altOptions.setAttribute("aria-hidden", "true");
+              altToggle.focus();
+            }
+
+            if (historyContent.classList.contains("show")) {
+              historyContent.classList.remove("show");
+              historyToggle.focus();
+            }
+          }
+
+          // Arrow key navigation in alternative options
+          if (
+            document.getElementById("alt-options").classList.contains("show")
+          ) {
+            const options = Array.from(
+              document.querySelectorAll(".quick-download-btn"),
+            );
+            const currentIndex = options.findIndex(
+              (option) => option === document.activeElement,
+            );
+
+            if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+              e.preventDefault();
+              const nextIndex = (currentIndex + 1) % options.length;
+              options[nextIndex].focus();
+            } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+              e.preventDefault();
+              const prevIndex =
+                currentIndex <= 0 ? options.length - 1 : currentIndex - 1;
+              options[prevIndex].focus();
+            }
+          }
+        });
+      }
+
+      // Initialize everything when page loads
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Load version data first
+        const data = await loadVersionHistory();
+
+        if (data && data.versions && data.versions.length > 0) {
+          const latestVersion = data.versions[0]; // First version is latest
+
+          // Update all sections with dynamic data
+          updateVersionInfo(latestVersion);
+          setupSmartDownload(latestVersion);
+          renderVersionHistory(data.versions);
+        }
+
+        // Setup interactivity
+        setupToggles();
+        setupKeyboardShortcuts();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+      });
+
+      // Enhanced loading states for downloads
+      document.addEventListener("click", (e) => {
+        const downloadElement = e.target.closest(
+          ".primary-download, .quick-download-btn, .download-link",
+        );
+
+        if (downloadElement) {
+          // Add loading state with smooth transition
+          downloadElement.style.transition = "all 0.3s ease";
+          downloadElement.classList.add("loading");
+
+          // Add ripple effect
+          createRippleEffect(e, downloadElement);
+
+          // Show download started message with animation
+          showDownloadMessage("→ Download started!");
+
+          // Temporarily disable pointer events
+          downloadElement.style.pointerEvents = "none";
+
+          // Remove loading state after delay
+          setTimeout(() => {
+            downloadElement.classList.remove("loading");
+            downloadElement.style.pointerEvents = "";
+          }, 2500);
+        }
+      });
+
+      // Create ripple effect on click
+      function createRippleEffect(event, element) {
+        const ripple = document.createElement("span");
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+
+        ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease-out;
+                pointer-events: none;
+                z-index: 10;
+            `;
+
+        // Add ripple keyframe if it doesn't exist
+        if (!document.querySelector("#ripple-keyframes")) {
+          const style = document.createElement("style");
+          style.id = "ripple-keyframes";
+          style.textContent = `
+                    @keyframes ripple {
+                        to {
+                            transform: scale(2);
+                            opacity: 0;
+                        }
+                    }
+                `;
+          document.head.appendChild(style);
+        }
+
+        const elementStyle = getComputedStyle(element);
+        if (elementStyle.position === "static") {
+          element.style.position = "relative";
+        }
+
+        element.appendChild(ripple);
+
+        // Remove ripple after animation
+        setTimeout(() => {
+          if (ripple.parentNode) {
+            ripple.parentNode.removeChild(ripple);
+          }
+        }, 600);
+      }
+
+      // Enhanced download message with better animations
+      function showDownloadMessage(message) {
+        // Remove existing message if any
+        const existingMessage = document.querySelector(".download-message");
+        if (existingMessage) {
+          existingMessage.style.transform = "translateX(100%) scale(0.8)";
+          existingMessage.style.opacity = "0";
+          setTimeout(() => existingMessage.remove(), 200);
+        }
+
+        // Create and show new message
+        const messageEl = document.createElement("div");
+        messageEl.className = "download-message";
+        messageEl.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.2em;">${message.split(" ")[0]}</span>
+                    <span>${message.substring(message.indexOf(" ") + 1)}</span>
+                </div>
+            `;
+
+        // Better mobile positioning with enhanced styling
+        if (window.innerWidth <= 768) {
+          messageEl.style.cssText = `
+                    position: fixed;
+                    top: 1rem;
+                    left: 1rem;
+                    right: 1rem;
+                    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+                    border: 1px solid var(--accent-primary);
+                    border-radius: 12px;
+                    padding: 1rem;
+                    color: var(--text-primary);
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    z-index: 1000;
+                    opacity: 0;
+                    transform: translateY(-20px) scale(0.9);
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 10px 30px rgba(0, 112, 243, 0.2);
+                    text-align: center;
+                    max-width: none;
+                    backdrop-filter: blur(10px);
+                `;
+        } else {
+          messageEl.style.cssText = `
+                    position: fixed;
+                    top: 2rem;
+                    right: 2rem;
+                    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+                    border: 1px solid var(--accent-primary);
+                    border-radius: 12px;
+                    padding: 1.25rem;
+                    color: var(--text-primary);
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    z-index: 1000;
+                    opacity: 0;
+                    transform: translateX(20px) scale(0.9);
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    max-width: 320px;
+                    box-shadow: 0 10px 30px rgba(0, 112, 243, 0.2);
+                    backdrop-filter: blur(10px);
+                `;
+        }
+
+        document.body.appendChild(messageEl);
+
+        // Enhanced animate in with bounce effect
+        requestAnimationFrame(() => {
+          if (window.innerWidth <= 768) {
+            messageEl.style.opacity = "1";
+            messageEl.style.transform = "translateY(0) scale(1)";
+          } else {
+            messageEl.style.opacity = "1";
+            messageEl.style.transform = "translateX(0) scale(1)";
+          }
+        });
+
+        // Add subtle pulsing animation
+        setTimeout(() => {
+          messageEl.style.animation = "pulse 2s ease-in-out infinite";
+        }, 400);
+
+        // Auto hide after 4 seconds with improved animation
+        setTimeout(() => {
+          messageEl.style.animation = "none";
+          if (window.innerWidth <= 768) {
+            messageEl.style.opacity = "0";
+            messageEl.style.transform = "translateY(-20px) scale(0.8)";
+          } else {
+            messageEl.style.opacity = "0";
+            messageEl.style.transform = "translateX(100%) scale(0.8)";
+          }
+          setTimeout(() => messageEl.remove(), 400);
+        }, 4000);
+      }
+    </script>
+  </body>
 </html>

@@ -2,8 +2,8 @@ name: Update Cursor Download Links
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Run hourly at minute 0
-  workflow_dispatch:     # Allow manual triggering
+    - cron: "0 * * * *" # Run hourly at minute 0
+  workflow_dispatch: # Allow manual triggering
 
 permissions:
   contents: write
@@ -14,33 +14,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-          
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
-        
+
       - name: Run update script
         run: bun run scripts/update-links.ts
-        
+
       - name: Check for changes
         id: git-check
         run: |
           git diff --quiet index.html version-history.json || echo "changes=true" >> $GITHUB_OUTPUT
-          
+
       - name: Commit and push if changed
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add index.html version-history.json
+          git add --all
           git commit -m "Update Cursor download links and version history"
-          git push 
+          git push
