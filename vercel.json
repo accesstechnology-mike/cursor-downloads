@@ -7,5 +7,22 @@
       "config": { "distDir": "." }
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+  "routes": [
+    {
+      "src": "/version-history.json",
+      "dest": "/version-history.json",
+      "headers": {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=300"
+      }
+    },
+    {
+      "src": "/(.*\\.(js|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
