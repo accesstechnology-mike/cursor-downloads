@@ -2168,13 +2168,7 @@
             </div>
           </div>
           
-          <!-- Test button (remove before production) -->
-          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary);">
-            <button id="test-email-btn" style="padding: 0.5rem 1rem; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
-              🧪 Send Test Email
-            </button>
-            <div id="test-email-status" style="margin-top: 0.5rem; font-size: 0.875rem;"></div>
-          </div>
+
         </div>
       </section>
 
@@ -2860,7 +2854,6 @@
         setupToggles();
         setupKeyboardShortcuts();
         setupNewsletter();
-        setupTestEmail();
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -3113,52 +3106,7 @@
         });
       }
 
-      // Test email functionality using production endpoint
-      function setupTestEmail() {
-        const testBtn = document.getElementById('test-email-btn');
-        const testStatus = document.getElementById('test-email-status');
 
-        if (testBtn) {
-          testBtn.addEventListener('click', async () => {
-            const secret = prompt('Enter NOTIFICATION_SECRET for testing:');
-            if (!secret) return;
-
-            testBtn.disabled = true;
-            testBtn.textContent = 'Sending...';
-            testStatus.textContent = '';
-
-            try {
-              const response = await fetch('/api/send-notification', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${secret}`
-                },
-                body: JSON.stringify({
-                  version: '0.51.2',
-                  date: '2025-06-03'
-                })
-              });
-
-              const data = await response.json();
-
-              if (response.ok) {
-                testStatus.innerHTML = `Production notification sent successfully!<br>Sent to: ${data.sentTo}<br>Total subscribers: ${data.totalSubscribers}`;
-                testStatus.style.color = 'var(--success)';
-              } else {
-                testStatus.textContent = `${data.error || 'Failed to send notification'}`;
-                testStatus.style.color = '#ef4444';
-              }
-            } catch (error) {
-              testStatus.textContent = `Error: ${error.message}`;
-              testStatus.style.color = '#ef4444';
-            } finally {
-              testBtn.disabled = false;
-              testBtn.textContent = 'Send Test Email';
-            }
-          });
-        }
-      }
     </script>
   </body>
 </html>
