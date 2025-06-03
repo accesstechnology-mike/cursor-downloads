@@ -30,8 +30,22 @@ module.exports = async (req, res) => {
     console.log('🔍 Checking if email exists...');
     const existingEmail = await kv.get(`subscriber:${email}`);
     if (existingEmail) {
-      console.log('⚠️ Email already subscribed');
-      return res.status(200).json({ message: 'Already subscribed!' });
+      if (existingEmail.active) {
+        console.log('⚠️ Email already subscribed and active');
+        return res.status(200).json({ message: 'Already subscribed!' });
+      } else {
+        console.log('🔄 Email exists but inactive, reactivating...');
+        // Reactivate the subscription
+        await kv.set(`subscriber:${email}`, {
+          email,
+          subscribedAt: existingEmail.subscribedAt, // Keep original subscription date
+          reactivatedAt: new Date().toISOString(),
+          active: true
+        });
+        await kv.sadd('subscribers', email);
+        console.log('✅ Email reactivated successfully!');
+        return res.status(200).json({ message: 'Successfully resubscribed!' });
+      }
     }
 
     // Store email with timestamp
