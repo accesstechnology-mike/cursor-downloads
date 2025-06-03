@@ -1,13 +1,6 @@
 import { kv } from '@vercel/kv';
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
+export async function POST(req) {
   try {
     const { email } = await req.json();
 

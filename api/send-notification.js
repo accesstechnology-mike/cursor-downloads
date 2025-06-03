@@ -3,14 +3,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
+export async function POST(req) {
   // Verify the request is from your update script (simple auth)
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.NOTIFICATION_SECRET}`) {
