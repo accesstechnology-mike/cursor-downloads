@@ -285,25 +285,56 @@ function saveVersionHistory(history: VersionHistory): void {
 /**
  * Send notification for new version
  */
-async function sendNewVersionNotification(version: string, releaseDate: string): Promise<void> {
+async function sendNewVersionNotification(version: string, releaseDate: string, isTestRun: boolean = false): Promise<void> {
   try {
-    // Only send notifications in production (when running on Vercel or CI)
+    console.log('🔍 [DEBUG] Starting notification process...');
+    console.log(`🔍 [DEBUG] Version: ${version}, Release Date: ${releaseDate}, Test Run: ${isTestRun}`);
+    
+    // Environment variable debugging
     const isProduction = process.env.VERCEL || process.env.CI || process.env.NODE_ENV === 'production';
     const notificationSecret = process.env.NOTIFICATION_SECRET;
+    const vercelUrl = process.env.VERCEL_URL;
+    const nodeEnv = process.env.NODE_ENV;
     
-    if (!isProduction) {
-      console.log(`[DEV] Would send notification for version ${version} (skipping in development)`);
+    console.log('🔍 [DEBUG] Environment variables:');
+    console.log(`  - VERCEL: ${process.env.VERCEL ? 'SET' : 'NOT_SET'}`);
+    console.log(`  - CI: ${process.env.CI ? 'SET' : 'NOT_SET'}`);
+    console.log(`  - NODE_ENV: ${nodeEnv || 'NOT_SET'}`);
+    console.log(`  - NOTIFICATION_SECRET: ${notificationSecret ? 'SET (length: ' + notificationSecret.length + ')' : 'NOT_SET'}`);
+    console.log(`  - VERCEL_URL: ${vercelUrl || 'NOT_SET'}`);
+    console.log(`  - isProduction: ${isProduction}`);
+
+    // For test runs, we'll send notifications even in development
+    if (!isProduction && !isTestRun) {
+      console.log(`🔍 [DEV] Would send notification for version ${version} (skipping in development)`);
       return;
     }
 
     if (!notificationSecret) {
-      console.log('NOTIFICATION_SECRET not set, skipping email notifications');
+      console.error('❌ [ERROR] NOTIFICATION_SECRET not set! Cannot send email notifications.');
+      console.log('🔍 [DEBUG] Available environment variables:');
+      Object.keys(process.env).forEach(key => {
+        if (key.includes('NOTIFICATION') || key.includes('RESEND') || key.includes('VERCEL')) {
+          console.log(`  - ${key}: ${process.env[key] ? 'SET' : 'NOT_SET'}`);
+        }
+      });
       return;
     }
 
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'https://downloadcursor.app';
+    const baseUrl = vercelUrl 
+      ? `https://${vercelUrl}` 
+      : 'https://www.downloadcursor.app';
+
+    console.log(`🔍 [DEBUG] Using base URL: ${baseUrl}`);
+    console.log(`🔍 [DEBUG] Making request to: ${baseUrl}/api/send-notification`);
+
+    const requestBody = {
+      version,
+      releaseDate,
+      isTest: isTestRun
+    };
+
+    console.log(`🔍 [DEBUG] Request body: ${JSON.stringify(requestBody, null, 2)}`);
 
     const response = await fetch(`${baseUrl}/api/send-notification`, {
       method: 'POST',
@@ -311,21 +342,28 @@ async function sendNewVersionNotification(version: string, releaseDate: string):
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${notificationSecret}`,
       },
-      body: JSON.stringify({
-        version,
-        releaseDate,
-      }),
+      body: JSON.stringify(requestBody),
     });
+
+    console.log(`🔍 [DEBUG] Response status: ${response.status}`);
+    console.log(`🔍 [DEBUG] Response headers:`, Object.fromEntries(response.headers.entries()));
 
     if (response.ok) {
       const result = await response.json();
-      console.log(`✅ Notifications sent: ${result.sent} emails, ${result.errors} errors`);
+      console.log(`✅ Notifications sent successfully!`);
+      console.log(`🔍 [DEBUG] Response: ${JSON.stringify(result, null, 2)}`);
+      console.log(`📧 Sent: ${result.sent} emails, Errors: ${result.errors}`);
     } else {
       const error = await response.text();
       console.error(`❌ Failed to send notifications: ${response.status} - ${error}`);
+      console.log(`🔍 [DEBUG] Error response body: ${error}`);
     }
   } catch (error) {
     console.error('❌ Error sending notifications:', error instanceof Error ? error.message : 'Unknown error');
+    console.log('🔍 [DEBUG] Full error:', error);
+    if (error instanceof Error && error.stack) {
+      console.log('🔍 [DEBUG] Error stack:', error.stack);
+    }
   }
 }
 
@@ -456,11 +494,16 @@ async function main(): Promise<void> {
     const limitedHistory = limitToLastThreeMajorVersions(history);
     saveVersionHistory(limitedHistory);
 
-    // Send notification if this is a new version
-    if (isNewVersion && limitedHistory.versions.length > 0) {
+    // Send notification - for FINAL TEST, always send regardless of new version
+    if (limitedHistory.versions.length > 0) {
       const latestEntry = limitedHistory.versions[0];
-      console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
-      await sendNewVersionNotification(latestEntry.version, latestEntry.date);
+      if (isNewVersion) {
+        console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
+        await sendNewVersionNotification(latestEntry.version, latestEntry.date, false);
+      } else {
+        console.log(`🧪 FINAL TEST: Sending notification for existing version ${latestEntry.version}...`);
+        await sendNewVersionNotification(latestEntry.version, latestEntry.date, true);
+      }
     }
 
     // Update README.md with latest version information
