@@ -1,11 +1,11 @@
 import { kv } from '@vercel/kv';
-import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'edge';
-
-export default async function handler(req: NextRequest) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
@@ -14,13 +14,19 @@ export default async function handler(req: NextRequest) {
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
+      return new Response(JSON.stringify({ error: 'Invalid email address' }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Check if email already exists
     const existingEmail = await kv.get(`subscriber:${email}`);
     if (existingEmail) {
-      return NextResponse.json({ message: 'Already subscribed!' }, { status: 200 });
+      return new Response(JSON.stringify({ message: 'Already subscribed!' }), { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Store email with timestamp
@@ -33,9 +39,15 @@ export default async function handler(req: NextRequest) {
     // Add to subscribers list
     await kv.sadd('subscribers', email);
 
-    return NextResponse.json({ message: 'Successfully subscribed!' }, { status: 200 });
+    return new Response(JSON.stringify({ message: 'Successfully subscribed!' }), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
     console.error('Subscription error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 } 

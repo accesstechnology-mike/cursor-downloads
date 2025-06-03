@@ -3064,23 +3064,23 @@
 
             const data = await response.json();
 
-            if (response.ok) {
-              statusEl.textContent = '✅ ' + data.message;
-              statusEl.className = 'newsletter-status success';
-              emailInput.value = '';
-              
-              // Show success animation
-              form.style.transform = 'scale(1.02)';
-              setTimeout(() => {
-                form.style.transform = 'scale(1)';
-              }, 200);
-            } else {
-              statusEl.textContent = '❌ ' + (data.error || 'Something went wrong');
-              statusEl.className = 'newsletter-status error';
-            }
-          } catch (error) {
-            statusEl.textContent = '❌ Network error. Please try again.';
-            statusEl.className = 'newsletter-status error';
+                         if (response.ok) {
+               statusEl.textContent = data.message;
+               statusEl.className = 'newsletter-status success';
+               emailInput.value = '';
+               
+               // Show success animation
+               form.style.transform = 'scale(1.02)';
+               setTimeout(() => {
+                 form.style.transform = 'scale(1)';
+               }, 200);
+             } else {
+               statusEl.textContent = data.error || 'Something went wrong';
+               statusEl.className = 'newsletter-status error';
+             }
+           } catch (error) {
+             statusEl.textContent = 'Network error. Please try again.';
+             statusEl.className = 'newsletter-status error';
           } finally {
             // Reset button state
             submitBtn.disabled = false;

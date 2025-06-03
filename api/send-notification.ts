@@ -1,34 +1,43 @@
 import { kv } from '@vercel/kv';
 import { Resend } from 'resend';
-import { NextRequest, NextResponse } from 'next/server';
-
-export const runtime = 'edge';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req: NextRequest) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   // Verify the request is from your update script (simple auth)
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.NOTIFICATION_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
     const { version, releaseDate } = await req.json();
 
     if (!version) {
-      return NextResponse.json({ error: 'Version is required' }, { status: 400 });
+      return new Response(JSON.stringify({ error: 'Version is required' }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Get all subscribers
     const subscribers = await kv.smembers('subscribers');
     
     if (!subscribers || subscribers.length === 0) {
-      return NextResponse.json({ message: 'No subscribers to notify' }, { status: 200 });
+      return new Response(JSON.stringify({ message: 'No subscribers to notify' }), { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Create email content
@@ -113,14 +122,20 @@ export default async function handler(req: NextRequest) {
       errorCount
     });
 
-    return NextResponse.json({ 
+    return new Response(JSON.stringify({ 
       message: 'Notifications sent', 
       sent: sentCount, 
       errors: errorCount 
-    }, { status: 200 });
+    }), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
 
   } catch (error) {
     console.error('Send notification error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 } 

@@ -1,18 +1,21 @@
 import { kv } from '@vercel/kv';
-import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'edge';
-
-export default async function handler(req: NextRequest) {
+export default async function handler(req: Request) {
   if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { 
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+      return new Response(JSON.stringify({ error: 'Email is required' }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Remove from subscribers list
@@ -25,9 +28,15 @@ export default async function handler(req: NextRequest) {
       unsubscribedAt: new Date().toISOString()
     });
 
-    return NextResponse.json({ message: 'Successfully unsubscribed!' }, { status: 200 });
+    return new Response(JSON.stringify({ message: 'Successfully unsubscribed!' }), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (error) {
     console.error('Unsubscribe error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 } 

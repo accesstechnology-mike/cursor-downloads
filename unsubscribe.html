@@ -260,15 +260,15 @@
           const data = await response.json();
 
           if (response.ok) {
-            statusEl.textContent = '✅ ' + data.message;
+            statusEl.textContent = data.message;
             statusEl.className = 'status success';
             emailInput.value = '';
           } else {
-            statusEl.textContent = '❌ ' + (data.error || 'Something went wrong');
+            statusEl.textContent = data.error || 'Something went wrong';
             statusEl.className = 'status error';
           }
         } catch (error) {
-          statusEl.textContent = '❌ Network error. Please try again.';
+          statusEl.textContent = 'Network error. Please try again.';
           statusEl.className = 'status error';
         } finally {
           // Reset button state
