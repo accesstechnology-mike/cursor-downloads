@@ -3113,40 +3113,48 @@
         });
       }
 
-      // Test email functionality (remove before production)
+      // Test email functionality using production endpoint
       function setupTestEmail() {
         const testBtn = document.getElementById('test-email-btn');
         const testStatus = document.getElementById('test-email-status');
 
         if (testBtn) {
           testBtn.addEventListener('click', async () => {
+            const secret = prompt('Enter NOTIFICATION_SECRET for testing:');
+            if (!secret) return;
+
             testBtn.disabled = true;
-            testBtn.textContent = '🔄 Sending...';
+            testBtn.textContent = 'Sending...';
             testStatus.textContent = '';
 
             try {
-              const response = await fetch('/api/test-email', {
+              const response = await fetch('/api/send-notification', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                }
+                  'Authorization': `Bearer ${secret}`
+                },
+                body: JSON.stringify({
+                  version: '0.51.2',
+                  date: '2025-06-03'
+                })
               });
 
               const data = await response.json();
 
               if (response.ok) {
-                testStatus.innerHTML = `✅ ${data.message}<br>Sent to: ${data.sentTo}<br>Total subscribers: ${data.totalSubscribers}`;
+                testStatus.innerHTML = `Production notification sent successfully!<br>Sent to: ${data.sentTo}<br>Total subscribers: ${data.totalSubscribers}`;
                 testStatus.style.color = 'var(--success)';
               } else {
-                testStatus.textContent = `❌ ${data.error || 'Failed to send test email'}`;
+                testStatus.textContent = `${data.error || 'Failed to send notification'}`;
                 testStatus.style.color = '#ef4444';
               }
             } catch (error) {
-              testStatus.textContent = `💥 Error: ${error.message}`;
+              testStatus.textContent = `Error: ${error.message}`;
               testStatus.style.color = '#ef4444';
             } finally {
               testBtn.disabled = false;
-              testBtn.textContent = '🧪 Send Test Email';
+              testBtn.textContent = 'Send Test Email';
             }
           });
         }
