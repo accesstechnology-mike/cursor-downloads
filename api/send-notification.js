@@ -1,36 +1,31 @@
-import { kv } from '@vercel/kv';
-import { Resend } from 'resend';
+const { kv } = require('@vercel/kv');
+const { Resend } = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(req) {
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   // Verify the request is from your update script (simple auth)
-  const authHeader = req.headers.get('authorization');
+  const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.NOTIFICATION_SECRET}`) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
-    const { version, releaseDate } = await req.json();
+    const { version, releaseDate } = req.body;
 
     if (!version) {
-      return new Response(JSON.stringify({ error: 'Version is required' }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return res.status(400).json({ error: 'Version is required' });
     }
 
     // Get all subscribers
     const subscribers = await kv.smembers('subscribers');
     
     if (!subscribers || subscribers.length === 0) {
-      return new Response(JSON.stringify({ message: 'No subscribers to notify' }), { 
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return res.status(200).json({ message: 'No subscribers to notify' });
     }
 
     // Create email content
@@ -115,20 +110,14 @@ export async function POST(req) {
       errorCount
     });
 
-    return new Response(JSON.stringify({ 
+    return res.status(200).json({ 
       message: 'Notifications sent', 
       sent: sentCount, 
       errors: errorCount 
-    }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
     console.error('Send notification error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(500).json({ error: 'Internal server error' });
   }
-} 
+}; 

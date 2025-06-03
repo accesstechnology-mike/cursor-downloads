@@ -1,14 +1,15 @@
-import { kv } from '@vercel/kv';
+const { kv } = require('@vercel/kv');
 
-export async function POST(req) {
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    const { email } = await req.json();
+    const { email } = req.body;
 
     if (!email) {
-      return new Response(JSON.stringify({ error: 'Email is required' }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return res.status(400).json({ error: 'Email is required' });
     }
 
     // Remove from subscribers list
@@ -21,15 +22,9 @@ export async function POST(req) {
       unsubscribedAt: new Date().toISOString()
     });
 
-    return new Response(JSON.stringify({ message: 'Successfully unsubscribed!' }), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(200).json({ message: 'Successfully unsubscribed!' });
   } catch (error) {
     console.error('Unsubscribe error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return res.status(500).json({ error: 'Internal server error' });
   }
-} 
+}; 
