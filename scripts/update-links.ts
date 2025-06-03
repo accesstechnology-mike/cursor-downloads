@@ -283,6 +283,53 @@ function saveVersionHistory(history: VersionHistory): void {
 }
 
 /**
+ * Send notification for new version
+ */
+async function sendNewVersionNotification(version: string, releaseDate: string): Promise<void> {
+  try {
+    // Only send notifications in production (when running on Vercel or CI)
+    const isProduction = process.env.VERCEL || process.env.CI || process.env.NODE_ENV === 'production';
+    const notificationSecret = process.env.NOTIFICATION_SECRET;
+    
+    if (!isProduction) {
+      console.log(`[DEV] Would send notification for version ${version} (skipping in development)`);
+      return;
+    }
+
+    if (!notificationSecret) {
+      console.log('NOTIFICATION_SECRET not set, skipping email notifications');
+      return;
+    }
+
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'https://downloadcursor.app';
+
+    const response = await fetch(`${baseUrl}/api/send-notification`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${notificationSecret}`,
+      },
+      body: JSON.stringify({
+        version,
+        releaseDate,
+      }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(`✅ Notifications sent: ${result.sent} emails, ${result.errors} errors`);
+    } else {
+      const error = await response.text();
+      console.error(`❌ Failed to send notifications: ${response.status} - ${error}`);
+    }
+  } catch (error) {
+    console.error('❌ Error sending notifications:', error instanceof Error ? error.message : 'Unknown error');
+  }
+}
+
+/**
  * Generate Markdown content for README.md
  */
 function generateReadmeMarkdown(
@@ -385,6 +432,7 @@ async function main(): Promise<void> {
     );
 
     // Add new version to history if it doesn't exist
+    let isNewVersion = false;
     if (existingVersionIndex === -1) {
       const platforms: { [platform: string]: string } = {};
       for (const osKey in results) {
@@ -399,6 +447,7 @@ async function main(): Promise<void> {
       };
       history.versions.unshift(newEntry); // Add to top
       console.log(`Added new version ${latestVersion} to history`);
+      isNewVersion = true;
     } else {
       console.log(`Version ${latestVersion} already exists in history`);
     }
@@ -406,6 +455,13 @@ async function main(): Promise<void> {
     // Limit to last 3 major versions and save
     const limitedHistory = limitToLastThreeMajorVersions(history);
     saveVersionHistory(limitedHistory);
+
+    // Send notification if this is a new version
+    if (isNewVersion && limitedHistory.versions.length > 0) {
+      const latestEntry = limitedHistory.versions[0];
+      console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
+      await sendNewVersionNotification(latestEntry.version, latestEntry.date);
+    }
 
     // Update README.md with latest version information
     if (limitedHistory.versions.length > 0) {

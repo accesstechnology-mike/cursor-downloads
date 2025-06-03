@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: UI changes
+globs: 
 alwaysApply: false
 ---
 # Design Consistency Rules for downloadcursor.app
