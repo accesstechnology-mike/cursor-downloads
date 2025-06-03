@@ -2411,38 +2411,38 @@
         };
       }
 
-      // Get prioritized platforms (remove duplicates, prefer user over system)
+      // Get prioritized platforms (show both user and system versions)
       function getPrioritizedPlatforms(platforms) {
         const result = [];
-        const seenPlatforms = new Set();
+        const addedPlatforms = new Set();
 
-        // Define platform groups to avoid duplicates
-        const platformGroups = [
-          ["win32-x64-user", "win32-x64-system", "win32-x64"],
-          ["win32-arm64-user", "win32-arm64-system", "win32-arm64"],
-          ["darwin-universal"],
-          ["darwin-arm64", "darwin-x64"],
-          ["linux-x64"],
-          ["linux-arm64"],
+        // Define platform priority order (user and system versions are separate)
+        const priorityOrder = [
+          "win32-x64-user",
+          "win32-x64-system", 
+          "win32-arm64-user",
+          "win32-arm64-system",
+          "darwin-universal",
+          "darwin-arm64",
+          "darwin-x64",
+          "linux-x64",
+          "linux-arm64",
         ];
 
-        // Process each group, taking the first available platform
-        platformGroups.forEach((group) => {
-          for (const key of group) {
-            if (platforms[key] && !seenPlatforms.has(getBasePlatform(key))) {
-              result.push({ key, url: platforms[key] });
-              seenPlatforms.add(getBasePlatform(key));
-              break;
-            }
+        // Add platforms in priority order
+        priorityOrder.forEach((key) => {
+          if (platforms[key] && !addedPlatforms.has(key)) {
+            result.push({ key, url: platforms[key] });
+            addedPlatforms.add(key);
           }
         });
 
-        // Add any remaining platforms not in groups
+        // Add any remaining platforms not in priority list (excluding duplicates)
+        const excludedPlatforms = new Set(['win32-x64', 'win32-arm64']); // These duplicate the system versions
         Object.entries(platforms).forEach(([key, url]) => {
-          const basePlatform = getBasePlatform(key);
-          if (!seenPlatforms.has(basePlatform)) {
+          if (!addedPlatforms.has(key) && !excludedPlatforms.has(key)) {
             result.push({ key, url });
-            seenPlatforms.add(basePlatform);
+            addedPlatforms.add(key);
           }
         });
 
