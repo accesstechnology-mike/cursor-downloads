@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
           
           <div style="text-align: center; color: #666; font-size: 0.9rem;">
             <p>
-              You're receiving this because you subscribed to Cursor version notifications at 
+              You're receiving this because you subscribed to Cursor version notifications at <br />
               <a href="https://downloadcursor.app" style="color: #007bff;">downloadcursor.app</a>
             </p>
             <p>
