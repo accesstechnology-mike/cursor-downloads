@@ -2167,6 +2167,14 @@
               <span>No spam, ever</span>
             </div>
           </div>
+          
+          <!-- Test button (remove before production) -->
+          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary);">
+            <button id="test-email-btn" style="padding: 0.5rem 1rem; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">
+              🧪 Send Test Email
+            </button>
+            <div id="test-email-status" style="margin-top: 0.5rem; font-size: 0.875rem;"></div>
+          </div>
         </div>
       </section>
 
@@ -2852,6 +2860,7 @@
         setupToggles();
         setupKeyboardShortcuts();
         setupNewsletter();
+        setupTestEmail();
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -3102,6 +3111,45 @@
           statusEl.textContent = '';
           statusEl.className = 'newsletter-status';
         });
+      }
+
+      // Test email functionality (remove before production)
+      function setupTestEmail() {
+        const testBtn = document.getElementById('test-email-btn');
+        const testStatus = document.getElementById('test-email-status');
+
+        if (testBtn) {
+          testBtn.addEventListener('click', async () => {
+            testBtn.disabled = true;
+            testBtn.textContent = '🔄 Sending...';
+            testStatus.textContent = '';
+
+            try {
+              const response = await fetch('/api/test-email', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                testStatus.innerHTML = `✅ ${data.message}<br>Sent to: ${data.sentTo}<br>Total subscribers: ${data.totalSubscribers}`;
+                testStatus.style.color = 'var(--success)';
+              } else {
+                testStatus.textContent = `❌ ${data.error || 'Failed to send test email'}`;
+                testStatus.style.color = '#ef4444';
+              }
+            } catch (error) {
+              testStatus.textContent = `💥 Error: ${error.message}`;
+              testStatus.style.color = '#ef4444';
+            } finally {
+              testBtn.disabled = false;
+              testBtn.textContent = '🧪 Send Test Email';
+            }
+          });
+        }
       }
     </script>
   </body>
