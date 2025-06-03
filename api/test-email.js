@@ -41,13 +41,13 @@ module.exports = async (req, res) => {
             <h1 style="color: white; margin: 0; font-size: 2rem;">New Cursor Version!</h1>
           </div>
           
-          <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-            <h2 style="margin-top: 0; color: #2c3e50;">Cursor ${version} is now available</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+          <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; text-align: center;">
+            <h2 style="margin-top: 0; color: #2c3e50; text-align: center;">Cursor ${version} is now available</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1rem; text-align: center;">
               A new version of Cursor has been released${releaseDate ? ` on ${new Date(releaseDate).toLocaleDateString()}` : ''}. 
               The site will automatically detect your platform and show the right download for you.
             </p>
-            <p>
+            <p style="text-align: center;">
               <a href="https://downloadcursor.app" 
                  style="display: inline-block; background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: 600;">
                 Visit Download Page
