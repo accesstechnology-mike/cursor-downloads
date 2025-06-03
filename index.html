@@ -2156,42 +2156,44 @@
               Be the first to know when a new Cursor version is available
             </p>
           </div>
-          
+
           <form class="newsletter-form" id="newsletter-form">
             <div class="email-input-container">
-              <input 
-                type="email" 
-                class="email-input" 
+              <input
+                type="email"
+                class="email-input"
                 id="email-input"
                 placeholder="Enter your email address"
                 required
                 aria-label="Email address"
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 class="subscribe-btn"
                 id="subscribe-btn"
                 aria-label="Subscribe to notifications"
               >
                 <span class="subscribe-text">Subscribe</span>
-                <span class="subscribe-icon"><i data-lucide="arrow-right"></i></span>
+                <span class="subscribe-icon"
+                  ><i data-lucide="arrow-right"></i
+                ></span>
               </button>
             </div>
             <div class="newsletter-status" id="newsletter-status"></div>
           </form>
-          
+
           <div class="newsletter-features">
             <div class="feature">
               <span class="feature-icon"><i data-lucide="zap"></i></span>
               <span>Instant notifications</span>
             </div>
             <div class="feature">
-              <span class="feature-icon"><i data-lucide="shield-check"></i></span>
+              <span class="feature-icon"
+                ><i data-lucide="shield-check"></i
+              ></span>
               <span>No spam, ever</span>
             </div>
           </div>
-          
-
         </div>
       </section>
 
@@ -2419,7 +2421,7 @@
         // Define platform priority order (user and system versions are separate)
         const priorityOrder = [
           "win32-x64-user",
-          "win32-x64-system", 
+          "win32-x64-system",
           "win32-arm64-user",
           "win32-arm64-system",
           "darwin-universal",
@@ -2438,7 +2440,7 @@
         });
 
         // Add any remaining platforms not in priority list (excluding duplicates)
-        const excludedPlatforms = new Set(['win32-x64', 'win32-arm64']); // These duplicate the system versions
+        const excludedPlatforms = new Set(["win32-x64", "win32-arm64"]); // These duplicate the system versions
         Object.entries(platforms).forEach(([key, url]) => {
           if (!addedPlatforms.has(key) && !excludedPlatforms.has(key)) {
             result.push({ key, url });
@@ -3088,75 +3090,75 @@
 
       // Newsletter functionality
       function setupNewsletter() {
-        const form = document.getElementById('newsletter-form');
-        const emailInput = document.getElementById('email-input');
-        const submitBtn = document.getElementById('subscribe-btn');
-        const statusEl = document.getElementById('newsletter-status');
+        const form = document.getElementById("newsletter-form");
+        const emailInput = document.getElementById("email-input");
+        const submitBtn = document.getElementById("subscribe-btn");
+        const statusEl = document.getElementById("newsletter-status");
 
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener("submit", async (e) => {
           e.preventDefault();
-          
+
           const email = emailInput.value.trim();
           if (!email) return;
 
-          console.log('🚀 FRONTEND DEBUG: Starting subscription');
-          console.log('📧 Email:', email);
+          console.log("🚀 FRONTEND DEBUG: Starting subscription");
+          console.log("📧 Email:", email);
 
           // Update UI to loading state
           submitBtn.disabled = true;
-          submitBtn.querySelector('.subscribe-text').textContent = 'Subscribing...';
-          statusEl.textContent = '';
-          statusEl.className = 'newsletter-status';
+          submitBtn.querySelector(".subscribe-text").textContent =
+            "Subscribing...";
+          statusEl.textContent = "";
+          statusEl.className = "newsletter-status";
 
           try {
-            console.log('📡 Making fetch request to /api/subscribe');
-            const response = await fetch('/api/subscribe', {
-              method: 'POST',
+            console.log("📡 Making fetch request to /api/subscribe");
+            const response = await fetch("/api/subscribe", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({ email }),
             });
 
-            console.log('📥 Response status:', response.status);
-            console.log('📥 Response headers:', response.headers);
-            
-            const data = await response.json();
-            console.log('📄 Response data:', data);
+            console.log("📥 Response status:", response.status);
+            console.log("📥 Response headers:", response.headers);
 
-                         if (response.ok) {
-               statusEl.textContent = data.message;
-               statusEl.className = 'newsletter-status success';
-               emailInput.value = '';
-               
-               // Show success animation
-               form.style.transform = 'scale(1.02)';
-               setTimeout(() => {
-                 form.style.transform = 'scale(1)';
-               }, 200);
-             } else {
-               statusEl.textContent = data.error || 'Something went wrong';
-               statusEl.className = 'newsletter-status error';
-             }
-           } catch (error) {
-             console.error('💥 FRONTEND ERROR:', error);
-             statusEl.textContent = 'Network error. Please try again.';
-             statusEl.className = 'newsletter-status error';
+            const data = await response.json();
+            console.log("📄 Response data:", data);
+
+            if (response.ok) {
+              statusEl.textContent = data.message;
+              statusEl.className = "newsletter-status success";
+              emailInput.value = "";
+
+              // Show success animation
+              form.style.transform = "scale(1.02)";
+              setTimeout(() => {
+                form.style.transform = "scale(1)";
+              }, 200);
+            } else {
+              statusEl.textContent = data.error || "Something went wrong";
+              statusEl.className = "newsletter-status error";
+            }
+          } catch (error) {
+            console.error("💥 FRONTEND ERROR:", error);
+            statusEl.textContent = "Network error. Please try again.";
+            statusEl.className = "newsletter-status error";
           } finally {
             // Reset button state
             submitBtn.disabled = false;
-            submitBtn.querySelector('.subscribe-text').textContent = 'Subscribe';
+            submitBtn.querySelector(".subscribe-text").textContent =
+              "Subscribe";
           }
         });
 
         // Clear status on input change
-        emailInput.addEventListener('input', () => {
-          statusEl.textContent = '';
-          statusEl.className = 'newsletter-status';
+        emailInput.addEventListener("input", () => {
+          statusEl.textContent = "";
+          statusEl.className = "newsletter-status";
         });
       }
-
-
     </script>
   </body>
 </html>

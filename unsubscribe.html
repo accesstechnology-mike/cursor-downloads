@@ -2,18 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
     <title>Unsubscribe - Cursor Download Updates</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    
+
     <style>
       :root {
         --bg-primary: #0a0a0a;
@@ -36,7 +42,13 @@
       }
 
       body {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
         background: var(--bg-primary);
         background-image:
           radial-gradient(circle at 25% 25%, #1a1a2e 0%, transparent 50%),
@@ -72,7 +84,12 @@
         left: 0;
         right: 0;
         height: 1px;
-        background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-primary),
+          transparent
+        );
       }
 
       .title {
@@ -195,21 +212,22 @@
     <div class="container">
       <h1 class="title">Unsubscribe from Updates</h1>
       <p class="subtitle">
-        Enter your email address to unsubscribe from Cursor version notifications.
+        Enter your email address to unsubscribe from Cursor version
+        notifications.
       </p>
-      
+
       <form class="form" id="unsubscribe-form">
         <div class="input-container">
-          <input 
-            type="email" 
-            class="email-input" 
+          <input
+            type="email"
+            class="email-input"
             id="email-input"
             placeholder="Enter your email address"
             required
             aria-label="Email address"
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="unsubscribe-btn"
             id="unsubscribe-btn"
             aria-label="Unsubscribe from notifications"
@@ -219,70 +237,73 @@
         </div>
         <div class="status" id="status"></div>
       </form>
-      
+
       <a href="/" class="back-link">← Back to Download Cursor</a>
     </div>
 
     <script>
       // Get email from URL if provided
       const urlParams = new URLSearchParams(window.location.search);
-      const emailFromUrl = urlParams.get('email');
+      const emailFromUrl = urlParams.get("email");
       if (emailFromUrl) {
-        document.getElementById('email-input').value = decodeURIComponent(emailFromUrl);
+        document.getElementById("email-input").value =
+          decodeURIComponent(emailFromUrl);
       }
 
       // Handle form submission
-      document.getElementById('unsubscribe-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const emailInput = document.getElementById('email-input');
-        const submitBtn = document.getElementById('unsubscribe-btn');
-        const statusEl = document.getElementById('status');
-        
-        const email = emailInput.value.trim();
-        if (!email) return;
+      document
+        .getElementById("unsubscribe-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        // Update UI to loading state
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Unsubscribing...';
-        statusEl.textContent = '';
-        statusEl.className = 'status';
+          const emailInput = document.getElementById("email-input");
+          const submitBtn = document.getElementById("unsubscribe-btn");
+          const statusEl = document.getElementById("status");
 
-        try {
-          const response = await fetch('/api/unsubscribe', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-          });
+          const email = emailInput.value.trim();
+          if (!email) return;
 
-          const data = await response.json();
+          // Update UI to loading state
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Unsubscribing...";
+          statusEl.textContent = "";
+          statusEl.className = "status";
 
-          if (response.ok) {
-            statusEl.textContent = data.message;
-            statusEl.className = 'status success';
-            emailInput.value = '';
-          } else {
-            statusEl.textContent = data.error || 'Something went wrong';
-            statusEl.className = 'status error';
+          try {
+            const response = await fetch("/api/unsubscribe", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              statusEl.textContent = data.message;
+              statusEl.className = "status success";
+              emailInput.value = "";
+            } else {
+              statusEl.textContent = data.error || "Something went wrong";
+              statusEl.className = "status error";
+            }
+          } catch (error) {
+            statusEl.textContent = "Network error. Please try again.";
+            statusEl.className = "status error";
+          } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Unsubscribe";
           }
-        } catch (error) {
-          statusEl.textContent = 'Network error. Please try again.';
-          statusEl.className = 'status error';
-        } finally {
-          // Reset button state
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Unsubscribe';
-        }
-      });
+        });
 
       // Clear status on input change
-      document.getElementById('email-input').addEventListener('input', () => {
-        const statusEl = document.getElementById('status');
-        statusEl.textContent = '';
-        statusEl.className = 'status';
+      document.getElementById("email-input").addEventListener("input", () => {
+        const statusEl = document.getElementById("status");
+        statusEl.textContent = "";
+        statusEl.className = "status";
       });
     </script>
   </body>
-</html> 
+</html>

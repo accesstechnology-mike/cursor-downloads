@@ -285,66 +285,89 @@ function saveVersionHistory(history: VersionHistory): void {
 /**
  * Send notification for new version
  */
-async function sendNewVersionNotification(version: string, releaseDate: string): Promise<void> {
+async function sendNewVersionNotification(
+  version: string,
+  releaseDate: string,
+): Promise<void> {
   try {
-    console.log('🔍 [DEBUG] Starting notification process...');
+    console.log("🔍 [DEBUG] Starting notification process...");
     console.log(`🔍 [DEBUG] Version: ${version}, Release Date: ${releaseDate}`);
-    
+
     // Environment variable debugging
-    const isProduction = process.env.VERCEL || process.env.CI || process.env.NODE_ENV === 'production';
+    const isProduction =
+      process.env.VERCEL ||
+      process.env.CI ||
+      process.env.NODE_ENV === "production";
     const notificationSecret = process.env.NOTIFICATION_SECRET;
     const vercelUrl = process.env.VERCEL_URL;
     const nodeEnv = process.env.NODE_ENV;
-    
-    console.log('🔍 [DEBUG] Environment variables:');
-    console.log(`  - VERCEL: ${process.env.VERCEL ? 'SET' : 'NOT_SET'}`);
-    console.log(`  - CI: ${process.env.CI ? 'SET' : 'NOT_SET'}`);
-    console.log(`  - NODE_ENV: ${nodeEnv || 'NOT_SET'}`);
-    console.log(`  - NOTIFICATION_SECRET: ${notificationSecret ? 'SET (length: ' + notificationSecret.length + ')' : 'NOT_SET'}`);
-    console.log(`  - VERCEL_URL: ${vercelUrl || 'NOT_SET'}`);
+
+    console.log("🔍 [DEBUG] Environment variables:");
+    console.log(`  - VERCEL: ${process.env.VERCEL ? "SET" : "NOT_SET"}`);
+    console.log(`  - CI: ${process.env.CI ? "SET" : "NOT_SET"}`);
+    console.log(`  - NODE_ENV: ${nodeEnv || "NOT_SET"}`);
+    console.log(
+      `  - NOTIFICATION_SECRET: ${notificationSecret ? "SET (length: " + notificationSecret.length + ")" : "NOT_SET"}`,
+    );
+    console.log(`  - VERCEL_URL: ${vercelUrl || "NOT_SET"}`);
     console.log(`  - isProduction: ${isProduction}`);
 
     if (!isProduction) {
-      console.log(`🔍 [DEV] Would send notification for version ${version} (skipping in development)`);
+      console.log(
+        `🔍 [DEV] Would send notification for version ${version} (skipping in development)`,
+      );
       return;
     }
 
     if (!notificationSecret) {
-      console.error('❌ [ERROR] NOTIFICATION_SECRET not set! Cannot send email notifications.');
-      console.log('🔍 [DEBUG] Available environment variables:');
-      Object.keys(process.env).forEach(key => {
-        if (key.includes('NOTIFICATION') || key.includes('RESEND') || key.includes('VERCEL')) {
-          console.log(`  - ${key}: ${process.env[key] ? 'SET' : 'NOT_SET'}`);
+      console.error(
+        "❌ [ERROR] NOTIFICATION_SECRET not set! Cannot send email notifications.",
+      );
+      console.log("🔍 [DEBUG] Available environment variables:");
+      Object.keys(process.env).forEach((key) => {
+        if (
+          key.includes("NOTIFICATION") ||
+          key.includes("RESEND") ||
+          key.includes("VERCEL")
+        ) {
+          console.log(`  - ${key}: ${process.env[key] ? "SET" : "NOT_SET"}`);
         }
       });
       return;
     }
 
-    const baseUrl = vercelUrl 
-      ? `https://${vercelUrl}` 
-      : 'https://www.downloadcursor.app';
+    const baseUrl = vercelUrl
+      ? `https://${vercelUrl}`
+      : "https://www.downloadcursor.app";
 
     console.log(`🔍 [DEBUG] Using base URL: ${baseUrl}`);
-    console.log(`🔍 [DEBUG] Making request to: ${baseUrl}/api/send-notification`);
+    console.log(
+      `🔍 [DEBUG] Making request to: ${baseUrl}/api/send-notification`,
+    );
 
     const requestBody = {
       version,
-      releaseDate
+      releaseDate,
     };
 
-    console.log(`🔍 [DEBUG] Request body: ${JSON.stringify(requestBody, null, 2)}`);
+    console.log(
+      `🔍 [DEBUG] Request body: ${JSON.stringify(requestBody, null, 2)}`,
+    );
 
     const response = await fetch(`${baseUrl}/api/send-notification`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${notificationSecret}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${notificationSecret}`,
       },
       body: JSON.stringify(requestBody),
     });
 
     console.log(`🔍 [DEBUG] Response status: ${response.status}`);
-    console.log(`🔍 [DEBUG] Response headers:`, Object.fromEntries(response.headers.entries()));
+    console.log(
+      `🔍 [DEBUG] Response headers:`,
+      Object.fromEntries(response.headers.entries()),
+    );
 
     if (response.ok) {
       const result = await response.json();
@@ -353,14 +376,19 @@ async function sendNewVersionNotification(version: string, releaseDate: string):
       console.log(`📧 Sent: ${result.sent} emails, Errors: ${result.errors}`);
     } else {
       const error = await response.text();
-      console.error(`❌ Failed to send notifications: ${response.status} - ${error}`);
+      console.error(
+        `❌ Failed to send notifications: ${response.status} - ${error}`,
+      );
       console.log(`🔍 [DEBUG] Error response body: ${error}`);
     }
   } catch (error) {
-    console.error('❌ Error sending notifications:', error instanceof Error ? error.message : 'Unknown error');
-    console.log('🔍 [DEBUG] Full error:', error);
+    console.error(
+      "❌ Error sending notifications:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+    console.log("🔍 [DEBUG] Full error:", error);
     if (error instanceof Error && error.stack) {
-      console.log('🔍 [DEBUG] Error stack:', error.stack);
+      console.log("🔍 [DEBUG] Error stack:", error.stack);
     }
   }
 }
@@ -495,7 +523,9 @@ async function main(): Promise<void> {
     // Send notification if this is a new version
     if (isNewVersion && limitedHistory.versions.length > 0) {
       const latestEntry = limitedHistory.versions[0];
-      console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
+      console.log(
+        `🚀 New version detected: ${latestEntry.version}. Sending notifications...`,
+      );
       await sendNewVersionNotification(latestEntry.version, latestEntry.date);
     }
 

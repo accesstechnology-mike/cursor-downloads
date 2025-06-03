@@ -5,6 +5,7 @@ This guide explains how to set up the email notification system for new Cursor r
 ## Required Services
 
 ### 1. Vercel KV (Redis Database)
+
 - Go to your [Vercel Dashboard](https://vercel.com/dashboard)
 - Select your project
 - Go to **Storage** → **Create Database** → **KV**
@@ -12,6 +13,7 @@ This guide explains how to set up the email notification system for new Cursor r
 - This will automatically set the required environment variables
 
 ### 2. Resend (Email Service)
+
 - Sign up at [Resend](https://resend.com)
 - Go to [API Keys](https://resend.com/api-keys)
 - Create a new API key
@@ -36,23 +38,26 @@ The Vercel KV variables (`KV_REST_API_URL`, `KV_REST_API_TOKEN`, etc.) are autom
 ## How It Works
 
 ### Email Collection
+
 - Users can subscribe via the form on the main page
 - Emails are stored in Vercel KV (Redis)
 - Duplicate subscriptions are handled gracefully
 
 ### Notifications
+
 - When the update script (`scripts/update-links.ts`) detects a new version, it calls `/api/send-notification`
 - The API sends emails to all subscribers using Resend
 - Emails include direct links back to the website for platform-specific downloads
 
 ### Unsubscribe
+
 - Each email includes an unsubscribe link: `/unsubscribe?email=user@example.com`
 - Users can also unsubscribe manually at `/unsubscribe.html`
 
 ## API Endpoints
 
 - `POST /api/subscribe` - Subscribe an email address
-- `POST /api/unsubscribe` - Unsubscribe an email address  
+- `POST /api/unsubscribe` - Unsubscribe an email address
 - `POST /api/send-notification` - Send notifications (requires auth header)
 
 ## Security
@@ -79,4 +84,4 @@ In development, the notification system will log messages but not send actual em
 4. Test the subscription form
 5. Verify notifications work by manually triggering the update script
 
-The mailing list will automatically send notifications when new Cursor versions are detected during the regular update process. 
+The mailing list will automatically send notifications when new Cursor versions are detected during the regular update process.
