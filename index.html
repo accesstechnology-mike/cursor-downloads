@@ -175,18 +175,20 @@
       }
 
       .platform-icon {
-        font-size: 1rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
       }
 
       .platform-icon svg {
         width: 100%;
         height: 100%;
         fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 1.5;
       }
 
       .primary-download {
@@ -318,9 +320,9 @@
       .quick-download-btn {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
         background: var(--bg-tertiary);
         border: 1px solid var(--border-primary);
         border-radius: 8px;
@@ -329,12 +331,94 @@
         font-size: 0.875rem;
         font-weight: 500;
         transition: all 0.2s ease;
+        min-height: 48px;
+        text-align: left;
       }
 
       .quick-download-btn:hover {
         background: var(--bg-hover);
         border-color: var(--border-hover);
         transform: translateY(-1px);
+      }
+
+      /* Official Links Section */
+      .official-links-section {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-primary);
+      }
+
+      .official-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .official-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .official-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 112, 243, 0.1),
+          transparent
+        );
+        transition: left 0.4s ease;
+      }
+
+      .official-link:hover::before {
+        left: 100%;
+      }
+
+      .official-link:hover {
+        background: var(--bg-hover);
+        border-color: var(--accent-primary);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 112, 243, 0.15);
+        color: var(--accent-primary);
+      }
+
+      .link-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .link-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke-width: 2;
+        transition: all 0.3s ease;
+      }
+
+      .official-link:hover .link-icon svg {
+        transform: scale(1.1);
+        stroke-width: 2.5;
       }
 
       /* Inline Version Info */
@@ -798,10 +882,12 @@
         }
 
         .quick-download-btn {
-          padding: 0.875rem 1rem;
-          font-size: 0.8rem;
-          min-height: 48px;
+          padding: 1rem;
+          font-size: 0.875rem;
+          min-height: 52px;
           border-radius: 8px;
+          justify-content: flex-start;
+          gap: 0.75rem;
         }
 
         .version-info-inline {
@@ -937,6 +1023,18 @@
           font-size: 0.8rem;
           min-height: 44px;
           border-radius: 6px;
+        }
+
+        .official-links {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .official-link {
+          padding: 1rem;
+          font-size: 0.875rem;
+          min-height: 48px;
+          border-radius: 8px;
         }
       }
 
@@ -1791,6 +1889,24 @@
             <div class="quick-options" id="quick-options">
               <!-- Populated by JavaScript -->
             </div>
+          </div>
+        </div>
+
+        <!-- Official Links Section -->
+        <div class="official-links-section">
+          <div class="official-links">
+            <a href="https://www.cursor.com/" target="_blank" class="official-link">
+              <span class="link-icon"><i data-lucide="globe"></i></span>
+              <span>Official Cursor Website</span>
+            </a>
+            <a href="https://www.cursor.com/changelog" target="_blank" class="official-link">
+              <span class="link-icon"><i data-lucide="scroll-text"></i></span>
+              <span>View Changelog</span>
+            </a>
+            <a href="https://forum.cursor.com/" target="_blank" class="official-link">
+              <span class="link-icon"><i data-lucide="message-circle"></i></span>
+              <span>Community Forum</span>
+            </a>
           </div>
         </div>
       </section>
