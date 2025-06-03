@@ -3047,6 +3047,9 @@
           const email = emailInput.value.trim();
           if (!email) return;
 
+          console.log('🚀 FRONTEND DEBUG: Starting subscription');
+          console.log('📧 Email:', email);
+
           // Update UI to loading state
           submitBtn.disabled = true;
           submitBtn.querySelector('.subscribe-text').textContent = 'Subscribing...';
@@ -3054,6 +3057,7 @@
           statusEl.className = 'newsletter-status';
 
           try {
+            console.log('📡 Making fetch request to /api/subscribe');
             const response = await fetch('/api/subscribe', {
               method: 'POST',
               headers: {
@@ -3062,7 +3066,11 @@
               body: JSON.stringify({ email }),
             });
 
+            console.log('📥 Response status:', response.status);
+            console.log('📥 Response headers:', response.headers);
+            
             const data = await response.json();
+            console.log('📄 Response data:', data);
 
                          if (response.ok) {
                statusEl.textContent = data.message;
@@ -3079,6 +3087,7 @@
                statusEl.className = 'newsletter-status error';
              }
            } catch (error) {
+             console.error('💥 FRONTEND ERROR:', error);
              statusEl.textContent = 'Network error. Please try again.';
              statusEl.className = 'newsletter-status error';
           } finally {
