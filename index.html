@@ -357,11 +357,15 @@
       .version-number-emphasis {
         font-size: 2rem;
         font-weight: 800;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-family: 'Inter', monospace;
+        font-family: "Inter", monospace;
         letter-spacing: -0.02em;
       }
 
@@ -1720,14 +1724,15 @@
           <div class="version-details-inline">
             <h3 class="version-title">
               <span class="version-number-emphasis">Cursor</span>
-              <span class="version-number-emphasis" id="version-number-display">v0.0.0</span>
+              <span class="version-number-emphasis" id="version-number-display"
+                >v0.0.0</span
+              >
             </h3>
             <div class="version-meta" id="version-meta-inline">
               Loading version information...
             </div>
             <div class="version-description-inline">
-             All downloads are direct from Cursor's
-              official servers.
+              All downloads are direct from Cursor's official servers.
             </div>
           </div>
         </div>
@@ -1750,10 +1755,8 @@
         >
           <span class="download-icon">↓</span>
           <span id="primary-download-text">Download for Your Platform</span>
-        
-          
         </a>
-        
+
         <div class="download-help" id="download-help">
           Direct download from official Cursor servers • Always latest version
         </div>
@@ -1782,8 +1785,6 @@
             </div>
           </div>
         </div>
-
-        
       </section>
 
       <!-- Version History -->
@@ -2091,8 +2092,7 @@
         }
 
         if (versionDescription) {
-          versionDescription.textContent =
-            "";
+          versionDescription.textContent = "";
         }
       }
 
