@@ -285,10 +285,10 @@ function saveVersionHistory(history: VersionHistory): void {
 /**
  * Send notification for new version
  */
-async function sendNewVersionNotification(version: string, releaseDate: string, isTestRun: boolean = false): Promise<void> {
+async function sendNewVersionNotification(version: string, releaseDate: string): Promise<void> {
   try {
     console.log('🔍 [DEBUG] Starting notification process...');
-    console.log(`🔍 [DEBUG] Version: ${version}, Release Date: ${releaseDate}, Test Run: ${isTestRun}`);
+    console.log(`🔍 [DEBUG] Version: ${version}, Release Date: ${releaseDate}`);
     
     // Environment variable debugging
     const isProduction = process.env.VERCEL || process.env.CI || process.env.NODE_ENV === 'production';
@@ -304,8 +304,7 @@ async function sendNewVersionNotification(version: string, releaseDate: string, 
     console.log(`  - VERCEL_URL: ${vercelUrl || 'NOT_SET'}`);
     console.log(`  - isProduction: ${isProduction}`);
 
-    // For test runs, we'll send notifications even in development
-    if (!isProduction && !isTestRun) {
+    if (!isProduction) {
       console.log(`🔍 [DEV] Would send notification for version ${version} (skipping in development)`);
       return;
     }
@@ -330,8 +329,7 @@ async function sendNewVersionNotification(version: string, releaseDate: string, 
 
     const requestBody = {
       version,
-      releaseDate,
-      isTest: isTestRun
+      releaseDate
     };
 
     console.log(`🔍 [DEBUG] Request body: ${JSON.stringify(requestBody, null, 2)}`);
@@ -494,16 +492,11 @@ async function main(): Promise<void> {
     const limitedHistory = limitToLastThreeMajorVersions(history);
     saveVersionHistory(limitedHistory);
 
-    // Send notification - for FINAL TEST, always send regardless of new version
-    if (limitedHistory.versions.length > 0) {
+    // Send notification if this is a new version
+    if (isNewVersion && limitedHistory.versions.length > 0) {
       const latestEntry = limitedHistory.versions[0];
-      if (isNewVersion) {
-        console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
-        await sendNewVersionNotification(latestEntry.version, latestEntry.date, false);
-      } else {
-        console.log(`🧪 FINAL TEST: Sending notification for existing version ${latestEntry.version}...`);
-        await sendNewVersionNotification(latestEntry.version, latestEntry.date, true);
-      }
+      console.log(`🚀 New version detected: ${latestEntry.version}. Sending notifications...`);
+      await sendNewVersionNotification(latestEntry.version, latestEntry.date);
     }
 
     // Update README.md with latest version information
