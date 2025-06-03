@@ -14,6 +14,10 @@
       "dest": "/$1"
     },
     {
+      "src": "/unsubscribe",
+      "dest": "/unsubscribe.html"
+    },
+    {
       "src": "/(?!api/)(.*)",
       "dest": "/index.html"
     }
