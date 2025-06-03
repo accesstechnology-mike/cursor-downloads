@@ -1,0 +1,63 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Design Consistency Rules for downloadcursor.app
+
+## Icon Standards
+
+**NEVER use emoji icons** - they are colorful, inconsistent, and clash with the monochrome design aesthetic.
+
+**ALWAYS use Lucide icons** - the project uses the Lucide icon library loaded via CDN:
+```html
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+```
+
+### Icon Implementation Pattern
+
+**✅ CORRECT - Lucide Icons:**
+```html
+<span class="icon"><i data-lucide="globe"></i></span>
+<span class="icon"><i data-lucide="scroll-text"></i></span>
+<span class="icon"><i data-lucide="message-circle"></i></span>
+<span class="icon"><i data-lucide="coffee"></i></span>
+```
+
+**❌ WRONG - Emoji Icons:**
+```html
+<span>🏠</span>
+<span>📋</span>
+<span>💬</span>
+<span>☕</span>
+```
+
+### Design System
+
+The site uses a **monochrome dark theme** with:
+- CSS custom properties for consistent colors
+- `var(--accent-primary)` for highlights
+- `var(--text-primary)` for main text
+- `var(--text-secondary)` for secondary text
+- Smooth hover transitions and scaling effects
+
+### Key Files
+
+- [index.html](mdc:index.html) - Main site file containing all styling and structure
+- Icons must integrate with the existing `.platform-icon` and `.link-icon` CSS classes
+- All icons should support hover effects and be properly sized
+
+### Common Icon Mappings
+
+| Purpose | Lucide Icon | 
+|---------|-------------|
+| Website/Home | `globe` or `home` |
+| Changelog | `scroll-text` or `file-text` |
+| Forum/Chat | `message-circle` or `users` |
+| Coffee/Support | `coffee` or `heart` |
+| Download | `download` |
+| Windows | `monitor` |
+| macOS | `laptop` |
+| Linux | `terminal` |
+
+**Remember: Consistency is key. Every icon should feel like part of the same design system.**
