@@ -1,6 +1,6 @@
-import { kv } from '@vercel/kv';
+const { kv } = require('@vercel/kv');
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   console.log('=== API DEBUG START ===');
   console.log('Method:', req.method);
   console.log('Headers:', req.headers);
@@ -53,4 +53,4 @@ export default async function handler(req, res) {
     console.error('Error stack:', error.stack);
     return res.status(500).json({ error: 'Internal server error', debug: error.message });
   }
-} 
+}; 
