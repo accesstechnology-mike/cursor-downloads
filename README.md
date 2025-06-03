@@ -43,9 +43,3 @@ The `scripts/update-links.ts` script fetches the latest download URLs from the o
 2.  Updates this `README.md` with the latest version information and project details.
 
 A GitHub Actions workflow in `.github/workflows/update.yml` runs this script periodically to keep the site and version information up-to-date.
-
-## Support
-
-If you find this project helpful, consider supporting it:
-
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://coff.ee/mikethrussell)
