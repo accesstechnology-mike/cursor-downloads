@@ -181,40 +181,81 @@ function readVersionHistory(): VersionHistory {
 }
 
 /**
- * Extract major version number from semantic version string
- * For 0.X.Y versioning, we consider X the major version.
+ * Compare two semantic version strings
+ * Returns: 1 if v1 > v2, -1 if v1 < v2, 0 if equal
  */
-function getMajorVersion(version: string): number {
-  // Split by dots and get the second component as major version for 0.X.Y versioning
-  const parts = version.split(".");
-  if (parts.length >= 2 && parts[0] === "0") {
-    return parseInt(parts[1], 10);
+function compareVersions(v1: string, v2: string): number {
+  const parts1 = v1.split(".").map(n => parseInt(n, 10));
+  const parts2 = v2.split(".").map(n => parseInt(n, 10));
+  
+  const maxLength = Math.max(parts1.length, parts2.length);
+  
+  for (let i = 0; i < maxLength; i++) {
+    const part1 = parts1[i] || 0;
+    const part2 = parts2[i] || 0;
+    
+    if (part1 > part2) return 1;
+    if (part1 < part2) return -1;
   }
-  return parseInt(parts[0], 10); // Fallback to first component
+  
+  return 0;
+}
+
+/**
+ * Extract major version number from semantic version string
+ * For 0.X.Y versions, we use a composite approach to handle version history properly
+ */
+function getMajorVersion(version: string): string {
+  const parts = version.split(".");
+  const major = parseInt(parts[0], 10);
+  
+  // For versions 1.0.0+, use the major version as-is
+  if (major >= 1) {
+    return major.toString();
+  }
+  
+  // For 0.X.Y versions, use "0.X" as the "major" version to group them properly
+  if (parts.length >= 2) {
+    const minor = parseInt(parts[1], 10);
+    return `0.${minor}`;
+  }
+  
+  return "0";
 }
 
 /**
  * Filter version history to keep only the last 3 major versions
+ * Sorts versions properly using semantic versioning comparison
  */
 function limitToLastThreeMajorVersions(
   history: VersionHistory,
 ): VersionHistory {
-  // Get unique major versions
-  const majorVersions = new Set<number>();
-  history.versions.forEach((entry) => {
+  // Sort all versions by actual semantic versioning (newest first)
+  const sortedVersions = [...history.versions].sort((a, b) => 
+    compareVersions(b.version, a.version)
+  );
+  
+  // Get unique major versions in order
+  const seenMajorVersions = new Set<string>();
+  const versionsWithUniqueMajors: VersionHistoryEntry[] = [];
+  
+  for (const entry of sortedVersions) {
     const majorVersion = getMajorVersion(entry.version);
-    majorVersions.add(majorVersion);
-  });
-
-  // Sort major versions descending
-  const sortedMajorVersions = Array.from(majorVersions).sort((a, b) => b - a);
-
-  // Keep only the last 3 major versions
-  const majorVersionsToKeep = sortedMajorVersions.slice(0, 3);
-
-  // Filter versions to only include those with major versions in the keep list
-  const filteredVersions = history.versions.filter((entry) =>
-    majorVersionsToKeep.includes(getMajorVersion(entry.version)),
+    if (!seenMajorVersions.has(majorVersion)) {
+      seenMajorVersions.add(majorVersion);
+      versionsWithUniqueMajors.push(entry);
+      
+      // Stop after 3 unique major versions
+      if (versionsWithUniqueMajors.length >= 3) {
+        break;
+      }
+    }
+  }
+  
+  // Now collect ALL versions that belong to these major versions
+  const majorVersionsToKeep = Array.from(seenMajorVersions);
+  const filteredVersions = sortedVersions.filter((entry) =>
+    majorVersionsToKeep.includes(getMajorVersion(entry.version))
   );
 
   return {
