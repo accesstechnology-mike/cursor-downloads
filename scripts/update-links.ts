@@ -185,19 +185,19 @@ function readVersionHistory(): VersionHistory {
  * Returns: 1 if v1 > v2, -1 if v1 < v2, 0 if equal
  */
 function compareVersions(v1: string, v2: string): number {
-  const parts1 = v1.split(".").map(n => parseInt(n, 10));
-  const parts2 = v2.split(".").map(n => parseInt(n, 10));
-  
+  const parts1 = v1.split(".").map((n) => parseInt(n, 10));
+  const parts2 = v2.split(".").map((n) => parseInt(n, 10));
+
   const maxLength = Math.max(parts1.length, parts2.length);
-  
+
   for (let i = 0; i < maxLength; i++) {
     const part1 = parts1[i] || 0;
     const part2 = parts2[i] || 0;
-    
+
     if (part1 > part2) return 1;
     if (part1 < part2) return -1;
   }
-  
+
   return 0;
 }
 
@@ -208,18 +208,18 @@ function compareVersions(v1: string, v2: string): number {
 function getMajorVersion(version: string): string {
   const parts = version.split(".");
   const major = parseInt(parts[0], 10);
-  
+
   // For versions 1.0.0+, use the major version as-is
   if (major >= 1) {
     return major.toString();
   }
-  
+
   // For 0.X.Y versions, use "0.X" as the "major" version to group them properly
   if (parts.length >= 2) {
     const minor = parseInt(parts[1], 10);
     return `0.${minor}`;
   }
-  
+
   return "0";
 }
 
@@ -231,31 +231,31 @@ function limitToLastThreeMajorVersions(
   history: VersionHistory,
 ): VersionHistory {
   // Sort all versions by actual semantic versioning (newest first)
-  const sortedVersions = [...history.versions].sort((a, b) => 
-    compareVersions(b.version, a.version)
+  const sortedVersions = [...history.versions].sort((a, b) =>
+    compareVersions(b.version, a.version),
   );
-  
+
   // Get unique major versions in order
   const seenMajorVersions = new Set<string>();
   const versionsWithUniqueMajors: VersionHistoryEntry[] = [];
-  
+
   for (const entry of sortedVersions) {
     const majorVersion = getMajorVersion(entry.version);
     if (!seenMajorVersions.has(majorVersion)) {
       seenMajorVersions.add(majorVersion);
       versionsWithUniqueMajors.push(entry);
-      
+
       // Stop after 3 unique major versions
       if (versionsWithUniqueMajors.length >= 3) {
         break;
       }
     }
   }
-  
+
   // Now collect ALL versions that belong to these major versions
   const majorVersionsToKeep = Array.from(seenMajorVersions);
   const filteredVersions = sortedVersions.filter((entry) =>
-    majorVersionsToKeep.includes(getMajorVersion(entry.version))
+    majorVersionsToKeep.includes(getMajorVersion(entry.version)),
   );
 
   return {
