@@ -93,8 +93,17 @@ module.exports = async (req, res) => {
           }),
         );
 
-        await Promise.allSettled(emailPromises);
-        sentCount += batch.length;
+        const results = await Promise.allSettled(emailPromises);
+        
+        // Count successful sends vs failures
+        results.forEach((result, index) => {
+          if (result.status === 'fulfilled') {
+            sentCount++;
+          } else {
+            errorCount++;
+            console.error(`Failed to send email to ${batch[index]}:`, result.reason);
+          }
+        });
       } catch (error) {
         console.error("Batch send error:", error);
         errorCount += batch.length;
