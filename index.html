@@ -573,12 +573,7 @@
         left: 0;
         right: 0;
         height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          #facc15,
-          transparent
-        );
+        background: linear-gradient(90deg, transparent, #facc15, transparent);
       }
 
       .version-history-content {
@@ -860,7 +855,17 @@
       }
 
       /* Prevent all text from overflowing - clean line breaks */
-      h1, h2, h3, h4, h5, h6, p, span, div, a, button {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      span,
+      div,
+      a,
+      button {
         max-width: 100%;
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -2344,7 +2349,10 @@
         </a>
 
         <div class="download-help" id="download-help">
-          <span class="download-help-desktop">Direct download from official Cursor servers • Always latest version</span>
+          <span class="download-help-desktop"
+            >Direct download from official Cursor servers • Always latest
+            version</span
+          >
           <span class="download-help-mobile">
             <span>Direct download from official Cursor servers</span>
             <span>Always latest version</span>
@@ -2495,12 +2503,14 @@
     <footer>
       <div>
         <div>This site is automatically generated.</div>
-        <div>View the source on
-        <a
-          href="https://github.com/accesstechnology-mike/downloadcursor.app"
-          target="_blank"
-          >GitHub</a
-        >.</div>
+        <div>
+          View the source on
+          <a
+            href="https://github.com/accesstechnology-mike/downloadcursor.app"
+            target="_blank"
+            >GitHub</a
+          >.
+        </div>
       </div>
       <div
         style="
@@ -2814,7 +2824,7 @@
           updateVersionMeta();
 
           // Update on window resize
-          window.addEventListener('resize', updateVersionMeta);
+          window.addEventListener("resize", updateVersionMeta);
         }
 
         if (versionDescription) {
