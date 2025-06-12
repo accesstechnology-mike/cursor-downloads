@@ -562,7 +562,23 @@
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 1rem;
+        position: relative;
         animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+
+      .version-history-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #facc15,
+          transparent
+        );
       }
 
       .version-history-content {
@@ -2006,17 +2022,19 @@
         gap: 0.5rem;
         min-width: 120px;
         outline: none;
+        position: relative;
+        overflow: hidden;
       }
 
       .subscribe-btn:hover {
         background: #6d28d9;
         border-color: #6d28d9;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
       }
 
       .subscribe-btn:active {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
 
       .subscribe-btn:disabled {
@@ -2040,7 +2058,7 @@
       }
 
       .subscribe-btn:hover .subscribe-icon {
-        transform: translateX(2px);
+        transform: none;
       }
 
       .newsletter-status {
@@ -2226,6 +2244,50 @@
         .version-history-section {
           overflow-x: hidden;
         }
+      }
+
+      /* Remove hover effect specifically for Version History title */
+      .version-history-section .section-title {
+        transition: none;
+      }
+
+      .version-history-section .section-title:hover {
+        transform: none;
+        color: var(--text-primary);
+      }
+
+      /* Add a separator dot between footer lines on desktop */
+      @media (min-width: 641px) {
+        footer > div > div {
+          display: inline;
+          margin-bottom: 0;
+        }
+
+        footer > div > div:not(:last-child)::after {
+          content: " •";
+          margin: 0 0.25rem;
+        }
+      }
+
+      /* Shimmer effect to match primary download button */
+      .subscribe-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .subscribe-btn:hover::before {
+        left: 100%;
       }
     </style>
   </head>
