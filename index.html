@@ -6,21 +6,69 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
+    <meta name="description" content="Download Cursor, the AI-powered code editor built for developers who move fast. Direct downloads for Windows, macOS and Linux.">
+    <meta name="language" content="en">
+    <link rel="canonical" href="https://downloadcursor.app/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Download Cursor – AI-Powered Code Editor">
+    <meta property="og:description" content="Direct downloads of the latest Cursor release for Windows, macOS and Linux.">
+    <meta property="og:url" content="https://downloadcursor.app/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Download Cursor – AI-Powered Code Editor">
+    <meta name="twitter:description" content="Direct downloads of the latest Cursor release for Windows, macOS and Linux.">
+
     <title>Download Cursor</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GFB5MD3ESR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GFB5MD3ESR');
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Cursor",
+      "description": "AI-powered code editor built for developers who move fast",
+      "operatingSystem": ["Windows", "macOS", "Linux"],
+      "applicationCategory": "DeveloperApplication",
+      "downloadUrl": "https://downloadcursor.app",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Cursor"
+      }
+    }
+    </script>
+    
     <style>
       :root {
         --bg-primary: #0a0a0a;
@@ -2330,7 +2378,7 @@
 
         <div class="platform-detected" id="platform-detected">
           <span class="platform-icon" id="detected-icon">
-            <svg viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24" aria-label="Platform icon">
               <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
             </svg>
           </span>
@@ -2475,7 +2523,7 @@
         <div class="section-header">
           <h2 class="section-title">
             <span class="platform-icon">
-              <svg viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-label="Settings icon">
                 <path
                   d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
                 />
@@ -2483,6 +2531,9 @@
             </span>
             Version History
           </h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0.5rem 0 1rem 0; line-height: 1.5;">
+            Browse previous Cursor releases and download specific versions for all supported platforms. Each version includes direct download links from official Cursor servers.
+          </p>
           <button class="expand-toggle" id="history-toggle">
             <span>Show all versions</span>
             <span
