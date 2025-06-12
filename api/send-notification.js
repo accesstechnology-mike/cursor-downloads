@@ -70,43 +70,49 @@ module.exports = async (req, res) => {
       </html>
     `;
 
-    // Send emails in batches to avoid rate limits
-    const batchSize = 50;
-    const batches = [];
+    // -----------------------------------------------------------
+    // NOTE: The Resend free tier is limited to 2 requests/second.
+    // Sending concurrently easily trips this limit and leads to 429s.
+    // We therefore send **sequentially** with a small delay between
+    // requests so we never exceed 2 req/s. This keeps the code simple
+    // and entirely avoids rate-limit errors for typical list sizes.
+    // -----------------------------------------------------------
 
-    for (let i = 0; i < subscribers.length; i += batchSize) {
-      const batch = subscribers.slice(i, i + batchSize);
-      batches.push(batch);
-    }
+    const RATE_LIMIT_RPS = 2;
+    const DELAY_MS = Math.ceil(1000 / RATE_LIMIT_RPS); // 500ms
+
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
     let sentCount = 0;
     let errorCount = 0;
 
-    for (const batch of batches) {
-      try {
-        const emailPromises = batch.map((email) =>
-          resend.emails.send({
-            from: "Cursor Updates <noreply@downloadcursor.app>",
-            to: email,
-            subject,
-            html: htmlContent.replace("{{email}}", encodeURIComponent(email)),
-          }),
-        );
+    for (let i = 0; i < subscribers.length; i++) {
+      const email = subscribers[i];
 
-        const results = await Promise.allSettled(emailPromises);
-        
-        // Count successful sends vs failures
-        results.forEach((result, index) => {
-          if (result.status === 'fulfilled') {
-            sentCount++;
-          } else {
-            errorCount++;
-            console.error(`Failed to send email to ${batch[index]}:`, result.reason);
-          }
+      try {
+        const response = await resend.emails.send({
+          from: "Cursor Updates <noreply@downloadcursor.app>",
+          to: email,
+          subject,
+          html: htmlContent.replace("{{email}}", encodeURIComponent(email)),
         });
-      } catch (error) {
-        console.error("Batch send error:", error);
-        errorCount += batch.length;
+
+        if (response.error) {
+          // Resend resolves the promise even on failure – check the error field
+          errorCount++;
+          console.error(`Failed to send email to ${email}:`, response.error);
+        } else {
+          sentCount++;
+        }
+      } catch (err) {
+        // Network / SDK level error (including 429 if we somehow hit it)
+        errorCount++;
+        console.error(`Failed to send email to ${email}:`, err);
+      }
+
+      // Respect the rate-limit before sending the next email
+      if (i < subscribers.length - 1) {
+        await sleep(DELAY_MS);
       }
     }
 
