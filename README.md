@@ -4,7 +4,7 @@ A simple, automatically updated site providing the latest download links for the
 
 **Live Site:** [downloadcursor.app](https://downloadcursor.app)
 
-**Latest Version:** v1.1.2 (Released: 2025-06-13)
+**Latest Version:** v1.1.3 (Released: 2025-06-15)
 
 ## Features
 
