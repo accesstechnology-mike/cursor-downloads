@@ -1014,11 +1014,19 @@
 
         .alternative-downloads {
           margin-top: 1rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .alternative-options {
           margin-top: 0.75rem;
           padding-top: 0.75rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .platform-icon {
@@ -1039,6 +1047,10 @@
         .quick-options {
           grid-template-columns: 1fr;
           gap: 0.5rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .quick-download-btn {
@@ -1048,6 +1060,13 @@
           border-radius: 8px;
           justify-content: flex-start;
           gap: 0.75rem;
+          max-width: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
+          display: flex;
+          flex-wrap: wrap;
+          word-wrap: break-word;
+          white-space: normal;
         }
 
         .version-info-inline {
@@ -1118,6 +1137,12 @@
           font-size: clamp(0.8rem, 4vw, 0.875rem);
           min-height: 48px;
           border-radius: 10px;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
+          word-wrap: break-word;
+          white-space: normal;
         }
 
         .platform-card {
@@ -1177,6 +1202,9 @@
         .version-content {
           padding: 0.875rem;
           overflow-x: hidden;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
         }
 
         .platform-label {
@@ -1186,6 +1214,10 @@
         .download-links {
           flex-direction: column;
           gap: 0.5rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .download-link {
@@ -1193,6 +1225,13 @@
           font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           min-height: 44px;
           border-radius: 6px;
+          max-width: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          word-wrap: break-word;
+          white-space: normal;
         }
 
         .official-links {
@@ -1243,12 +1282,21 @@
         .quick-options {
           grid-template-columns: 1fr;
           gap: 0.5rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .quick-download-btn {
           padding: 1rem;
           font-size: 0.875rem;
           min-height: 48px;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          box-sizing: border-box;
         }
 
         .version-info-inline {
@@ -1311,6 +1359,10 @@
         .download-links {
           flex-direction: column;
           gap: 0.5rem;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
         }
 
         .download-link,
@@ -1320,6 +1372,9 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
+          max-width: 100%;
+          overflow: hidden;
+          box-sizing: border-box;
         }
       }
 
@@ -1417,6 +1472,28 @@
         .smart-download-section,
         .version-history-section {
           overflow-x: hidden;
+        }
+
+        /* Ensure dropdown containers don't overflow */
+        .alternative-downloads,
+        .alternative-options,
+        .quick-options,
+        .download-links,
+        .version-content {
+          max-width: 100%;
+          overflow-x: hidden;
+          box-sizing: border-box;
+        }
+
+        /* Prevent buttons and links from overflowing */
+        .quick-download-btn,
+        .download-link,
+        .alternative-downloads-toggle,
+        .expand-toggle {
+          max-width: 100%;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          box-sizing: border-box;
         }
       }
 
@@ -1791,6 +1868,8 @@
         transform: translateY(-10px) scale(0.95);
         max-height: 0;
         overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .alternative-options.show {
