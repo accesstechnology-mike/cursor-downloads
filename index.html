@@ -2371,6 +2371,25 @@
       .subscribe-btn:hover::before {
         left: 100%;
       }
+
+      /* Mobile overflow fix for dropdowns */
+      @media (max-width: 640px) {
+        /* Ensure the quick-options list (Other platforms) never exceeds its container */
+        .quick-options {
+          grid-template-columns: 1fr !important;
+        }
+
+        /* Stack version download links vertically and ensure they fit */
+        .download-links {
+          flex-direction: column !important;
+          align-items: stretch;
+        }
+
+        .download-link {
+          width: 100%;
+          text-align: left;
+        }
+      }
     </style>
   </head>
   <body>
