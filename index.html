@@ -376,6 +376,21 @@
         min-height: 48px;
         width: 100%;
         position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .alternative-downloads-toggle span:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .alternative-downloads-toggle .expand-icon {
+        flex-shrink: 0;
       }
 
       .alternative-downloads-toggle:hover {
@@ -423,6 +438,21 @@
         transition: all 0.2s ease;
         min-height: 48px;
         text-align: left;
+        overflow: hidden;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .quick-download-btn .platform-icon {
+        flex-shrink: 0;
+      }
+      
+      .quick-download-btn span:not(.platform-icon) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+        flex: 1;
       }
 
       .quick-download-btn:hover {
@@ -1014,11 +1044,21 @@
 
         .alternative-downloads {
           margin-top: 1rem;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
         }
 
         .alternative-options {
           margin-top: 0.75rem;
           padding-top: 0.75rem;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+        
+        .alternative-options.show {
+          max-height: 800px;
         }
 
         .platform-icon {
@@ -1048,6 +1088,18 @@
           border-radius: 8px;
           justify-content: flex-start;
           gap: 0.75rem;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+        
+        .quick-download-btn span:last-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          flex: 1;
+          min-width: 0;
         }
 
         .version-info-inline {
@@ -1118,6 +1170,16 @@
           font-size: clamp(0.8rem, 4vw, 0.875rem);
           min-height: 48px;
           border-radius: 10px;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+        
+        .alternative-downloads-toggle span:first-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: calc(100% - 2rem);
         }
 
         .platform-card {
@@ -1193,6 +1255,13 @@
           font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           min-height: 44px;
           border-radius: 6px;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: block;
         }
 
         .official-links {
@@ -1320,6 +1389,16 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+        
+        .download-link {
+          justify-content: flex-start;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
 
@@ -1377,10 +1456,20 @@
 
         .download-links {
           flex-direction: column;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
         }
 
         .download-link {
           min-height: 48px;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: block;
         }
 
         .keyboard-hint {
@@ -1796,7 +1885,7 @@
       .alternative-options.show {
         opacity: 1;
         transform: translateY(0) scale(1);
-        max-height: 300px;
+        max-height: 600px;
       }
 
       .quick-options {
@@ -1937,7 +2026,7 @@
 
       .version-item[open] .version-content {
         opacity: 1;
-        max-height: 500px;
+        max-height: 800px;
         animation: fadeInUp 0.4s ease-out;
       }
 
@@ -2305,6 +2394,10 @@
           padding: 0.75rem;
           font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           min-height: 42px;
+          width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
         }
 
         .section-title {
