@@ -181,39 +181,80 @@ function readVersionHistory(): VersionHistory {
 }
 
 /**
- * Extract major version number from semantic version string
- * For 0.X.Y versioning, we consider X the major version.
+ * Compare two semantic version strings
+ * Returns: 1 if v1 > v2, -1 if v1 < v2, 0 if equal
  */
-function getMajorVersion(version: string): number {
-  // Split by dots and get the second component as major version for 0.X.Y versioning
-  const parts = version.split(".");
-  if (parts.length >= 2 && parts[0] === "0") {
-    return parseInt(parts[1], 10);
+function compareVersions(v1: string, v2: string): number {
+  const parts1 = v1.split(".").map((n) => parseInt(n, 10));
+  const parts2 = v2.split(".").map((n) => parseInt(n, 10));
+
+  const maxLength = Math.max(parts1.length, parts2.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    const part1 = parts1[i] || 0;
+    const part2 = parts2[i] || 0;
+
+    if (part1 > part2) return 1;
+    if (part1 < part2) return -1;
   }
-  return parseInt(parts[0], 10); // Fallback to first component
+
+  return 0;
+}
+
+/**
+ * Extract major version number from semantic version string
+ * For 0.X.Y versions, we use a composite approach to handle version history properly
+ */
+function getMajorVersion(version: string): string {
+  const parts = version.split(".");
+  const major = parseInt(parts[0], 10);
+
+  // For versions 1.0.0+, use the major version as-is
+  if (major >= 1) {
+    return major.toString();
+  }
+
+  // For 0.X.Y versions, use "0.X" as the "major" version to group them properly
+  if (parts.length >= 2) {
+    const minor = parseInt(parts[1], 10);
+    return `0.${minor}`;
+  }
+
+  return "0";
 }
 
 /**
  * Filter version history to keep only the last 3 major versions
+ * Sorts versions properly using semantic versioning comparison
  */
 function limitToLastThreeMajorVersions(
   history: VersionHistory,
 ): VersionHistory {
-  // Get unique major versions
-  const majorVersions = new Set<number>();
-  history.versions.forEach((entry) => {
+  // Sort all versions by actual semantic versioning (newest first)
+  const sortedVersions = [...history.versions].sort((a, b) =>
+    compareVersions(b.version, a.version),
+  );
+
+  // Get unique major versions in order
+  const seenMajorVersions = new Set<string>();
+  const versionsWithUniqueMajors: VersionHistoryEntry[] = [];
+
+  for (const entry of sortedVersions) {
     const majorVersion = getMajorVersion(entry.version);
-    majorVersions.add(majorVersion);
-  });
+    if (!seenMajorVersions.has(majorVersion)) {
+      seenMajorVersions.add(majorVersion);
+      versionsWithUniqueMajors.push(entry);
 
-  // Sort major versions descending
-  const sortedMajorVersions = Array.from(majorVersions).sort((a, b) => b - a);
+      // Stop after 3 unique major versions
+      if (versionsWithUniqueMajors.length >= 3) {
+        break;
+      }
+    }
+  }
 
-  // Keep only the last 3 major versions
-  const majorVersionsToKeep = sortedMajorVersions.slice(0, 3);
-
-  // Filter versions to only include those with major versions in the keep list
-  const filteredVersions = history.versions.filter((entry) =>
+  // Now collect ALL versions that belong to these major versions
+  const majorVersionsToKeep = Array.from(seenMajorVersions);
+  const filteredVersions = sortedVersions.filter((entry) =>
     majorVersionsToKeep.includes(getMajorVersion(entry.version)),
   );
 
@@ -279,6 +320,117 @@ function saveVersionHistory(history: VersionHistory): void {
       error instanceof Error ? error.message : "Unknown error",
     );
     throw error;
+  }
+}
+
+/**
+ * Send notification for new version
+ */
+async function sendNewVersionNotification(
+  version: string,
+  releaseDate: string,
+): Promise<void> {
+  try {
+    console.log("🔍 [DEBUG] Starting notification process...");
+    console.log(`🔍 [DEBUG] Version: ${version}, Release Date: ${releaseDate}`);
+
+    // Environment variable debugging
+    const isProduction =
+      process.env.VERCEL ||
+      process.env.CI ||
+      process.env.NODE_ENV === "production";
+    const notificationSecret = process.env.NOTIFICATION_SECRET;
+    const vercelUrl = process.env.VERCEL_URL;
+    const nodeEnv = process.env.NODE_ENV;
+
+    console.log("🔍 [DEBUG] Environment variables:");
+    console.log(`  - VERCEL: ${process.env.VERCEL ? "SET" : "NOT_SET"}`);
+    console.log(`  - CI: ${process.env.CI ? "SET" : "NOT_SET"}`);
+    console.log(`  - NODE_ENV: ${nodeEnv || "NOT_SET"}`);
+    console.log(
+      `  - NOTIFICATION_SECRET: ${notificationSecret ? "SET (length: " + notificationSecret.length + ")" : "NOT_SET"}`,
+    );
+    console.log(`  - VERCEL_URL: ${vercelUrl || "NOT_SET"}`);
+    console.log(`  - isProduction: ${isProduction}`);
+
+    if (!isProduction) {
+      console.log(
+        `🔍 [DEV] Would send notification for version ${version} (skipping in development)`,
+      );
+      return;
+    }
+
+    if (!notificationSecret) {
+      console.error(
+        "❌ [ERROR] NOTIFICATION_SECRET not set! Cannot send email notifications.",
+      );
+      console.log("🔍 [DEBUG] Available environment variables:");
+      Object.keys(process.env).forEach((key) => {
+        if (
+          key.includes("NOTIFICATION") ||
+          key.includes("RESEND") ||
+          key.includes("VERCEL")
+        ) {
+          console.log(`  - ${key}: ${process.env[key] ? "SET" : "NOT_SET"}`);
+        }
+      });
+      return;
+    }
+
+    const baseUrl = vercelUrl
+      ? `https://${vercelUrl}`
+      : "https://www.downloadcursor.app";
+
+    console.log(`🔍 [DEBUG] Using base URL: ${baseUrl}`);
+    console.log(
+      `🔍 [DEBUG] Making request to: ${baseUrl}/api/send-notification`,
+    );
+
+    const requestBody = {
+      version,
+      releaseDate,
+    };
+
+    console.log(
+      `🔍 [DEBUG] Request body: ${JSON.stringify(requestBody, null, 2)}`,
+    );
+
+    const response = await fetch(`${baseUrl}/api/send-notification`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${notificationSecret}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    console.log(`🔍 [DEBUG] Response status: ${response.status}`);
+    console.log(
+      `🔍 [DEBUG] Response headers:`,
+      Object.fromEntries(response.headers.entries()),
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log(`✅ Notifications sent successfully!`);
+      console.log(`🔍 [DEBUG] Response: ${JSON.stringify(result, null, 2)}`);
+      console.log(`📧 Sent: ${result.sent} emails, Errors: ${result.errors}`);
+    } else {
+      const error = await response.text();
+      console.error(
+        `❌ Failed to send notifications: ${response.status} - ${error}`,
+      );
+      console.log(`🔍 [DEBUG] Error response body: ${error}`);
+    }
+  } catch (error) {
+    console.error(
+      "❌ Error sending notifications:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+    console.log("🔍 [DEBUG] Full error:", error);
+    if (error instanceof Error && error.stack) {
+      console.log("🔍 [DEBUG] Error stack:", error.stack);
+    }
   }
 }
 
@@ -385,6 +537,7 @@ async function main(): Promise<void> {
     );
 
     // Add new version to history if it doesn't exist
+    let isNewVersion = false;
     if (existingVersionIndex === -1) {
       const platforms: { [platform: string]: string } = {};
       for (const osKey in results) {
@@ -399,6 +552,7 @@ async function main(): Promise<void> {
       };
       history.versions.unshift(newEntry); // Add to top
       console.log(`Added new version ${latestVersion} to history`);
+      isNewVersion = true;
     } else {
       console.log(`Version ${latestVersion} already exists in history`);
     }
@@ -406,6 +560,15 @@ async function main(): Promise<void> {
     // Limit to last 3 major versions and save
     const limitedHistory = limitToLastThreeMajorVersions(history);
     saveVersionHistory(limitedHistory);
+
+    // Send notification if this is a new version
+    if (isNewVersion && limitedHistory.versions.length > 0) {
+      const latestEntry = limitedHistory.versions[0];
+      console.log(
+        `🚀 New version detected: ${latestEntry.version}. Sending notifications...`,
+      );
+      await sendNewVersionNotification(latestEntry.version, latestEntry.date);
+    }
 
     // Update README.md with latest version information
     if (limitedHistory.versions.length > 0) {

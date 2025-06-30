@@ -30,6 +30,8 @@ jobs:
 
       - name: Run update script
         run: bun run scripts/update-links.ts
+        env:
+          NOTIFICATION_SECRET: ${{ secrets.NOTIFICATION_SECRET }}
 
       - name: Format everything with Prettier
         run: bunx prettier ./ --write

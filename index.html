@@ -6,14 +6,98 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
+    <meta
+      name="description"
+      content="Download Cursor, the AI-powered code editor built for developers who move fast. Direct downloads for Windows, macOS and Linux."
+    />
+    <meta name="language" content="en" />
+    <link rel="canonical" href="https://downloadcursor.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Download Cursor – AI-Powered Code Editor"
+    />
+    <meta
+      property="og:description"
+      content="Direct downloads of the latest Cursor release for Windows, macOS and Linux."
+    />
+    <meta property="og:url" content="https://downloadcursor.app/" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Download Cursor – AI-Powered Code Editor"
+    />
+    <meta
+      name="twitter:description"
+      content="Direct downloads of the latest Cursor release for Windows, macOS and Linux."
+    />
+
     <title>Download Cursor</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-GFB5MD3ESR"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-GFB5MD3ESR");
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    /></noscript>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Cursor",
+        "description": "AI-powered code editor built for developers who move fast",
+        "operatingSystem": ["Windows", "macOS", "Linux"],
+        "applicationCategory": "DeveloperApplication",
+        "downloadUrl": "https://downloadcursor.app",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Cursor"
+        }
+      }
+    </script>
+
     <style>
       :root {
         --bg-primary: #0a0a0a;
@@ -168,18 +252,20 @@
       }
 
       .platform-icon {
-        font-size: 1rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
       }
 
       .platform-icon svg {
         width: 100%;
         height: 100%;
         fill: currentColor;
+        stroke: currentColor;
+        stroke-width: 1.5;
       }
 
       .primary-download {
@@ -257,6 +343,19 @@
         opacity: 0.8;
       }
 
+      .download-help-mobile {
+        display: none;
+      }
+
+      .download-help-mobile span {
+        display: block;
+        line-height: 1.4;
+      }
+
+      .version-meta span {
+        display: inline;
+      }
+
       .alternative-downloads {
         margin-top: 1rem;
       }
@@ -311,9 +410,9 @@
       .quick-download-btn {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
         background: var(--bg-tertiary);
         border: 1px solid var(--border-primary);
         border-radius: 8px;
@@ -322,6 +421,8 @@
         font-size: 0.875rem;
         font-weight: 500;
         transition: all 0.2s ease;
+        min-height: 48px;
+        text-align: left;
       }
 
       .quick-download-btn:hover {
@@ -330,12 +431,93 @@
         transform: translateY(-1px);
       }
 
+      /* Official Links Section */
+      .official-links-section {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-primary);
+      }
+
+      .official-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .official-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.875rem 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .official-link::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 112, 243, 0.1),
+          transparent
+        );
+        transition: left 0.4s ease;
+      }
+
+      .official-link:hover::before {
+        left: 100%;
+      }
+
+      .official-link:hover {
+        background: var(--bg-hover);
+        border-color: var(--accent-primary);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 112, 243, 0.15);
+        color: var(--accent-primary);
+      }
+
+      .link-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .link-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke-width: 2;
+        transition: all 0.3s ease;
+      }
+
+      .official-link:hover .link-icon svg {
+        transform: scale(1.1);
+        stroke-width: 2.5;
+      }
+
       /* Inline Version Info */
       .version-info-inline {
         display: block;
         text-align: center;
         margin: 0 0 1rem 0;
         padding: 1.25rem;
+        padding-top: 2.5rem;
         background: var(--bg-tertiary);
         border: 1px solid var(--border-primary);
         border-radius: 12px;
@@ -409,7 +591,7 @@
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
       }
 
       .section-title {
@@ -456,7 +638,19 @@
         border: 1px solid var(--border-primary);
         border-radius: 16px;
         padding: 2rem;
+        margin-bottom: 1rem;
+        position: relative;
         animation: fadeInUp 0.8s ease-out 0.5s both;
+      }
+
+      .version-history-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #facc15, transparent);
       }
 
       .version-history-content {
@@ -622,9 +816,17 @@
         text-align: center;
         color: var(--text-muted);
         font-size: 0.875rem;
-        margin-top: 4rem;
-        padding: 2rem 0;
+        margin-top: 2rem;
+        padding: 1.5rem 0;
         border-top: 1px solid var(--border-primary);
+      }
+
+      footer div div {
+        margin-bottom: 0.5rem;
+      }
+
+      footer div div:last-child {
+        margin-bottom: 0;
       }
 
       footer a {
@@ -695,70 +897,119 @@
       /* Base responsive fixes */
       * {
         max-width: 100%;
+        box-sizing: border-box;
       }
 
       body {
         width: 100%;
         min-width: 320px;
+        overflow-x: hidden;
       }
 
+      /* Proper text wrapping without hyphens */
       .hero-title,
       .hero-subtitle,
-      .section-title {
+      .section-title,
+      .version-title,
+      .newsletter-title,
+      .platform-detected,
+      .download-help,
+      .version-meta,
+      .version-description-inline,
+      .newsletter-subtitle,
+      .primary-download,
+      .quick-download-btn,
+      .alternative-downloads-toggle,
+      .expand-toggle,
+      .official-link,
+      .download-link,
+      .platform-label,
+      .version-number,
+      .version-date {
         word-wrap: break-word;
         overflow-wrap: break-word;
-        hyphens: auto;
+        hyphens: none;
+      }
+
+      /* Prevent all text from overflowing - clean line breaks */
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      span,
+      div,
+      a,
+      button {
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: none;
       }
 
       /* Responsive Design - Mobile First */
       @media (max-width: 390px) {
         main {
-          padding: 1rem 0.875rem;
+          padding: 1rem 0.75rem;
           width: 100%;
           overflow-x: hidden;
         }
 
         .hero-section {
-          padding: 1rem 0;
-          margin-bottom: 1.5rem;
+          padding: 0.75rem 0;
+          margin-bottom: 1.25rem;
+          overflow-x: hidden;
         }
 
         .hero-title {
-          font-size: 1.75rem;
-          line-height: 1.1;
+          font-size: clamp(1.25rem, 7vw, 1.75rem);
+          line-height: 1.2;
           margin-bottom: 0.75rem;
+          padding: 0 0.25rem;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: none;
         }
 
         .hero-subtitle {
-          font-size: 0.875rem;
-          padding: 0;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
+          padding: 0 0.25rem;
           margin-bottom: 1rem;
+          line-height: 1.4;
         }
 
         .smart-download-section,
         .version-history-section {
-          padding: 1rem;
-          margin-bottom: 1.5rem;
+          padding: 0.875rem;
+          margin-bottom: 1.25rem;
           border-radius: 12px;
+          overflow-x: hidden;
         }
 
         .primary-download {
           width: 100%;
           min-width: auto;
-          padding: 0.75rem 1rem;
-          font-size: 0.875rem;
+          padding: 0.75rem 0.875rem;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
           min-height: 44px;
           border-radius: 8px;
+          text-align: center;
         }
 
         .platform-detected {
-          font-size: 0.8rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           margin-bottom: 0.75rem;
+          flex-wrap: wrap;
+          text-align: center;
         }
 
         .download-help {
-          font-size: 0.8rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           margin-bottom: 1rem;
+          padding: 0 0.25rem;
+          line-height: 1.4;
         }
 
         .alternative-downloads {
@@ -791,71 +1042,81 @@
         }
 
         .quick-download-btn {
-          padding: 0.875rem 1rem;
-          font-size: 0.8rem;
+          padding: 0.875rem;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
           min-height: 48px;
           border-radius: 8px;
+          justify-content: flex-start;
+          gap: 0.75rem;
         }
 
         .version-info-inline {
           grid-template-columns: 1fr;
           text-align: center;
           gap: 0.75rem;
-          padding: 1rem;
+          padding: 0.875rem;
           margin: 1rem 0;
           position: relative;
+          overflow-x: hidden;
         }
 
         .status-badge {
           position: absolute;
-          top: 0.75rem;
-          right: 0.75rem;
-          padding: 0.2rem 0.5rem;
-          font-size: 0.65rem;
+          top: 0.625rem;
+          right: 0.625rem;
+          padding: 0.2rem 0.4rem;
+          font-size: clamp(0.6rem, 3vw, 0.65rem);
         }
 
         .version-title {
-          font-size: 1rem;
+          font-size: clamp(0.9rem, 4.5vw, 1rem);
           flex-direction: column;
           align-items: center;
           gap: 0.25rem;
           margin-top: 0.5rem;
+          padding: 0 0.25rem;
         }
 
         .version-number-emphasis {
-          font-size: 1.25rem;
+          font-size: clamp(1.1rem, 5vw, 1.25rem);
         }
 
         .version-meta {
-          font-size: 0.75rem;
+          font-size: clamp(0.7rem, 3.5vw, 0.75rem);
           margin-bottom: 0.5rem;
+          padding: 0 0.25rem;
+          line-height: 1.3;
         }
 
         .version-description-inline {
-          font-size: 0.75rem;
+          font-size: clamp(0.7rem, 3.5vw, 0.75rem);
+          padding: 0 0.25rem;
+          line-height: 1.3;
         }
 
         .section-title {
-          font-size: 1.15rem;
+          font-size: clamp(1rem, 5vw, 1.15rem);
+          padding: 0 0.25rem;
         }
 
         .section-header {
           flex-direction: column;
           align-items: stretch;
           gap: 1rem;
+          overflow-x: hidden;
         }
 
         .expand-toggle {
-          padding: 1rem 1.25rem;
-          font-size: 0.875rem;
-          min-height: 52px;
+          padding: 0.875rem 1rem;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
+          min-height: 48px;
           border-radius: 10px;
         }
 
         .alternative-downloads-toggle {
-          padding: 1rem 1.25rem;
-          font-size: 0.875rem;
-          min-height: 52px;
+          padding: 0.875rem 1rem;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
+          min-height: 48px;
           border-radius: 10px;
         }
 
@@ -885,23 +1146,24 @@
 
         .version-header {
           grid-template-columns: 1fr;
-          padding: 0.875rem 1rem;
+          padding: 0.75rem 0.875rem;
           position: relative;
+          overflow-x: hidden;
         }
 
         .version-number {
-          font-size: 0.85rem;
+          font-size: clamp(0.8rem, 4vw, 0.85rem);
         }
 
         .version-date {
-          font-size: 0.75rem;
+          font-size: clamp(0.7rem, 3.5vw, 0.75rem);
           margin-top: 0.25rem;
           margin-right: 0;
         }
 
         .expand-icon {
           position: absolute;
-          right: 1rem;
+          right: 0.875rem;
           top: 50%;
           transform: translateY(-50%) rotate(45deg);
           width: 0.5rem;
@@ -913,11 +1175,12 @@
         }
 
         .version-content {
-          padding: 1rem;
+          padding: 0.875rem;
+          overflow-x: hidden;
         }
 
         .platform-label {
-          font-size: 0.8rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
         }
 
         .download-links {
@@ -926,10 +1189,22 @@
         }
 
         .download-link {
-          padding: 0.75rem;
-          font-size: 0.8rem;
+          padding: 0.625rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
           min-height: 44px;
           border-radius: 6px;
+        }
+
+        .official-links {
+          grid-template-columns: 1fr;
+          gap: 0.5rem;
+        }
+
+        .official-link {
+          padding: 0.875rem;
+          font-size: clamp(0.8rem, 4vw, 0.875rem);
+          min-height: 48px;
+          border-radius: 8px;
         }
       }
 
@@ -1704,6 +1979,398 @@
         transform: translateX(4px) scale(1.02);
         box-shadow: 0 2px 8px rgba(0, 112, 243, 0.1);
       }
+
+      /* Newsletter Section */
+      .newsletter-section {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: center;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.4s both;
+      }
+
+      .newsletter-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-secondary),
+          transparent
+        );
+      }
+
+      .newsletter-content {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .newsletter-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .newsletter-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .newsletter-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .newsletter-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke: currentColor;
+        stroke-width: 2;
+      }
+
+      .newsletter-subtitle {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .newsletter-form {
+        margin-bottom: 0rem;
+      }
+
+      .email-input-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0rem;
+        flex-direction: column;
+      }
+
+      @media (min-width: 480px) {
+        .email-input-container {
+          flex-direction: row;
+        }
+      }
+
+      .email-input {
+        flex: 1;
+        padding: 0.875rem 1rem;
+        border: 1px solid var(--border-primary);
+        border-radius: 8px;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .email-input:focus {
+        border-color: var(--accent-primary);
+        background: var(--bg-primary);
+        box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+      }
+
+      .email-input::placeholder {
+        color: var(--text-muted);
+      }
+
+      .subscribe-btn {
+        padding: 0.875rem 1.5rem;
+        background: var(--accent-secondary);
+        border: 1px solid var(--accent-secondary);
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 120px;
+        outline: none;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .subscribe-btn:hover {
+        background: #6d28d9;
+        border-color: #6d28d9;
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+      }
+
+      .subscribe-btn:active {
+        transform: translateY(0) scale(1);
+      }
+
+      .subscribe-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .subscribe-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+
+      .subscribe-icon svg {
+        width: 1rem;
+        height: 1rem;
+        stroke-width: 2;
+      }
+
+      .subscribe-btn:hover .subscribe-icon {
+        transform: none;
+      }
+
+      .newsletter-status {
+        min-height: 1.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .newsletter-status.success {
+        color: var(--success);
+      }
+
+      .newsletter-status.error {
+        color: #ef4444;
+      }
+
+      .newsletter-features {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .feature {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .feature-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke: currentColor;
+        stroke-width: 2;
+      }
+
+      @media (max-width: 640px) {
+        .download-help-desktop {
+          display: none;
+        }
+
+        .download-help-mobile {
+          display: block;
+        }
+
+        .version-meta span {
+          display: block;
+          line-height: 1.4;
+        }
+
+        footer {
+          margin-top: 1.5rem;
+          padding: 1rem 0;
+        }
+
+        .newsletter-section {
+          padding: 1rem;
+          margin: 1.5rem 0;
+          overflow-x: hidden;
+        }
+
+        .newsletter-title {
+          font-size: clamp(1.2rem, 5vw, 1.5rem);
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .newsletter-subtitle {
+          font-size: clamp(0.85rem, 4vw, 0.95rem);
+          padding: 0 0.25rem;
+          line-height: 1.4;
+        }
+
+        .email-input {
+          font-size: clamp(0.85rem, 4vw, 0.95rem);
+          padding: 0.75rem 0.875rem;
+        }
+
+        .subscribe-btn {
+          font-size: clamp(0.85rem, 4vw, 0.95rem);
+          padding: 0.75rem 1.25rem;
+          min-width: 100px;
+        }
+
+        .newsletter-features {
+          gap: 1rem;
+          justify-content: center;
+        }
+
+        .feature {
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
+        }
+
+        .newsletter-status {
+          font-size: clamp(0.8rem, 3.5vw, 0.875rem);
+          padding: 0 0.25rem;
+          text-align: center;
+        }
+      }
+
+      /* Ultra-small viewport fixes (under 320px) */
+      @media (max-width: 319px) {
+        main {
+          padding: 0.75rem 0.5rem;
+        }
+
+        .hero-title {
+          font-size: clamp(1rem, 6vw, 1.25rem);
+          line-height: 1.3;
+        }
+
+        .hero-subtitle {
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
+        }
+
+        .smart-download-section,
+        .version-history-section,
+        .newsletter-section {
+          padding: 0.75rem;
+          margin-bottom: 1rem;
+        }
+
+        .primary-download {
+          padding: 0.625rem 0.75rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
+          min-height: 42px;
+        }
+
+        .version-title {
+          font-size: clamp(0.85rem, 4vw, 0.9rem);
+        }
+
+        .version-number-emphasis {
+          font-size: clamp(1rem, 4.5vw, 1.1rem);
+        }
+
+        .platform-detected,
+        .download-help,
+        .version-meta,
+        .version-description-inline {
+          font-size: clamp(0.65rem, 3vw, 0.7rem);
+        }
+
+        .quick-download-btn,
+        .alternative-downloads-toggle,
+        .expand-toggle,
+        .official-link {
+          padding: 0.75rem;
+          font-size: clamp(0.75rem, 3.5vw, 0.8rem);
+          min-height: 42px;
+        }
+
+        .section-title {
+          font-size: clamp(0.9rem, 4.5vw, 1rem);
+        }
+      }
+
+      /* Prevent horizontal overflow */
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+        }
+
+        main {
+          overflow-x: hidden;
+        }
+
+        .smart-download-section,
+        .version-history-section {
+          overflow-x: hidden;
+        }
+      }
+
+      /* Remove hover effect specifically for Version History title */
+      .version-history-section .section-title {
+        transition: none;
+      }
+
+      .version-history-section .section-title:hover {
+        transform: none;
+        color: var(--text-primary);
+      }
+
+      /* Add a separator dot between footer lines on desktop */
+      @media (min-width: 641px) {
+        footer > div > div {
+          display: inline;
+          margin-bottom: 0;
+        }
+
+        footer > div > div:not(:last-child)::after {
+          content: " •";
+          margin: 0 0.25rem;
+        }
+      }
+
+      /* Shimmer effect to match primary download button */
+      .subscribe-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .subscribe-btn:hover::before {
+        left: 100%;
+      }
     </style>
   </head>
   <body>
@@ -1740,7 +2407,7 @@
 
         <div class="platform-detected" id="platform-detected">
           <span class="platform-icon" id="detected-icon">
-            <svg viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24" aria-label="Platform icon">
               <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
             </svg>
           </span>
@@ -1759,7 +2426,14 @@
         </a>
 
         <div class="download-help" id="download-help">
-          Direct download from official Cursor servers • Always latest version
+          <span class="download-help-desktop"
+            >Direct download from official Cursor servers • Always latest
+            version</span
+          >
+          <span class="download-help-mobile">
+            <span>Direct download from official Cursor servers</span>
+            <span>Always latest version</span>
+          </span>
         </div>
 
         <div class="keyboard-hint">
@@ -1786,6 +2460,91 @@
             </div>
           </div>
         </div>
+
+        <!-- Official Links Section -->
+        <div class="official-links-section">
+          <div class="official-links">
+            <a
+              href="https://www.cursor.com/"
+              target="_blank"
+              class="official-link"
+            >
+              <span class="link-icon"><i data-lucide="globe"></i></span>
+              <span>Official Cursor Website</span>
+            </a>
+            <a
+              href="https://www.cursor.com/changelog"
+              target="_blank"
+              class="official-link"
+            >
+              <span class="link-icon"><i data-lucide="scroll-text"></i></span>
+              <span>View Changelog</span>
+            </a>
+            <a
+              href="https://forum.cursor.com/"
+              target="_blank"
+              class="official-link"
+            >
+              <span class="link-icon"
+                ><i data-lucide="message-circle"></i
+              ></span>
+              <span>Community Forum</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter Subscription Section -->
+      <section class="newsletter-section">
+        <div class="newsletter-content">
+          <div class="newsletter-header">
+            <h3 class="newsletter-title">
+              <span class="newsletter-icon"><i data-lucide="mail"></i></span>
+              Get notified of new releases
+            </h3>
+            <p class="newsletter-subtitle">
+              Be the first to know when a new Cursor version is available
+            </p>
+          </div>
+
+          <form class="newsletter-form" id="newsletter-form">
+            <div class="email-input-container">
+              <input
+                type="email"
+                class="email-input"
+                id="email-input"
+                placeholder="Enter your email address"
+                required
+                aria-label="Email address"
+              />
+              <button
+                type="submit"
+                class="subscribe-btn"
+                id="subscribe-btn"
+                aria-label="Subscribe to notifications"
+              >
+                <span class="subscribe-text">Subscribe</span>
+                <span class="subscribe-icon"
+                  ><i data-lucide="arrow-right"></i
+                ></span>
+              </button>
+            </div>
+            <div class="newsletter-status" id="newsletter-status"></div>
+          </form>
+
+          <div class="newsletter-features">
+            <div class="feature">
+              <span class="feature-icon"><i data-lucide="zap"></i></span>
+              <span>Instant notifications</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon"
+                ><i data-lucide="shield-check"></i
+              ></span>
+              <span>No spam, ever</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Version History -->
@@ -1793,7 +2552,7 @@
         <div class="section-header">
           <h2 class="section-title">
             <span class="platform-icon">
-              <svg viewBox="0 0 24 24">
+              <svg viewBox="0 0 24 24" aria-label="Settings icon">
                 <path
                   d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
                 />
@@ -1801,6 +2560,18 @@
             </span>
             Version History
           </h2>
+          <p
+            style="
+              color: var(--text-secondary);
+              font-size: 0.95rem;
+              margin: 0.5rem 0 1rem 0;
+              line-height: 1.5;
+            "
+          >
+            Browse previous Cursor releases and download specific versions for
+            all supported platforms. Each version includes direct download links
+            from official Cursor servers.
+          </p>
           <button class="expand-toggle" id="history-toggle">
             <span>Show all versions</span>
             <span
@@ -1820,12 +2591,48 @@
 
     <footer>
       <div>
-        This site is automatically generated. View the source on
+        <div>This site is automatically generated.</div>
+        <div>
+          View the source on
+          <a
+            href="https://github.com/accesstechnology-mike/downloadcursor.app"
+            target="_blank"
+            >GitHub</a
+          >.
+        </div>
+      </div>
+      <div
+        style="
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid var(--border-primary);
+        "
+      >
         <a
-          href="https://github.com/accesstechnology-mike/downloadcursor.app"
+          href="https://coff.ee/mikethrussell"
           target="_blank"
-          >GitHub</a
-        >.
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+          "
+        >
+          <span
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 1rem;
+              height: 1rem;
+            "
+            ><i data-lucide="coffee"></i
+          ></span>
+          <span>Buy me a coffee</span>
+        </a>
       </div>
     </footer>
 
@@ -1971,38 +2778,38 @@
         };
       }
 
-      // Get prioritized platforms (remove duplicates, prefer user over system)
+      // Get prioritized platforms (show both user and system versions)
       function getPrioritizedPlatforms(platforms) {
         const result = [];
-        const seenPlatforms = new Set();
+        const addedPlatforms = new Set();
 
-        // Define platform groups to avoid duplicates
-        const platformGroups = [
-          ["win32-x64-user", "win32-x64-system", "win32-x64"],
-          ["win32-arm64-user", "win32-arm64-system", "win32-arm64"],
-          ["darwin-universal"],
-          ["darwin-arm64", "darwin-x64"],
-          ["linux-x64"],
-          ["linux-arm64"],
+        // Define platform priority order (user and system versions are separate)
+        const priorityOrder = [
+          "win32-x64-user",
+          "win32-x64-system",
+          "win32-arm64-user",
+          "win32-arm64-system",
+          "darwin-universal",
+          "darwin-arm64",
+          "darwin-x64",
+          "linux-x64",
+          "linux-arm64",
         ];
 
-        // Process each group, taking the first available platform
-        platformGroups.forEach((group) => {
-          for (const key of group) {
-            if (platforms[key] && !seenPlatforms.has(getBasePlatform(key))) {
-              result.push({ key, url: platforms[key] });
-              seenPlatforms.add(getBasePlatform(key));
-              break;
-            }
+        // Add platforms in priority order
+        priorityOrder.forEach((key) => {
+          if (platforms[key] && !addedPlatforms.has(key)) {
+            result.push({ key, url: platforms[key] });
+            addedPlatforms.add(key);
           }
         });
 
-        // Add any remaining platforms not in groups
+        // Add any remaining platforms not in priority list (excluding duplicates)
+        const excludedPlatforms = new Set(["win32-x64", "win32-arm64"]); // These duplicate the system versions
         Object.entries(platforms).forEach(([key, url]) => {
-          const basePlatform = getBasePlatform(key);
-          if (!seenPlatforms.has(basePlatform)) {
+          if (!addedPlatforms.has(key) && !excludedPlatforms.has(key)) {
             result.push({ key, url });
-            seenPlatforms.add(basePlatform);
+            addedPlatforms.add(key);
           }
         });
 
@@ -2089,7 +2896,24 @@
         }
 
         if (versionMeta && latestVersion) {
-          versionMeta.textContent = `Released ${latestVersion.date} • Multiple platforms available`;
+          // Function to update version meta based on screen size
+          function updateVersionMeta() {
+            const isMobile = window.innerWidth <= 640;
+            if (isMobile) {
+              versionMeta.innerHTML = `
+                <span>Released ${latestVersion.date}</span>
+                <span>Multiple platforms available</span>
+              `;
+            } else {
+              versionMeta.textContent = `Released ${latestVersion.date} • Multiple platforms available`;
+            }
+          }
+
+          // Initial update
+          updateVersionMeta();
+
+          // Update on window resize
+          window.addEventListener("resize", updateVersionMeta);
         }
 
         if (versionDescription) {
@@ -2463,6 +3287,7 @@
         // Setup interactivity
         setupToggles();
         setupKeyboardShortcuts();
+        setupNewsletter();
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -2643,6 +3468,78 @@
           }
           setTimeout(() => messageEl.remove(), 400);
         }, 4000);
+      }
+
+      // Newsletter functionality
+      function setupNewsletter() {
+        const form = document.getElementById("newsletter-form");
+        const emailInput = document.getElementById("email-input");
+        const submitBtn = document.getElementById("subscribe-btn");
+        const statusEl = document.getElementById("newsletter-status");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = emailInput.value.trim();
+          if (!email) return;
+
+          console.log("🚀 FRONTEND DEBUG: Starting subscription");
+          console.log("📧 Email:", email);
+
+          // Update UI to loading state
+          submitBtn.disabled = true;
+          submitBtn.querySelector(".subscribe-text").textContent =
+            "Subscribing...";
+          statusEl.textContent = "";
+          statusEl.className = "newsletter-status";
+
+          try {
+            console.log("📡 Making fetch request to /api/subscribe");
+            const response = await fetch("/api/subscribe", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+
+            console.log("📥 Response status:", response.status);
+            console.log("📥 Response headers:", response.headers);
+
+            const data = await response.json();
+            console.log("📄 Response data:", data);
+
+            if (response.ok) {
+              statusEl.textContent = data.message;
+              statusEl.className = "newsletter-status success";
+              emailInput.value = "";
+
+              // Show success animation
+              form.style.transform = "scale(1.02)";
+              setTimeout(() => {
+                form.style.transform = "scale(1)";
+              }, 200);
+            } else {
+              statusEl.textContent = data.error || "Something went wrong";
+              statusEl.className = "newsletter-status error";
+            }
+          } catch (error) {
+            console.error("💥 FRONTEND ERROR:", error);
+            statusEl.textContent = "Network error. Please try again.";
+            statusEl.className = "newsletter-status error";
+          } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.querySelector(".subscribe-text").textContent =
+              "Subscribe";
+          }
+        });
+
+        // Clear status on input change
+        emailInput.addEventListener("input", () => {
+          statusEl.textContent = "";
+          statusEl.className = "newsletter-status";
+        });
       }
     </script>
   </body>

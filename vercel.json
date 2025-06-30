@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "." }
-    }
-  ],
   "routes": [
     {
       "src": "/version-history.json",
@@ -21,7 +14,11 @@
       "dest": "/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/unsubscribe",
+      "dest": "/unsubscribe.html"
+    },
+    {
+      "src": "/(?!api/)(.*)",
       "dest": "/index.html"
     }
   ]
