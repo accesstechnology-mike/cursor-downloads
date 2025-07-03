@@ -203,28 +203,33 @@ function compareVersions(v1: string, v2: string): number {
 
 /**
  * Extract major version number from semantic version string
- * For 0.X.Y versions, we use a composite approach to handle version history properly
+ * For 1.X.Y versions, we treat each major.minor as a separate "major" version
+ * For 0.X.Y versions, we use "0.X" as the "major" version to group them properly
  */
 function getMajorVersion(version: string): string {
   const parts = version.split(".");
   const major = parseInt(parts[0], 10);
 
-  // For versions 1.0.0+, use the major version as-is
-  if (major >= 1) {
-    return major.toString();
+  // For versions 1.0.0+, use major.minor as the "major" version group
+  // This allows us to keep 1.2.x, 1.1.x, and 1.0.x as separate major versions
+  if (major >= 1 && parts.length >= 2) {
+    const minor = parseInt(parts[1], 10);
+    return `${major}.${minor}`;
   }
 
   // For 0.X.Y versions, use "0.X" as the "major" version to group them properly
-  if (parts.length >= 2) {
+  if (major === 0 && parts.length >= 2) {
     const minor = parseInt(parts[1], 10);
     return `0.${minor}`;
   }
 
-  return "0";
+  return major.toString();
 }
 
 /**
  * Filter version history to keep only the last 3 major versions
+ * For 1.x.y versions: treats 1.2.x, 1.1.x, 1.0.x as separate major versions
+ * For 0.x.y versions: groups by 0.x (e.g., 0.52.x, 0.51.x as separate)
  * Sorts versions properly using semantic versioning comparison
  */
 function limitToLastThreeMajorVersions(
@@ -266,6 +271,7 @@ function limitToLastThreeMajorVersions(
 /**
  * Save version history to JSON file
  * Only the last 3 major versions will be kept to keep the file size and table manageable.
+ * For 1.x versions: 1.2.x, 1.1.x, 1.0.x are treated as separate major versions.
  */
 function saveVersionHistory(history: VersionHistory): void {
   if (!history || !Array.isArray(history.versions)) {
