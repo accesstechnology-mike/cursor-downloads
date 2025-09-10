@@ -497,15 +497,67 @@ async function sendNewVersionNotification(
 /**
  * Generate Markdown content for README.md
  */
-function generateReadmeMarkdown(latestEntry: VersionHistoryEntry): string {
+function generateReadmeMarkdown(
+  latestEntry: VersionHistoryEntry,
+  fullHistory: VersionHistory,
+): string {
   const repoUrl = "https://github.com/accesstechnology-mike/downloadcursor.app";
   const liveSiteUrl = "https://downloadcursor.app";
 
   // Build downloads table for all available platforms
   const platforms = latestEntry.platforms || {};
+  const displayName = (key: string): string => {
+    const map: Record<string, string> = {
+      "win32-x64-user": "Windows x64 (User)",
+      "win32-arm64-user": "Windows ARM64 (User)",
+      "win32-x64-system": "Windows x64 (System)",
+      "win32-arm64-system": "Windows ARM64 (System)",
+      "win32-x64": "Windows x64 (System)",
+      "win32-arm64": "Windows ARM64 (System)",
+      "darwin-universal": "macOS (Universal)",
+      "darwin-arm64": "macOS (Apple Silicon)",
+      "darwin-x64": "macOS (Intel)",
+      "linux-x64": "Linux x64 (AppImage)",
+      "linux-arm64": "Linux ARM64 (AppImage)",
+    };
+    return map[key] || key;
+  };
+
+  const sortOrder = [
+    "win32-x64-user",
+    "win32-x64-system",
+    "win32-arm64-user",
+    "win32-arm64-system",
+    "darwin-universal",
+    "darwin-arm64",
+    "darwin-x64",
+    "linux-x64",
+    "linux-arm64",
+  ];
+
   const platformRows = Object.keys(platforms)
-    .sort()
-    .map((key) => `| ${key} | [Download](${platforms[key]}) |`)
+    .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
+    .map((key) => `| ${displayName(key)} | [Download](${platforms[key]}) |`)
+    .join("\n");
+
+  // Build all versions section
+  const versions = Array.isArray(fullHistory?.versions)
+    ? [...fullHistory.versions]
+    : [];
+  versions.sort((a, b) => {
+    const byVersion = compareVersions(b.version, a.version);
+    if (byVersion !== 0) return byVersion;
+    return (b.date || "").localeCompare(a.date || "");
+  });
+
+  const allVersionsSection = versions
+    .map((entry) => {
+      const rows = Object.keys(entry.platforms || {})
+        .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
+        .map((key) => `| ${displayName(key)} | [Download](${entry.platforms[key]}) |`)
+        .join("\n");
+      return `\n#### v${entry.version} — ${entry.date}\n\n| Platform | Link |\n| --- | --- |\n${rows}\n`;
+    })
     .join("\n");
 
   return `# Cursor Download Hub
@@ -514,6 +566,11 @@ A simple, automatically updated site providing the latest download links for the
 
 **Live Site:** [${liveSiteUrl.replace("https://", "")}](${liveSiteUrl})
 
+![GitHub stars](https://img.shields.io/github/stars/accesstechnology-mike/downloadcursor.app?style=social)
+![Last commit](https://img.shields.io/github/last-commit/accesstechnology-mike/downloadcursor.app)
+![Update workflow](https://img.shields.io/github/actions/workflow/status/accesstechnology-mike/downloadcursor.app/update.yml?branch=main)
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95%EF%B8%8F-orange?labelColor=555&style=flat)](https://coff.ee/mikethrussell)
+
 **Latest Version:** v${latestEntry.version} (Released: ${latestEntry.date})
 
 ## Downloads (latest)
@@ -521,6 +578,13 @@ A simple, automatically updated site providing the latest download links for the
 | Platform | Link |
 | --- | --- |
 ${platformRows}
+
+<details>
+<summary><strong>All versions</strong></summary>
+
+${allVersionsSection}
+
+</details>
 
 ## Development
 
@@ -547,7 +611,7 @@ ${platformRows}
 
 The \`scripts/update-links.ts\` script fetches the latest download URLs from the official Cursor API. It then:
 
-1.  Updates the \`version-history.json\` file (pruning to the last 3 major versions).
+1.  Updates the \`version-history.json\` file.
 2.  Updates this \`README.md\` with the latest version information and project details.
 
 A GitHub Actions workflow in \`.github/workflows/update.yml\` runs this script periodically to keep the site and version information up-to-date.`;
@@ -619,13 +683,12 @@ async function main(): Promise<void> {
       console.log(`Version ${latestVersion} already exists in history`);
     }
 
-    // Limit to last 3 major versions and save
-    const limitedHistory = limitToLastThreeMajorVersions(history);
-    saveVersionHistory(limitedHistory);
+    // Save full history (no pruning) for complete README tables
+    saveVersionHistory(history);
 
     // Send notification if this is a new version
-    if (isNewVersion && limitedHistory.versions.length > 0) {
-      const latestEntry = limitedHistory.versions[0];
+    if (isNewVersion && history.versions.length > 0) {
+      const latestEntry = history.versions[0];
       console.log(
         `🚀 New version detected: ${latestEntry.version}. Sending notifications...`,
       );
@@ -633,9 +696,9 @@ async function main(): Promise<void> {
     }
 
     // Update README.md with latest version information
-    if (limitedHistory.versions.length > 0) {
-      const latestEntry = limitedHistory.versions[0]; // The actual latest version after pruning and sorting
-      const readmeContent = generateReadmeMarkdown(latestEntry);
+    if (history.versions.length > 0) {
+      const latestEntry = history.versions[0]; // Latest after unshift above
+      const readmeContent = generateReadmeMarkdown(latestEntry, history);
       const readmePath = path.join(process.cwd(), "README.md");
       fs.writeFileSync(readmePath, readmeContent.trim(), "utf8");
       console.log("README.md updated successfully.");
