@@ -497,12 +497,16 @@ async function sendNewVersionNotification(
 /**
  * Generate Markdown content for README.md
  */
-function generateReadmeMarkdown(
-  latestVersion: string,
-  releaseDate: string,
-): string {
+function generateReadmeMarkdown(latestEntry: VersionHistoryEntry): string {
   const repoUrl = "https://github.com/accesstechnology-mike/downloadcursor.app";
   const liveSiteUrl = "https://downloadcursor.app";
+
+  // Build downloads table for all available platforms
+  const platforms = latestEntry.platforms || {};
+  const platformRows = Object.keys(platforms)
+    .sort()
+    .map((key) => `| ${key} | [Download](${platforms[key]}) |`)
+    .join("\n");
 
   return `# Cursor Download Hub
 
@@ -510,15 +514,13 @@ A simple, automatically updated site providing the latest download links for the
 
 **Live Site:** [${liveSiteUrl.replace("https://", "")}](${liveSiteUrl})
 
-**Latest Version:** v${latestVersion} (Released: ${releaseDate})
+**Latest Version:** v${latestEntry.version} (Released: ${latestEntry.date})
 
-## Features
+## Downloads (latest)
 
-- Displays download links for Windows, macOS, and Linux.
-- Version history for the last 3 major versions using an expandable UI.
-- Dark theme.
-- Automatically updates when new versions of Cursor are released (via GitHub Actions).
-- Hero section with direct download buttons for popular platforms.
+| Platform | Link |
+| --- | --- |
+${platformRows}
 
 ## Development
 
@@ -633,10 +635,7 @@ async function main(): Promise<void> {
     // Update README.md with latest version information
     if (limitedHistory.versions.length > 0) {
       const latestEntry = limitedHistory.versions[0]; // The actual latest version after pruning and sorting
-      const readmeContent = generateReadmeMarkdown(
-        latestEntry.version,
-        latestEntry.date,
-      );
+      const readmeContent = generateReadmeMarkdown(latestEntry);
       const readmePath = path.join(process.cwd(), "README.md");
       fs.writeFileSync(readmePath, readmeContent.trim(), "utf8");
       console.log("README.md updated successfully.");
