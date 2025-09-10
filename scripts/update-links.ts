@@ -554,7 +554,10 @@ function generateReadmeMarkdown(
     .map((entry) => {
       const rows = Object.keys(entry.platforms || {})
         .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
-        .map((key) => `| ${displayName(key)} | [Download](${entry.platforms[key]}) |`)
+        .map(
+          (key) =>
+            `| ${displayName(key)} | [Download](${entry.platforms[key]}) |`,
+        )
         .join("\n");
       return `\n#### v${entry.version} — ${entry.date}\n\n| Platform | Link |\n| --- | --- |\n${rows}\n`;
     })
