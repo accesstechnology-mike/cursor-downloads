@@ -130,19 +130,25 @@ async function fetchLatestDownloadUrl(
     // Prefer new prerelease update endpoint for all platforms
     let normalizedPlatform: string | null = null;
     if (apiPlatform.includes("win32-x64")) normalizedPlatform = "win32-x64";
-    else if (apiPlatform.includes("win32-arm64")) normalizedPlatform = "win32-arm64";
-    else if (apiPlatform.includes("darwin-universal")) normalizedPlatform = "darwin-universal";
-    else if (apiPlatform.includes("darwin-arm64")) normalizedPlatform = "darwin-arm64";
-    else if (apiPlatform.includes("darwin-x64")) normalizedPlatform = "darwin-x64";
-    else if (apiPlatform.includes("linux-x64")) normalizedPlatform = "linux-x64";
-    else if (apiPlatform.includes("linux-arm64")) normalizedPlatform = "linux-arm64";
+    else if (apiPlatform.includes("win32-arm64"))
+      normalizedPlatform = "win32-arm64";
+    else if (apiPlatform.includes("darwin-universal"))
+      normalizedPlatform = "darwin-universal";
+    else if (apiPlatform.includes("darwin-arm64"))
+      normalizedPlatform = "darwin-arm64";
+    else if (apiPlatform.includes("darwin-x64"))
+      normalizedPlatform = "darwin-x64";
+    else if (apiPlatform.includes("linux-x64"))
+      normalizedPlatform = "linux-x64";
+    else if (apiPlatform.includes("linux-arm64"))
+      normalizedPlatform = "linux-arm64";
 
     if (normalizedPlatform) {
       const prereleaseUrl = `https://api2.cursor.sh/updates/api/update/${normalizedPlatform}/cursor/1.0.0/hash/prerelease`;
       try {
         const preResp = await fetch(prereleaseUrl, {
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
             "User-Agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Cache-Control": "no-cache",
