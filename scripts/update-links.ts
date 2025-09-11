@@ -46,6 +46,51 @@ interface VersionHistory {
   versions: VersionHistoryEntry[];
 }
 
+/**
+ * Map legacy/alias platform keys to canonical keys to avoid duplicates
+ */
+function canonicalizePlatformKey(key: string): string {
+  const aliasMap: Record<string, string> = {
+    // Windows aliases – prefer explicit "-system" variants
+    "win32-x64": "win32-x64-system",
+    "win32-arm64": "win32-arm64-system",
+  };
+  return aliasMap[key] || key;
+}
+
+/**
+ * Dedupe a platform map by collapsing aliases to their canonical keys
+ */
+function dedupePlatformsMap(
+  platforms: { [platform: string]: string },
+): { [platform: string]: string } {
+  const result: { [platform: string]: string } = {};
+  for (const [key, url] of Object.entries(platforms || {})) {
+    const canonical = canonicalizePlatformKey(key);
+    // Prefer values that already use the canonical key
+    if (!result[canonical] || key === canonical) {
+      result[canonical] = url;
+    }
+  }
+  return result;
+}
+
+/**
+ * Dedupe platform details with the same canonical rules as platforms
+ */
+function dedupePlatformDetailsMap(
+  details: { [platform: string]: { sizeBytes?: number; sha256?: string } },
+): { [platform: string]: { sizeBytes?: number; sha256?: string } } {
+  const result: { [platform: string]: { sizeBytes?: number; sha256?: string } } = {};
+  for (const [key, value] of Object.entries(details || {})) {
+    const canonical = canonicalizePlatformKey(key);
+    if (!result[canonical] || key === canonical) {
+      result[canonical] = value;
+    }
+  }
+  return result;
+}
+
 const PLATFORMS: PlatformMap = {
   windows: {
     platforms: [
@@ -577,8 +622,10 @@ async function sendNewVersionNotification(
  * Generate release notes for RELEASE_NOTES.md
  */
 function generateReleaseNotes(latestEntry: VersionHistoryEntry): string {
-  const platforms = latestEntry.platforms || {};
-  const latestDetails = latestEntry.platformDetails || {};
+  const platforms = dedupePlatformsMap(latestEntry.platforms || {});
+  const latestDetails = dedupePlatformDetailsMap(
+    latestEntry.platformDetails || {},
+  );
   const displayName = (key: string): string => {
     const map: Record<string, string> = {
       "win32-x64-user": "Windows x64 (User)",
@@ -639,8 +686,10 @@ function generateReadmeMarkdown(
   const liveSiteUrl = "https://downloadcursor.app";
 
   // Build downloads table for all available platforms
-  const platforms = latestEntry.platforms || {};
-  const latestDetails = latestEntry.platformDetails || {};
+  const platforms = dedupePlatformsMap(latestEntry.platforms || {});
+  const latestDetails = dedupePlatformDetailsMap(
+    latestEntry.platformDetails || {},
+  );
   const displayName = (key: string): string => {
     const map: Record<string, string> = {
       "win32-x64-user": "Windows x64 (User)",
@@ -829,12 +878,14 @@ async function main(): Promise<void> {
     // Add new version to history if it doesn't exist
     let isNewVersion = false;
     if (existingVersionIndex === -1) {
-      const platforms: { [platform: string]: string } = {};
+      // Aggregate and then dedupe platform keys (collapse aliases)
+      const aggregated: { [platform: string]: string } = {};
       for (const osKey in results) {
         for (const [platform, info] of Object.entries(results[osKey])) {
-          platforms[platform] = info.url;
+          aggregated[platform] = info.url;
         }
       }
+      const platforms: { [platform: string]: string } = dedupePlatformsMap(aggregated);
       // Compute platform details (size and optional SHA256)
       const platformDetails: {
         [platform: string]: { sizeBytes?: number; sha256?: string };
@@ -854,12 +905,14 @@ async function main(): Promise<void> {
           };
         } catch {}
       }
+      // Ensure details map aligns with deduped keys
+      const dedupedDetails = dedupePlatformDetailsMap(platformDetails);
 
       const newEntry: VersionHistoryEntry = {
         version: latestVersion,
         date: currentDate,
         platforms,
-        platformDetails,
+        platformDetails: dedupedDetails,
       };
       history.versions.unshift(newEntry); // Add to top
       console.log(`Added new version ${latestVersion} to history`);
