@@ -62,7 +62,7 @@ jobs:
 
       - name: Derive latest version
         id: latest
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.git-check.outputs.changes == 'true' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_update == 'true')
         run: |
           VERSION=$(jq -r '.versions[0].version' version-history.json)
           DATE=$(jq -r '.versions[0].date' version-history.json)
