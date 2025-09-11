@@ -574,6 +574,61 @@ async function sendNewVersionNotification(
 }
 
 /**
+ * Generate release notes for RELEASE_NOTES.md
+ */
+function generateReleaseNotes(latestEntry: VersionHistoryEntry): string {
+  const platforms = latestEntry.platforms || {};
+  const latestDetails = latestEntry.platformDetails || {};
+  const displayName = (key: string): string => {
+    const map: Record<string, string> = {
+      "win32-x64-user": "Windows x64 (User)",
+      "win32-arm64-user": "Windows ARM64 (User)",
+      "win32-x64-system": "Windows x64 (System)",
+      "win32-arm64-system": "Windows ARM64 (System)",
+      "win32-x64": "Windows x64 (System)",
+      "win32-arm64": "Windows ARM64 (System)",
+      "darwin-universal": "macOS (Universal)",
+      "darwin-arm64": "macOS (Apple Silicon)",
+      "darwin-x64": "macOS (Intel)",
+      "linux-x64": "Linux x64 (AppImage)",
+      "linux-arm64": "Linux ARM64 (AppImage)",
+    };
+    return map[key] || key;
+  };
+
+  const sortOrder = [
+    "win32-x64-user",
+    "win32-x64-system",
+    "win32-arm64-user",
+    "win32-arm64-system",
+    "darwin-universal",
+    "darwin-arm64",
+    "darwin-x64",
+    "linux-x64",
+    "linux-arm64",
+  ];
+
+  const platformRows = Object.keys(platforms)
+    .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
+    .map((key) => {
+      const d = latestDetails[key] || {};
+      const size = formatBytes(d.sizeBytes);
+      const sha = d.sha256 ? `\`${d.sha256}\`` : "-";
+      return `| ${displayName(key)} | [Download](${platforms[key]}) | ${size} | ${sha} |`;
+    })
+    .join("\n");
+
+  return `# Cursor v${latestEntry.version}
+Released: ${latestEntry.date}
+
+## Downloads
+
+| Platform | Link | Size | SHA256 |
+| --- | --- | --- | --- |
+${platformRows}`;
+}
+
+/**
  * Generate Markdown content for README.md
  */
 function generateReadmeMarkdown(
@@ -670,9 +725,11 @@ A simple, automatically updated site providing the latest download links for the
 - **Pre‑release visibility**: Surfaces prereleases when available so early adopters can test fixes before they ship to stable.
 - **Automation‑friendly**: Machine‑readable \`version-history.json\` and predictable link structure make it easy to integrate with tooling.
 
-**Latest Version:** v${latestEntry.version} (Released: ${latestEntry.date})
+<h2 align="center" style="font-size:2rem; margin-top:2.5em; margin-bottom:0.5em;">
+  <strong>Latest Version:</strong> v${latestEntry.version} <span style="font-size:1.2rem; font-weight:normal;">(Released: ${latestEntry.date})</span>
+</h2>
 
-## Downloads (latest)
+# Downloads (latest)
 
 | Platform | Link | Size | SHA256 |
 | --- | --- | --- | --- |
@@ -684,10 +741,12 @@ ${platformRows}
 - Always prefer downloading from official sources.
 
 
-<details>
-<summary><strong>All versions</strong></summary>
+<details open>
+<summary style="font-size:1.35em; padding:0.5em 0;"><strong>All versions</strong></summary>
 
+<div style="font-size:1.13em; line-height:1.7;">
 ${allVersionsSection}
+</div>
 
 </details>
 
@@ -821,15 +880,23 @@ async function main(): Promise<void> {
       await sendNewVersionNotification(latestEntry.version, latestEntry.date);
     }
 
-    // Update README.md with latest version information
+    // Update README.md and RELEASE_NOTES.md with latest version information
     if (history.versions.length > 0) {
       const latestEntry = history.versions[0]; // Latest after unshift above
+      
+      // Update README.md
       const readmeContent = generateReadmeMarkdown(latestEntry, history);
       const readmePath = path.join(process.cwd(), "README.md");
       fs.writeFileSync(readmePath, readmeContent.trim(), "utf8");
       console.log("README.md updated successfully.");
+      
+      // Generate RELEASE_NOTES.md
+      const releaseNotesContent = generateReleaseNotes(latestEntry);
+      const releaseNotesPath = path.join(process.cwd(), "RELEASE_NOTES.md");
+      fs.writeFileSync(releaseNotesPath, releaseNotesContent.trim(), "utf8");
+      console.log("RELEASE_NOTES.md updated successfully.");
     } else {
-      console.warn("Skipping README.md update as version history is empty.");
+      console.warn("Skipping README.md and RELEASE_NOTES.md update as version history is empty.");
     }
 
     const elapsedTime = Date.now() - startTime;
@@ -872,6 +939,7 @@ export {
   saveVersionHistory,
   extractVersion,
   formatDate,
+  generateReleaseNotes,
   main,
 };
 

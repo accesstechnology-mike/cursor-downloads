@@ -64,35 +64,80 @@ jobs:
         if: steps.git-check.outputs.changes == 'true'
         run: |
           echo "Generating release notes for v${{ steps.latest.outputs.version }}"
-          {
-            echo "# Cursor v${{ steps.latest.outputs.version }}"
-            echo "Released: ${{ steps.latest.outputs.date }}"
-            echo
-            echo "## Downloads"
-            echo
-            echo "| Platform | Link | Size | SHA256 |"
-            echo "| --- | --- | --- | --- |"
-            jq -r '
-              .versions[0] as $v |
-              ($v.platforms | to_entries) as $p |
-              ($v.platformDetails // {}) as $d |
-              $p[] | .key as $k | .value as $u |
-              ($d[$k].sizeBytes // null) as $sz |
-              ($d[$k].sha256 // null) as $sha |
-              [ $k,
-                "[Download](" + $u + ")",
-                (if $sz then ($sz|tonumber) else null end),
-                (if $sha then ("`" + $sha + "`") else "-" end)
-              ] | @tsv'
-              version-history.json |
-            awk -F"\t" '{
-              size=$3; unit="";
-              if (size=="") { printf "| %s | %s | - | %s |\n", $1,$2,$4; next }
-              s=size+0; u[0]="B"; u[1]="KB"; u[2]="MB"; u[3]="GB"; i=0;
-              while (s>=1024 && i<3) { s=s/1024; i++ }
-              printf "| %s | %s | %.1f %s | %s |\n", $1,$2,s,u[i],$4;
-            }'
-          } > RELEASE_NOTES.md
+          cat > generate_notes.py << 'EOF'
+          import json
+          import sys
+          
+          with open('version-history.json', 'r') as f:
+              data = json.load(f)
+          
+          latest = data['versions'][0]
+          version = latest['version']
+          date = latest['date']
+          
+          print(f"# Cursor v{version}")
+          print(f"Released: {date}")
+          print()
+          print("## Downloads")
+          print()
+          print("| Platform | Link | Size | SHA256 |")
+          print("| --- | --- | --- | --- |")
+          
+          platforms = latest.get('platforms', {})
+          details = latest.get('platformDetails', {})
+          
+          # Define display names
+          display_names = {
+              "win32-x64-user": "Windows x64 (User)",
+              "win32-arm64-user": "Windows ARM64 (User)", 
+              "win32-x64-system": "Windows x64 (System)",
+              "win32-arm64-system": "Windows ARM64 (System)",
+              "win32-x64": "Windows x64 (System)",
+              "win32-arm64": "Windows ARM64 (System)",
+              "darwin-universal": "macOS (Universal)",
+              "darwin-arm64": "macOS (Apple Silicon)",
+              "darwin-x64": "macOS (Intel)",
+              "linux-x64": "Linux x64 (AppImage)", 
+              "linux-arm64": "Linux ARM64 (AppImage)"
+          }
+          
+          # Sort platforms in desired order
+          sort_order = [
+              "win32-x64-user", "win32-x64-system", "win32-arm64-user", "win32-arm64-system",
+              "darwin-universal", "darwin-arm64", "darwin-x64", "linux-x64", "linux-arm64"
+          ]
+          
+          sorted_platforms = sorted(platforms.keys(), key=lambda x: sort_order.index(x) if x in sort_order else 999)
+          
+          for platform in sorted_platforms:
+              if platform not in platforms:
+                  continue
+              url = platforms[platform]
+              platform_details = details.get(platform, {})
+              
+              # Format size
+              size_bytes = platform_details.get('sizeBytes')
+              if size_bytes:
+                  if size_bytes >= 1024**3:
+                      size_str = f"{size_bytes / (1024**3):.1f} GB"
+                  elif size_bytes >= 1024**2:
+                      size_str = f"{size_bytes / (1024**2):.1f} MB"
+                  elif size_bytes >= 1024:
+                      size_str = f"{size_bytes / 1024:.1f} KB"
+                  else:
+                      size_str = f"{size_bytes} B"
+              else:
+                  size_str = "-"
+              
+              # Format SHA256
+              sha256 = platform_details.get('sha256')
+              sha_str = f"`{sha256}`" if sha256 else "-"
+              
+              display_name = display_names.get(platform, platform)
+              print(f"| {display_name} | [Download]({url}) | {size_str} | {sha_str} |")
+          EOF
+          
+          python3 generate_notes.py > RELEASE_NOTES.md
           echo "path=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
