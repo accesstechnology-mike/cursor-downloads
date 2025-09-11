@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 * * * *" # Run hourly at minute 0
   workflow_dispatch: # Allow manual triggering
+    inputs:
+      force_update:
+        description: "Force rebuild notes and update existing release for latest version"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -66,7 +71,7 @@ jobs:
 
       - name: Build release notes
         id: notes
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.git-check.outputs.changes == 'true' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_update == 'true')
         run: |
           echo "Generating release notes for v${{ steps.latest.outputs.version }}"
           if [ -f RELEASE_NOTES.md ]; then
@@ -173,11 +178,12 @@ jobs:
           echo "path=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.git-check.outputs.changes == 'true' || (github.event_name == 'workflow_dispatch' && github.event.inputs.force_update == 'true')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.latest.outputs.version }}
           name: Cursor v${{ steps.latest.outputs.version }}
           body_path: ${{ steps.notes.outputs.path }}
+          allowUpdates: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
