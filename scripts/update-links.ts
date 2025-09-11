@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import * as crypto from "crypto";
 
 interface PlatformInfo {
   platforms: string[];
@@ -32,6 +33,12 @@ interface VersionHistoryEntry {
   date: string;
   platforms: {
     [platform: string]: string; // platform -> download URL
+  };
+  platformDetails?: {
+    [platform: string]: {
+      sizeBytes?: number;
+      sha256?: string;
+    };
   };
 }
 
@@ -144,7 +151,15 @@ async function fetchLatestDownloadUrl(
       normalizedPlatform = "linux-arm64";
 
     if (normalizedPlatform) {
-      const prereleaseUrl = `https://api2.cursor.sh/updates/api/update/${normalizedPlatform}/cursor/1.0.0/hash/prerelease`;
+      // Use latest version from local version-history.json to avoid hardcoding
+      let versionParam = "1.0.0";
+      try {
+        const hist = readVersionHistory();
+        if (Array.isArray(hist.versions) && hist.versions.length > 0) {
+          versionParam = hist.versions[0].version || versionParam;
+        }
+      } catch {}
+      const prereleaseUrl = `https://api2.cursor.sh/updates/api/update/${normalizedPlatform}/cursor/${versionParam}/hash/prerelease`;
       try {
         const preResp = await fetch(prereleaseUrl, {
           headers: {
@@ -168,32 +183,32 @@ async function fetchLatestDownloadUrl(
 
     // Fallback to legacy latest endpoint if prerelease not available or for non-Windows
     if (!downloadUrl) {
-      const response = await fetch(
-        `https://www.cursor.com/api/download?platform=${apiPlatform}&releaseTrack=latest`,
-        {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Cache-Control": "no-cache",
-          },
+    const response = await fetch(
+      `https://www.cursor.com/api/download?platform=${apiPlatform}&releaseTrack=latest`,
+      {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "Cache-Control": "no-cache",
         },
-      );
+      },
+    );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-      const data = (await response.json()) as DownloadResponse;
+    const data = (await response.json()) as DownloadResponse;
       downloadUrl = data.downloadUrl;
     }
 
     // Ensure correct variant (system/user) according to requested platform
     if (downloadUrl) {
-      if (isSystemVersion) {
-        downloadUrl = downloadUrl.replace(
-          "user-setup/CursorUserSetup",
-          "system-setup/CursorSetup",
-        );
+    if (isSystemVersion) {
+      downloadUrl = downloadUrl.replace(
+        "user-setup/CursorUserSetup",
+        "system-setup/CursorSetup",
+      );
       } else if (isUserVersion) {
         downloadUrl = downloadUrl.replace(
           "system-setup/CursorSetup",
@@ -210,6 +225,70 @@ async function fetchLatestDownloadUrl(
     );
     return null;
   }
+}
+
+/**
+ * Fetch file size in bytes using HTTP HEAD
+ */
+async function fetchFileSizeBytes(url: string): Promise<number | null> {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      headers: {
+        Accept: "*/*",
+        "Cache-Control": "no-cache",
+      },
+    });
+    if (!response.ok) return null;
+    const len = response.headers.get("content-length");
+    if (!len) return null;
+    const parsed = parseInt(len, 10);
+    return Number.isFinite(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Compute SHA-256 checksum by streaming the response body
+ * WARNING: Downloads the whole file. Use sparingly.
+ */
+async function computeSha256ForUrl(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/octet-stream",
+        "Cache-Control": "no-cache",
+      },
+    });
+    if (!response.ok || !response.body) return null;
+
+    const hash = crypto.createHash("sha256");
+    const reader = response.body.getReader();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) hash.update(Buffer.from(value));
+    }
+    return hash.digest("hex");
+  } catch {
+    return null;
+  }
+}
+
+function formatBytes(bytes?: number): string {
+  if (bytes === undefined || bytes === null || !Number.isFinite(bytes)) {
+    return "-";
+  }
+  const units = ["B", "KB", "MB", "GB"];
+  let size = bytes;
+  let unitIdx = 0;
+  while (size >= 1024 && unitIdx < units.length - 1) {
+    size /= 1024;
+    unitIdx++;
+  }
+  return `${size.toFixed(1)} ${units[unitIdx]}`;
 }
 
 /**
@@ -501,11 +580,12 @@ function generateReadmeMarkdown(
   latestEntry: VersionHistoryEntry,
   fullHistory: VersionHistory,
 ): string {
-  const repoUrl = "https://github.com/accesstechnology-mike/downloadcursor.app";
+  const repoUrl = "https://github.com/accesstechnology-mike/cursor-downloads";
   const liveSiteUrl = "https://downloadcursor.app";
 
   // Build downloads table for all available platforms
   const platforms = latestEntry.platforms || {};
+  const latestDetails = latestEntry.platformDetails || {};
   const displayName = (key: string): string => {
     const map: Record<string, string> = {
       "win32-x64-user": "Windows x64 (User)",
@@ -537,7 +617,12 @@ function generateReadmeMarkdown(
 
   const platformRows = Object.keys(platforms)
     .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
-    .map((key) => `| ${displayName(key)} | [Download](${platforms[key]}) |`)
+    .map((key) => {
+      const d = latestDetails[key] || {};
+      const size = formatBytes(d.sizeBytes);
+      const sha = d.sha256 ? `\`${d.sha256}\`` : "-";
+      return `| ${displayName(key)} | [Download](${platforms[key]}) | ${size} | ${sha} |`;
+    })
     .join("\n");
 
   // Build all versions section
@@ -552,14 +637,17 @@ function generateReadmeMarkdown(
 
   const allVersionsSection = versions
     .map((entry) => {
+      const details = entry.platformDetails || {};
       const rows = Object.keys(entry.platforms || {})
         .sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
-        .map(
-          (key) =>
-            `| ${displayName(key)} | [Download](${entry.platforms[key]}) |`,
-        )
+        .map((key) => {
+          const d = details[key] || {};
+          const size = formatBytes(d.sizeBytes);
+          const sha = d.sha256 ? `\`${d.sha256}\`` : "-";
+          return `| ${displayName(key)} | [Download](${entry.platforms[key]}) | ${size} | ${sha} |`;
+        })
         .join("\n");
-      return `\n#### v${entry.version} — ${entry.date}\n\n| Platform | Link |\n| --- | --- |\n${rows}\n`;
+      return `\n#### v${entry.version} — ${entry.date}\n\n| Platform | Link | Size | SHA256 |\n| --- | --- | --- | --- |\n${rows}\n`;
     })
     .join("\n");
 
@@ -569,18 +657,32 @@ A simple, automatically updated site providing the latest download links for the
 
 **Live Site:** [${liveSiteUrl.replace("https://", "")}](${liveSiteUrl})
 
-![GitHub stars](https://img.shields.io/github/stars/accesstechnology-mike/downloadcursor.app?style=social)
-![Last commit](https://img.shields.io/github/last-commit/accesstechnology-mike/downloadcursor.app)
-![Update workflow](https://img.shields.io/github/actions/workflow/status/accesstechnology-mike/downloadcursor.app/update.yml?branch=main)
+![GitHub stars](https://img.shields.io/github/stars/accesstechnology-mike/cursor-downloads?style=social)
+![Last commit](https://img.shields.io/github/last-commit/accesstechnology-mike/cursor-downloads)
+![Update workflow](https://img.shields.io/github/actions/workflow/status/accesstechnology-mike/cursor-downloads/update.yml?branch=main)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95%EF%B8%8F-orange?labelColor=555&style=flat)](https://coff.ee/mikethrussell)
+
+## Why this exists
+
+- **Rollbacks and pinning**: Browse every available version and grab the exact installer link to quickly downgrade when a release breaks an extension, setting, or workflow.
+- **Reproducible installs**: Pin a specific URL in scripts or CI to ensure teammates and servers install the same Cursor version every time.
+- **Cross‑platform variants**: Clear links for Windows User/System installers, macOS Universal/Apple Silicon/Intel, and Linux x64/ARM64.
+- **Pre‑release visibility**: Surfaces prereleases when available so early adopters can test fixes before they ship to stable.
+- **Automation‑friendly**: Machine‑readable \`version-history.json\` and predictable link structure make it easy to integrate with tooling.
 
 **Latest Version:** v${latestEntry.version} (Released: ${latestEntry.date})
 
 ## Downloads (latest)
 
-| Platform | Link |
-| --- | --- |
+| Platform | Link | Size | SHA256 |
+| --- | --- | --- | --- |
 ${platformRows}
+## Security & integrity
+
+- All download links resolve directly to Cursor's official distribution servers (\`downloads.cursor.com\` / official endpoints).
+- For additional peace of mind, verify the SHA‑256 checksums locally after download.
+- Always prefer downloading from official sources.
+
 
 <details>
 <summary><strong>All versions</strong></summary>
@@ -674,10 +776,28 @@ async function main(): Promise<void> {
           platforms[platform] = info.url;
         }
       }
+      // Compute platform details (size and optional SHA256)
+      const platformDetails: { [platform: string]: { sizeBytes?: number; sha256?: string } } = {};
+      const computeSha = (process.env.COMPUTE_SHA256 || "").toLowerCase() === "true";
+      for (const [platform, url] of Object.entries(platforms)) {
+        try {
+          const size = await fetchFileSizeBytes(url);
+          let sha: string | null = null;
+          if (computeSha) {
+            sha = await computeSha256ForUrl(url);
+          }
+          platformDetails[platform] = {
+            sizeBytes: typeof size === "number" ? size : undefined,
+            sha256: sha || undefined,
+          };
+        } catch {}
+      }
+
       const newEntry: VersionHistoryEntry = {
         version: latestVersion,
         date: currentDate,
         platforms,
+        platformDetails,
       };
       history.versions.unshift(newEntry); // Add to top
       console.log(`Added new version ${latestVersion} to history`);

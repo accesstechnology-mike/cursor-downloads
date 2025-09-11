@@ -29,7 +29,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Run update script
-        run: bun run scripts/update-links.ts
+        run: COMPUTE_SHA256=true bun run scripts/update-links.ts
         env:
           NOTIFICATION_SECRET: ${{ secrets.NOTIFICATION_SECRET }}
 
@@ -49,3 +49,58 @@ jobs:
           git add --all
           git commit -m "Update Cursor download links and version history"
           git push
+
+      - name: Derive latest version
+        id: latest
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          VERSION=$(jq -r '.versions[0].version' version-history.json)
+          DATE=$(jq -r '.versions[0].date' version-history.json)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "date=${DATE}" >> $GITHUB_OUTPUT
+
+      - name: Build release notes
+        id: notes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          echo "Generating release notes for v${{ steps.latest.outputs.version }}"
+          {
+            echo "# Cursor v${{ steps.latest.outputs.version }}"
+            echo "Released: ${{ steps.latest.outputs.date }}"
+            echo
+            echo "## Downloads"
+            echo
+            echo "| Platform | Link | Size | SHA256 |"
+            echo "| --- | --- | --- | --- |"
+            jq -r '
+              .versions[0] as $v |
+              ($v.platforms | to_entries) as $p |
+              ($v.platformDetails // {}) as $d |
+              $p[] | .key as $k | .value as $u |
+              ($d[$k].sizeBytes // null) as $sz |
+              ($d[$k].sha256 // null) as $sha |
+              [ $k,
+                "[Download](" + $u + ")",
+                (if $sz then ($sz|tonumber) else null end),
+                (if $sha then ("`" + $sha + "`") else "-" end)
+              ] | @tsv'
+              version-history.json |
+            awk -F"\t" '{
+              size=$3; unit="";
+              if (size=="") { printf "| %s | %s | - | %s |\n", $1,$2,$4; next }
+              s=size+0; u[0]="B"; u[1]="KB"; u[2]="MB"; u[3]="GB"; i=0;
+              while (s>=1024 && i<3) { s=s/1024; i++ }
+              printf "| %s | %s | %.1f %s | %s |\n", $1,$2,s,u[i],$4;
+            }'
+          } > RELEASE_NOTES.md
+          echo "path=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        if: steps.git-check.outputs.changes == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.latest.outputs.version }}
+          name: Cursor v${{ steps.latest.outputs.version }}
+          body_path: ${{ steps.notes.outputs.path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
