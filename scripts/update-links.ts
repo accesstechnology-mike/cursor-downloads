@@ -183,32 +183,32 @@ async function fetchLatestDownloadUrl(
 
     // Fallback to legacy latest endpoint if prerelease not available or for non-Windows
     if (!downloadUrl) {
-    const response = await fetch(
-      `https://www.cursor.com/api/download?platform=${apiPlatform}&releaseTrack=latest`,
-      {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Cache-Control": "no-cache",
+      const response = await fetch(
+        `https://www.cursor.com/api/download?platform=${apiPlatform}&releaseTrack=latest`,
+        {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Cache-Control": "no-cache",
+          },
         },
-      },
-    );
+      );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    const data = (await response.json()) as DownloadResponse;
+      const data = (await response.json()) as DownloadResponse;
       downloadUrl = data.downloadUrl;
     }
 
     // Ensure correct variant (system/user) according to requested platform
     if (downloadUrl) {
-    if (isSystemVersion) {
-      downloadUrl = downloadUrl.replace(
-        "user-setup/CursorUserSetup",
-        "system-setup/CursorSetup",
-      );
+      if (isSystemVersion) {
+        downloadUrl = downloadUrl.replace(
+          "user-setup/CursorUserSetup",
+          "system-setup/CursorSetup",
+        );
       } else if (isUserVersion) {
         downloadUrl = downloadUrl.replace(
           "system-setup/CursorSetup",
@@ -777,8 +777,11 @@ async function main(): Promise<void> {
         }
       }
       // Compute platform details (size and optional SHA256)
-      const platformDetails: { [platform: string]: { sizeBytes?: number; sha256?: string } } = {};
-      const computeSha = (process.env.COMPUTE_SHA256 || "").toLowerCase() === "true";
+      const platformDetails: {
+        [platform: string]: { sizeBytes?: number; sha256?: string };
+      } = {};
+      const computeSha =
+        (process.env.COMPUTE_SHA256 || "").toLowerCase() === "true";
       for (const [platform, url] of Object.entries(platforms)) {
         try {
           const size = await fetchFileSizeBytes(url);
