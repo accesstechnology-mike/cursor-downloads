@@ -9,26 +9,42 @@ A simple, automatically updated site providing the latest download links for the
 ![Update workflow](https://img.shields.io/github/actions/workflow/status/accesstechnology-mike/downloadcursor.app/update.yml?branch=main)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95%EF%B8%8F-orange?labelColor=555&style=flat)](https://coff.ee/mikethrussell)
 
-**Latest Version:** v1.6.5 (Released: 2025-09-10)
+**Latest Version:** v1.6.6 (Released: 2025-09-11)
 
 ## Downloads (latest)
 
 | Platform               | Link                                                                                                                                                |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/x64/system-setup/CursorSetup-x64-1.6.5.exe)       |
-| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/arm64/system-setup/CursorSetup-arm64-1.6.5.exe)   |
-| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/x64/user-setup/CursorUserSetup-x64-1.6.5.exe)     |
-| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/x64/system-setup/CursorSetup-x64-1.6.5.exe)       |
-| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/arm64/user-setup/CursorUserSetup-arm64-1.6.5.exe) |
-| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/win32/arm64/system-setup/CursorSetup-arm64-1.6.5.exe)   |
-| macOS (Universal)      | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/darwin/universal/Cursor-darwin-universal.zip)           |
-| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/darwin/arm64/Cursor-darwin-arm64.zip)                   |
-| macOS (Intel)          | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/darwin/x64/Cursor-darwin-x64.zip)                       |
-| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/linux/x64/Cursor-1.6.5-x86_64.AppImage.zsync)           |
-| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/c0d91a4e0791b64e8577d89bae68b43c671b8610/linux/arm64/Cursor-1.6.5-aarch64.AppImage.zsync)        |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/system-setup/CursorSetup-x64-1.6.6.exe)       |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/system-setup/CursorSetup-arm64-1.6.6.exe)   |
+| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/user-setup/CursorUserSetup-x64-1.6.6.exe)     |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/system-setup/CursorSetup-x64-1.6.6.exe)       |
+| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/user-setup/CursorUserSetup-arm64-1.6.6.exe) |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/system-setup/CursorSetup-arm64-1.6.6.exe)   |
+| macOS (Universal)      | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/universal/Cursor-darwin-universal.zip)           |
+| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/arm64/Cursor-darwin-arm64.zip)                   |
+| macOS (Intel)          | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/x64/Cursor-darwin-x64.zip)                       |
+| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/linux/x64/Cursor-1.6.6-x86_64.AppImage.zsync)           |
+| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/linux/arm64/Cursor-1.6.6-aarch64.AppImage.zsync)        |
 
 <details>
 <summary><strong>All versions</strong></summary>
+
+#### v1.6.6 — 2025-09-11
+
+| Platform               | Link                                                                                                                                                |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/system-setup/CursorSetup-x64-1.6.6.exe)       |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/system-setup/CursorSetup-arm64-1.6.6.exe)   |
+| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/user-setup/CursorUserSetup-x64-1.6.6.exe)     |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/x64/system-setup/CursorSetup-x64-1.6.6.exe)       |
+| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/user-setup/CursorUserSetup-arm64-1.6.6.exe) |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/win32/arm64/system-setup/CursorSetup-arm64-1.6.6.exe)   |
+| macOS (Universal)      | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/universal/Cursor-darwin-universal.zip)           |
+| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/arm64/Cursor-darwin-arm64.zip)                   |
+| macOS (Intel)          | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/darwin/x64/Cursor-darwin-x64.zip)                       |
+| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/linux/x64/Cursor-1.6.6-x86_64.AppImage.zsync)           |
+| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/9455eaa4c87f2bad91eda3f2bc9b42b16eae1089/linux/arm64/Cursor-1.6.6-aarch64.AppImage.zsync)        |
 
 #### v1.6.5 — 2025-09-10
 
