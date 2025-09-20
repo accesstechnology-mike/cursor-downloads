@@ -1,6 +1,24 @@
 {
   "versions": [
     {
+      "version": "1.6.42",
+      "date": "2025-09-20",
+      "platforms": {
+        "linux-x64": "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/linux/x64/Cursor-1.6.42-x86_64.AppImage.zsync",
+        "linux-arm64": "https://downloads.cursor.com/production/5911e9593196a000b1c00553aaf03b0b32042b93/linux/arm64/Cursor-1.6.42-aarch64.AppImage.zsync"
+      },
+      "platformDetails": {
+        "linux-x64": {
+          "sizeBytes": 333157,
+          "sha256": "4b3684a3a2cc9f9241eae8229909dd3c84c6115df500d692aaf6d6a7852de444"
+        },
+        "linux-arm64": {
+          "sizeBytes": 305460,
+          "sha256": "445638c78d731283e78fe4969338f609c60b33dcf640adb06855d07cadb7f4b2"
+        }
+      }
+    },
+    {
       "version": "1.6.35",
       "date": "2025-09-19",
       "platforms": {
