@@ -1,6 +1,44 @@
 {
   "versions": [
     {
+      "version": "1.6.45",
+      "date": "2025-09-22",
+      "platforms": {
+        "win32-x64-user": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/win32/x64/user-setup/CursorUserSetup-x64-1.6.45.exe",
+        "win32-arm64-user": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/win32/arm64/user-setup/CursorUserSetup-arm64-1.6.45.exe",
+        "win32-x64-system": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/win32/x64/system-setup/CursorSetup-x64-1.6.45.exe",
+        "win32-arm64-system": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/win32/arm64/system-setup/CursorSetup-arm64-1.6.45.exe",
+        "linux-x64": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/linux/x64/Cursor-1.6.45-x86_64.AppImage.zsync",
+        "linux-arm64": "https://downloads.cursor.com/production/3ccce8f55d8cca49f6d28b491a844c699b8719a3/linux/arm64/Cursor-1.6.45-aarch64.AppImage.zsync"
+      },
+      "platformDetails": {
+        "win32-x64-user": {
+          "sizeBytes": 119754536,
+          "sha256": "6657047e21dc829a44be2f85689f9d3b4de3bcd2cff95bb8c9ddd6b92d3c00f2"
+        },
+        "win32-arm64-user": {
+          "sizeBytes": 118379720,
+          "sha256": "366dcf4528d6dde3cad995a6138c765cc796e9e53444f5b3ec769e621b9ff277"
+        },
+        "win32-x64-system": {
+          "sizeBytes": 119753720,
+          "sha256": "50a036fe0fd83b7bf71d5fb232cc20f7c7bf09a49b3113fa80214e9cd0801201"
+        },
+        "win32-arm64-system": {
+          "sizeBytes": 118381192,
+          "sha256": "1f93ba3eeedaacfe29b1c377868282fbc057d5172c2758ba3a84e2d7b8a94d7a"
+        },
+        "linux-x64": {
+          "sizeBytes": 333171,
+          "sha256": "90f75e43a73ef733ef9fb674dda1ceafd263b56946ec8f85199b50d02d62acf2"
+        },
+        "linux-arm64": {
+          "sizeBytes": 305460,
+          "sha256": "d55bc45595f17eb71b81e8d91ba77afe99d38382eebff2f287b8b6349e8dede3"
+        }
+      }
+    },
+    {
       "version": "1.6.42",
       "date": "2025-09-20",
       "platforms": {
