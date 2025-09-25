@@ -3120,9 +3120,15 @@
           __visibleVersionCount = options.visibleCount;
         }
 
-        // Clamp
+        // Clamp - ensure we have data to work with
         if (!__visibleVersionCount || __visibleVersionCount < 1) {
           __visibleVersionCount = Math.min(__LOAD_INCREMENT, __allVersions.length || 0);
+        }
+        
+        // Safety check
+        if (!__allVersions || __allVersions.length === 0) {
+          console.warn("No versions available for rendering");
+          return;
         }
 
         const versionList = document.getElementById("version-list");
@@ -3205,18 +3211,23 @@
         if (existingMore) existingMore.remove();
 
         if (__visibleVersionCount < (__allVersions || []).length) {
+          const remainingCount = (__allVersions || []).length - __visibleVersionCount;
+          const nextBatchSize = Math.min(__LOAD_INCREMENT, remainingCount);
+          
           const moreBtn = document.createElement("button");
           moreBtn.id = "load-more-versions";
           moreBtn.className = "expand-toggle";
           moreBtn.style.marginTop = "0.75rem";
-          moreBtn.innerHTML = '<span>Show older versions</span><span class="expand-icon" style="transform: rotate(45deg); margin-left: 0.25rem"></span>';
+          moreBtn.innerHTML = `<span>Show ${nextBatchSize} older versions</span><span class="expand-icon" style="transform: rotate(45deg); margin-left: 0.25rem"></span>`;
           moreBtn.addEventListener("click", (e) => {
             e.preventDefault();
+            console.log(`Loading more versions. Current: ${__visibleVersionCount}, Total: ${__allVersions.length}`);
             __visibleVersionCount = Math.min(
               __visibleVersionCount + __LOAD_INCREMENT,
               (__allVersions || []).length,
             );
-            renderVersionHistory(undefined, { visibleCount: __visibleVersionCount });
+            console.log(`New visible count: ${__visibleVersionCount}`);
+            renderVersionHistory(null, { visibleCount: __visibleVersionCount });
           });
           versionList.parentElement.appendChild(moreBtn);
         }
