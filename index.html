@@ -2898,9 +2898,14 @@
         });
 
         // Add any remaining platforms not in priority list (excluding duplicates)
-        const excludedPlatforms = new Set(["win32-x64", "win32-arm64"]); // These duplicate the system versions
+        // Only exclude legacy Windows aliases if canonical variants exist; otherwise include them
         Object.entries(platforms).forEach(([key, url]) => {
-          if (!addedPlatforms.has(key) && !excludedPlatforms.has(key)) {
+          const isLegacyWin = key === "win32-x64" || key === "win32-arm64";
+          const hasCanonical =
+            (key === "win32-x64" && (platforms["win32-x64-system"] || platforms["win32-x64-user"])) ||
+            (key === "win32-arm64" && (platforms["win32-arm64-system"] || platforms["win32-arm64-user"]));
+
+          if (!addedPlatforms.has(key) && (!isLegacyWin || !hasCanonical)) {
             result.push({ key, url });
             addedPlatforms.add(key);
           }

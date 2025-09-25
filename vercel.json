@@ -2,11 +2,18 @@
   "version": 2,
   "routes": [
     {
+      "src": "/",
+      "dest": "/index.html",
+      "headers": {
+        "Cache-Control": "no-store, must-revalidate"
+      }
+    },
+    {
       "src": "/version-history.json",
       "dest": "/version-history.json",
       "headers": {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=300"
+        "Cache-Control": "no-store, must-revalidate"
       }
     },
     {
