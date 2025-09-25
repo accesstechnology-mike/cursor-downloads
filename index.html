@@ -3106,11 +3106,30 @@
         lucide.createIcons();
       }
 
-      // Render version history
-      function renderVersionHistory(versions) {
+      // Render version history with incremental loading
+      let __allVersions = [];
+      let __visibleVersionCount = 0;
+      const __LOAD_INCREMENT = 12; // number of versions to reveal per click
+
+      function renderVersionHistory(versions, options = {}) {
+        // Initialize backing store
+        if (Array.isArray(versions)) {
+          __allVersions = versions;
+        }
+        if (typeof options.visibleCount === "number") {
+          __visibleVersionCount = options.visibleCount;
+        }
+
+        // Clamp
+        if (!__visibleVersionCount || __visibleVersionCount < 1) {
+          __visibleVersionCount = Math.min(__LOAD_INCREMENT, __allVersions.length || 0);
+        }
+
         const versionList = document.getElementById("version-list");
 
-        const versionsHTML = versions
+        const toRender = (__allVersions || []).slice(0, __visibleVersionCount);
+
+        const versionsHTML = toRender
           .map((version, versionIndex) => {
             // Prioritize platforms and remove duplicates for this version
             const prioritizedPlatforms = getPrioritizedPlatforms(
@@ -3178,7 +3197,29 @@
           })
           .join("");
 
+        // Render versions
         versionList.innerHTML = versionsHTML;
+
+        // Render/Update "Show older versions" control
+        const existingMore = document.getElementById("load-more-versions");
+        if (existingMore) existingMore.remove();
+
+        if (__visibleVersionCount < (__allVersions || []).length) {
+          const moreBtn = document.createElement("button");
+          moreBtn.id = "load-more-versions";
+          moreBtn.className = "expand-toggle";
+          moreBtn.style.marginTop = "0.75rem";
+          moreBtn.innerHTML = '<span>Show older versions</span><span class="expand-icon" style="transform: rotate(45deg); margin-left: 0.25rem"></span>';
+          moreBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            __visibleVersionCount = Math.min(
+              __visibleVersionCount + __LOAD_INCREMENT,
+              (__allVersions || []).length,
+            );
+            renderVersionHistory(undefined, { visibleCount: __visibleVersionCount });
+          });
+          versionList.parentElement.appendChild(moreBtn);
+        }
 
         // Re-initialize Lucide icons for dynamic content
         lucide.createIcons();
@@ -3379,7 +3420,7 @@
           // Update all sections with dynamic data
           updateVersionInfo(latestVersion);
           setupSmartDownload(latestVersion);
-          renderVersionHistory(data.versions);
+          renderVersionHistory(data.versions, { visibleCount: 12 });
         }
 
         // Setup interactivity
