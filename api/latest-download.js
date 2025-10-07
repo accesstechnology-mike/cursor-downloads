@@ -1,10 +1,33 @@
 const fs = require("fs");
 const path = require("path");
 
-function readVersionHistory() {
-  const historyPath = path.join(process.cwd(), "version-history.json");
-  const raw = fs.readFileSync(historyPath, "utf-8");
-  return JSON.parse(raw);
+async function readVersionHistory(req) {
+  const candidatePaths = [
+    path.join(process.cwd(), "version-history.json"),
+    path.join(__dirname, "..", "version-history.json"),
+  ];
+
+  for (const historyPath of candidatePaths) {
+    try {
+      if (fs.existsSync(historyPath)) {
+        const raw = fs.readFileSync(historyPath, "utf-8");
+        return JSON.parse(raw);
+      }
+    } catch {}
+  }
+
+  // Fallback to HTTP fetch from the same host if local file not available
+  try {
+    const base = req?.headers?.host
+      ? `https://${req.headers.host}`
+      : "https://downloadcursor.app";
+    const res = await fetch(new URL("/version-history.json", base));
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {}
+
+  throw new Error("version-history.json not found");
 }
 
 function getLatestVersion(history) {
@@ -43,7 +66,7 @@ module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store, must-revalidate");
 
   try {
-    const history = readVersionHistory();
+    const history = await readVersionHistory(req);
     const latest = getLatestVersion(history);
 
     if (!latest) {
