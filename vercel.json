@@ -17,6 +17,14 @@
       }
     },
     {
+      "src": "/api/latest-download",
+      "dest": "/api/latest-download.js",
+      "headers": {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store, must-revalidate"
+      }
+    },
+    {
       "src": "/(.*\\.(js|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
       "dest": "/$1"
     },
