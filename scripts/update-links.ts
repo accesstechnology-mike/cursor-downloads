@@ -761,6 +761,28 @@ A simple, automatically updated site providing the latest download links for the
 
 **Live Site:** [${liveSiteUrl.replace("https://", "")}](${liveSiteUrl})
 
+### JSON API (LLM-friendly)
+
+- **Latest release (all platforms):** \`${liveSiteUrl}/api/latest-download\`
+- **Latest for a specific platform:** \`${liveSiteUrl}/api/latest-download?platform=<key>\`
+
+Supported platform keys include: \`win32-x64-user\`, \`win32-x64-system\`, \`win32-arm64-user\`, \`win32-arm64-system\`, \`darwin-universal\`, \`darwin-arm64\`, \`darwin-x64\`, \`linux-x64\`, \`linux-arm64\`. Aliases accepted: \`windows\`, \`windows-user\`, \`windows-system\`, \`mac\`, \`macos\`, \`macos-arm64\`, \`macos-x64\`, \`linux\`.
+
+Example response (platform-filtered):
+
+\`\`\`json
+{
+  "version": "${latestEntry.version}",
+  "date": "${latestEntry.date}",
+  "platform": "win32-x64-user",
+  "url": "${platforms["win32-x64-user"] || "https://downloads.cursor.com/.../CursorUserSetup-x64.exe"}",
+  "sizeBytes": ${latestDetails["win32-x64-user"]?.sizeBytes ?? 0},
+  "sha256": "${latestDetails["win32-x64-user"]?.sha256 || "<sha256>"}"
+}
+\`\`\`
+
+For the full machine-readable history, you can also use \`${liveSiteUrl}/version-history.json\`.
+
 ![GitHub stars](https://img.shields.io/github/stars/accesstechnology-mike/cursor-downloads?style=social)
 ![Last commit](https://img.shields.io/github/last-commit/accesstechnology-mike/cursor-downloads)
 ![Update workflow](https://img.shields.io/github/actions/workflow/status/accesstechnology-mike/cursor-downloads/update.yml?branch=main)
