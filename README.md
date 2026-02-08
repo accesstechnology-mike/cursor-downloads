@@ -18,22 +18,22 @@ A simple, automatically updated site providing the latest download links for the
 - **Automation‑friendly**: Machine‑readable `version-history.json` and predictable link structure make it easy to integrate with tooling.
 
 <h2 align="center" style="font-size:2rem; margin-top:2.5em; margin-bottom:0.5em;">
-  <strong>Latest Version:</strong> v2.4.30 <span style="font-size:1.2rem; font-weight:normal;">(Released: 2026-02-07)</span>
+  <strong>Latest Version:</strong> v2.4.31 <span style="font-size:1.2rem; font-weight:normal;">(Released: 2026-02-08)</span>
 </h2>
 
 # Downloads (latest)
 
 | Platform               | Link                                                                                                                                                 | Size     | SHA256                                                             |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------ |
-| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/win32/x64/user-setup/CursorUserSetup-x64-2.4.30.exe)     | 169.8 MB | `297041ec970af88dbe0a9f28545ae17d12c207d4c0767980540e4edfb03f3ce4` |
-| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/win32/x64/system-setup/CursorSetup-x64-2.4.30.exe)       | 169.8 MB | `4f51e92daabe78b2b2f7c14b6b410cca8bc2a6beb6c3ca5447512a1ca5d799b4` |
-| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/win32/arm64/user-setup/CursorUserSetup-arm64-2.4.30.exe) | 161.9 MB | `a00fa12f2c4b16d9d5528c5084b2c5ef7f306b195338103698ebace1757eab29` |
-| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/win32/arm64/system-setup/CursorSetup-arm64-2.4.30.exe)   | 161.9 MB | `5eccc30fb78f42905bced3b2a7a57f4be89a2d0e57bef22f85db33214bb05939` |
-| macOS (Universal)      | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/darwin/universal/Cursor-darwin-universal.zip)            | 376.2 MB | `a937a18cfd4c7875743d033a1ff868ce9d76713740c214e7c4832f8f8f0e48cb` |
-| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/darwin/arm64/Cursor-darwin-arm64.zip)                    | 239.4 MB | `df9659158a4c7a784f9a19b991b0750f8df5cbb8f4e46e1a114ad4781c9e9cf2` |
-| macOS (Intel)          | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/darwin/x64/Cursor-darwin-x64.zip)                        | 247.8 MB | `95bf38d0284a48bf851299d1dda1e7198e1ddc9b59812a001f51ea778f32815f` |
-| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/linux/x64/Cursor-2.4.30-x86_64.AppImage.zsync)           | 477.4 KB | `855b6e576acf88614f696a5fce34f4f4095f3c29ef1d25c4ceac206dbf7efad2` |
-| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/0f8217a84adf66daf250228a3ebf0da631d3c9b5/linux/arm64/Cursor-2.4.30-aarch64.AppImage.zsync)        | 435.1 KB | `6d96c0a56dd20728abc41269cd384407b3a1746106a7b42aefabc9f582644f61` |
+| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/x64/user-setup/CursorUserSetup-x64-2.4.31.exe)     | 169.8 MB | `9afacf330062507eb154a0554ab10134baf30f81698d1cda340d1cd41b9beef5` |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/x64/system-setup/CursorSetup-x64-2.4.31.exe)       | 169.8 MB | `fe09ad553a1de99c7e42a6a86f194ac0b281f7816056487699a90d4c65597456` |
+| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/arm64/user-setup/CursorUserSetup-arm64-2.4.31.exe) | 160.9 MB | `ecf3e8130d8f3f28498631e08d0566431044456e442242bafee4d872975fa393` |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/arm64/system-setup/CursorSetup-arm64-2.4.31.exe)   | 160.9 MB | `78df89aff946cfddff23a65f3017fb9139bf9046870fa1ad7b3341ef394e45b8` |
+| macOS (Universal)      | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/universal/Cursor-darwin-universal.zip)            | 376.2 MB | `3dd672c4e98367cf608207646c6c1b0b2987a847e166f1dceed3d40512c0476b` |
+| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/arm64/Cursor-darwin-arm64.zip)                    | 239.4 MB | `b29b74536826caddf86cfccd6d78fd51032761169c741b4207cb136f58d31e25` |
+| macOS (Intel)          | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/x64/Cursor-darwin-x64.zip)                        | 247.8 MB | `f0b687fded3a63578dc2e842e194109b012d9c759c732ef282c50fdce7debf7a` |
+| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/x64/Cursor-2.4.31-x86_64.AppImage.zsync)           | 477.4 KB | `ee2e092001a5013ac0932dcc6918eca11cdaf91a25eb6985640449496416e31e` |
+| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/arm64/Cursor-2.4.31-aarch64.AppImage.zsync)        | 435.1 KB | `411f29eace835d23cedd1eb381512cf04b041794a692c02e6408170ee41e55b7` |
 
 ## Security & integrity
 
@@ -45,6 +45,20 @@ A simple, automatically updated site providing the latest download links for the
 <summary style="font-size:1.35em; padding:0.5em 0;"><strong>All versions</strong></summary>
 
 <div style="font-size:1.13em; line-height:1.7;">
+
+#### v2.4.31 — 2026-02-08
+
+| Platform               | Link                                                                                                                                                 | Size     | SHA256                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------ |
+| Windows x64 (User)     | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/x64/user-setup/CursorUserSetup-x64-2.4.31.exe)     | 169.8 MB | `9afacf330062507eb154a0554ab10134baf30f81698d1cda340d1cd41b9beef5` |
+| Windows x64 (System)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/x64/system-setup/CursorSetup-x64-2.4.31.exe)       | 169.8 MB | `fe09ad553a1de99c7e42a6a86f194ac0b281f7816056487699a90d4c65597456` |
+| Windows ARM64 (User)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/arm64/user-setup/CursorUserSetup-arm64-2.4.31.exe) | 160.9 MB | `ecf3e8130d8f3f28498631e08d0566431044456e442242bafee4d872975fa393` |
+| Windows ARM64 (System) | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/win32/arm64/system-setup/CursorSetup-arm64-2.4.31.exe)   | 160.9 MB | `78df89aff946cfddff23a65f3017fb9139bf9046870fa1ad7b3341ef394e45b8` |
+| macOS (Universal)      | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/universal/Cursor-darwin-universal.zip)            | 376.2 MB | `3dd672c4e98367cf608207646c6c1b0b2987a847e166f1dceed3d40512c0476b` |
+| macOS (Apple Silicon)  | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/arm64/Cursor-darwin-arm64.zip)                    | 239.4 MB | `b29b74536826caddf86cfccd6d78fd51032761169c741b4207cb136f58d31e25` |
+| macOS (Intel)          | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/darwin/x64/Cursor-darwin-x64.zip)                        | 247.8 MB | `f0b687fded3a63578dc2e842e194109b012d9c759c732ef282c50fdce7debf7a` |
+| Linux x64 (AppImage)   | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/x64/Cursor-2.4.31-x86_64.AppImage.zsync)           | 477.4 KB | `ee2e092001a5013ac0932dcc6918eca11cdaf91a25eb6985640449496416e31e` |
+| Linux ARM64 (AppImage) | [Download](https://downloads.cursor.com/production/3578107fdf149b00059ddad37048220e4168100f/linux/arm64/Cursor-2.4.31-aarch64.AppImage.zsync)        | 435.1 KB | `411f29eace835d23cedd1eb381512cf04b041794a692c02e6408170ee41e55b7` |
 
 #### v2.4.30 — 2026-02-07
 
