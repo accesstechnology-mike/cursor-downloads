@@ -1,6 +1,59 @@
 {
   "versions": [
     {
+      "version": "3.12.29",
+      "date": "2026-07-21",
+      "platforms": {
+        "win32-x64-user": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/win32/x64/user-setup/CursorUserSetup-x64-3.12.29.exe",
+        "win32-arm64-user": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/win32/arm64/user-setup/CursorUserSetup-arm64-3.12.29.exe",
+        "win32-x64-system": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/win32/x64/system-setup/CursorSetup-x64-3.12.29.exe",
+        "win32-arm64-system": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/win32/arm64/system-setup/CursorSetup-arm64-3.12.29.exe",
+        "darwin-universal": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/darwin/universal/Cursor-darwin-universal.dmg",
+        "darwin-x64": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/darwin/x64/Cursor-darwin-x64.dmg",
+        "darwin-arm64": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/darwin/arm64/Cursor-darwin-arm64.dmg",
+        "linux-x64": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/linux/x64/Cursor-3.12.29-x86_64.AppImage.zsync",
+        "linux-arm64": "https://downloads.cursor.com/production/cd1c87ff9b66021918fb9731605f8d1d5fd2f0b2/linux/arm64/Cursor-3.12.29-aarch64.AppImage.zsync"
+      },
+      "platformDetails": {
+        "win32-x64-user": {
+          "sizeBytes": 198119528,
+          "sha256": "552e9ed55ed77027c6ae1594c418cda6814c8217c620b823825f6f0da2cd4d9d"
+        },
+        "win32-arm64-user": {
+          "sizeBytes": 188112328,
+          "sha256": "5d3c31a2dcf2b196ec6490164fdabc46e783c39376bb9233e651ba338b55d5bc"
+        },
+        "win32-x64-system": {
+          "sizeBytes": 198122520,
+          "sha256": "479edd9daea89f48cf4537109467c569b1dec24f76dcfd11c3a49dd3207eb946"
+        },
+        "win32-arm64-system": {
+          "sizeBytes": 188113888,
+          "sha256": "1293d96ee788506e15229022c6ba1ab84753eabbf4c114ea3f5fadfc3646c3e9"
+        },
+        "darwin-universal": {
+          "sizeBytes": 428168277,
+          "sha256": "5fe2ec4f8a9ec341bb7bd9663883ccffdfef3e5598eafe0008cfc4fff5d04ad4"
+        },
+        "darwin-x64": {
+          "sizeBytes": 283491524,
+          "sha256": "62d2d65f02899d7e59f4d7e09c46ffabd86ac61bbbcab072e501fa6f0fb77d6e"
+        },
+        "darwin-arm64": {
+          "sizeBytes": 272853240,
+          "sha256": "31b61e72d7b015039ab02e909ad3964cde88a7fdb6f3ee811ec286199bb41a9c"
+        },
+        "linux-x64": {
+          "sizeBytes": 551104,
+          "sha256": "30388ff4b3b29bd8d846826b1157bfec3c7cf13772feb907970476972b810c58"
+        },
+        "linux-arm64": {
+          "sizeBytes": 498326,
+          "sha256": "45d48c2ff62a9606bada90a018221d2aa5e79c2c62718b24e089a5741b45b1ec"
+        }
+      }
+    },
+    {
       "version": "3.12.17",
       "date": "2026-07-17",
       "platforms": {
